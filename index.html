@@ -1,0 +1,344 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>JobMatch Admin</title>
+<meta name="description" content="Admin panel for the JobMatch job scraper.">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; script-src 'self' 'unsafe-inline'; connect-src 'self' https://jobmatch-worker.kennethj.workers.dev; base-uri 'self'; form-action 'self'; upgrade-insecure-requests">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect x='6' y='6' width='20' height='20' rx='4' fill='none' stroke='%236c3aed' stroke-width='2.5'/%3E%3Cpath d='M12 16l3 3 6-6' stroke='%236c3aed' stroke-width='2.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<style>
+  :root{
+    --ink:#141414;
+    --ink-soft:#5b5f66;
+    --bg:#ffffff;
+    --bg-alt:#faf8f6;
+    --accent:#6c3aed;
+    --accent-soft:#f1ecfe;
+    --line:#ece8e4;
+    --danger:#c0392b;
+    --danger-soft:#fdecea;
+    --radius:12px;
+    --maxw:880px;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Inter,Roboto,sans-serif;
+    color:var(--ink);
+    background:var(--bg-alt);
+    line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 24px;}
+
+  header{background:var(--bg);border-bottom:1px solid var(--line);}
+  .nav{display:flex;align-items:center;justify-content:space-between;padding:18px 0;}
+  .brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:17px;letter-spacing:-0.01em;}
+  .brand-mark{width:22px;height:22px;flex:none;}
+  #logout-btn{
+    display:none;background:none;border:1px solid var(--line);color:var(--ink-soft);
+    padding:7px 14px;border-radius:999px;font-size:13px;font-weight:600;cursor:pointer;
+  }
+  #logout-btn:hover{border-color:var(--ink-soft);color:var(--ink);}
+
+  main{padding:40px 0 80px;}
+
+  /* Login gate */
+  #login-view{max-width:360px;margin:60px auto 0;text-align:center;}
+  #login-view h1{font-size:19px;font-weight:700;margin:0 0 8px;}
+  #login-view p{color:var(--ink-soft);font-size:14px;margin:0 0 24px;}
+  #password-input{
+    width:100%;padding:12px 14px;border:1px solid var(--line);border-radius:var(--radius);
+    font-size:14px;margin-bottom:12px;
+  }
+  #password-input:focus{outline:2px solid var(--accent);outline-offset:1px;}
+  #unlock-btn{
+    width:100%;background:var(--accent);color:#fff;border:none;padding:12px;
+    border-radius:var(--radius);font-size:14px;font-weight:700;cursor:pointer;
+  }
+  #unlock-btn:hover{opacity:.9;}
+  #unlock-btn:disabled{opacity:.6;cursor:default;}
+  #login-error{color:var(--danger);font-size:13px;margin-top:10px;min-height:18px;}
+
+  /* Review view */
+  #review-view{display:none;}
+  .section-head{margin:0 0 24px;}
+  .section-head h1{font-size:20px;font-weight:800;margin:0 0 6px;letter-spacing:-0.01em;}
+  .section-head p{color:var(--ink-soft);font-size:14px;margin:0;}
+
+  #status-line{color:var(--ink-soft);font-size:14px;padding:40px 0;text-align:center;}
+
+  .job-card{
+    background:#fff;border:1px solid var(--line);border-radius:var(--radius);
+    padding:20px 22px;margin-bottom:14px;
+  }
+  .job-card h3{font-size:15.5px;font-weight:700;margin:0 0 4px;letter-spacing:-0.01em;}
+  .job-card h3 a{color:inherit;text-decoration:none;}
+  .job-card h3 a:hover{color:var(--accent);}
+  .job-meta{color:var(--ink-soft);font-size:13px;margin:0 0 12px;}
+  .job-meta span:not(:last-child)::after{content:" · ";}
+  .rejection{
+    background:var(--danger-soft);color:var(--danger);font-size:13px;
+    padding:8px 12px;border-radius:8px;margin:0 0 14px;display:inline-block;
+  }
+  .job-actions{display:flex;gap:10px;}
+  .btn{
+    border:none;padding:9px 16px;border-radius:999px;font-size:13px;font-weight:700;
+    cursor:pointer;transition:opacity .15s;
+  }
+  .btn:disabled{opacity:.5;cursor:default;}
+  .btn-confirm{background:var(--ink);color:#fff;}
+  .btn-confirm:hover:not(:disabled){opacity:.85;}
+  .btn-override{background:var(--accent-soft);color:var(--accent);}
+  .btn-override:hover:not(:disabled){opacity:.85;}
+
+  #empty-state{text-align:center;padding:60px 0;color:var(--ink-soft);}
+  #empty-state .checkmark{font-size:32px;margin-bottom:12px;}
+</style>
+</head>
+<body>
+
+<header>
+  <nav class="nav wrap">
+    <div class="brand">
+      <svg class="brand-mark" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="6" y="6" width="20" height="20" rx="4" stroke="#6c3aed" stroke-width="2.5"/>
+        <path d="M12 16l3 3 6-6" stroke="#6c3aed" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      JobMatch Admin
+    </div>
+    <button id="logout-btn">Log out</button>
+  </nav>
+</header>
+
+<main class="wrap">
+  <div id="login-view">
+    <h1>Enter admin password</h1>
+    <p>Access to secret.kennethjensen.me</p>
+    <input id="password-input" type="password" placeholder="Password" autocomplete="off">
+    <button id="unlock-btn">Unlock</button>
+    <div id="login-error"></div>
+  </div>
+
+  <div id="review-view">
+    <div class="section-head">
+      <h1>Flagged as not-a-job</h1>
+      <p>Jobs the AI classifier didn't think were genuine listings. Confirm or override each one.</p>
+    </div>
+    <div id="status-line"></div>
+    <div id="job-list"></div>
+    <div id="empty-state" style="display:none;">
+      <div class="checkmark">✓</div>
+      Nothing to review right now.
+    </div>
+  </div>
+</main>
+
+<script>
+  const WORKER_URL = "https://jobmatch-worker.kennethj.workers.dev";
+  const STORAGE_KEY = "jobmatch_admin_password";
+
+  const loginView = document.getElementById("login-view");
+  const reviewView = document.getElementById("review-view");
+  const passwordInput = document.getElementById("password-input");
+  const unlockBtn = document.getElementById("unlock-btn");
+  const loginError = document.getElementById("login-error");
+  const logoutBtn = document.getElementById("logout-btn");
+  const statusLine = document.getElementById("status-line");
+  const jobList = document.getElementById("job-list");
+  const emptyState = document.getElementById("empty-state");
+
+  function getStoredPassword() {
+    try {
+      return localStorage.getItem(STORAGE_KEY);
+    } catch {
+      return null;
+    }
+  }
+
+  function storePassword(password) {
+    try {
+      localStorage.setItem(STORAGE_KEY, password);
+    } catch {
+      // localStorage unavailable (private browsing, etc.) — password just
+      // won't persist across reloads; not fatal, the gate still works.
+    }
+  }
+
+  function clearStoredPassword() {
+    try {
+      localStorage.removeItem(STORAGE_KEY);
+    } catch {
+      /* nothing to clear */
+    }
+  }
+
+  async function callWorker(path, options = {}) {
+    const password = getStoredPassword();
+    const res = await fetch(WORKER_URL + path, {
+      ...options,
+      headers: {
+        Authorization: `Bearer ${password}`,
+        ...(options.headers || {}),
+      },
+    });
+    if (res.status === 403) {
+      const err = new Error("unauthorized");
+      err.unauthorized = true;
+      throw err;
+    }
+    if (!res.ok) {
+      throw new Error(`Request failed: ${res.status}`);
+    }
+    return res.json();
+  }
+
+  function showLogin(message) {
+    loginView.style.display = "block";
+    reviewView.style.display = "none";
+    logoutBtn.style.display = "none";
+    loginError.textContent = message || "";
+  }
+
+  function showReview() {
+    loginView.style.display = "none";
+    reviewView.style.display = "block";
+    logoutBtn.style.display = "inline-block";
+  }
+
+  function renderJobCard(job) {
+    const card = document.createElement("div");
+    card.className = "job-card";
+
+    const metaParts = [];
+    if (job.company) metaParts.push(escapeHtml(job.company));
+    if (job.location) metaParts.push(escapeHtml(job.location));
+    if (job.sourceSite) metaParts.push(escapeHtml(job.sourceSite));
+
+    card.innerHTML = `
+      <h3>${job.jobUrl ? `<a href="${escapeAttr(job.jobUrl)}" target="_blank" rel="noopener">${escapeHtml(job.jobTitle || "(untitled)")}</a>` : escapeHtml(job.jobTitle || "(untitled)")}</h3>
+      <p class="job-meta">${metaParts.map((p) => `<span>${p}</span>`).join("")}</p>
+      ${job.rejectionReason ? `<div class="rejection">${escapeHtml(job.rejectionReason)}</div>` : ""}
+      <div class="job-actions">
+        <button class="btn btn-confirm" data-action="confirm">Confirm — not a job</button>
+        <button class="btn btn-override" data-action="override">Override — it's real</button>
+      </div>
+    `;
+
+    card.querySelectorAll("button[data-action]").forEach((btn) => {
+      btn.addEventListener("click", () => reviewJob(job.id, btn.dataset.action, card));
+    });
+
+    return card;
+  }
+
+  function escapeHtml(str) {
+    const div = document.createElement("div");
+    div.textContent = str;
+    return div.innerHTML;
+  }
+
+  function escapeAttr(str) {
+    return escapeHtml(str).replace(/"/g, "&quot;");
+  }
+
+  async function reviewJob(id, action, card) {
+    card.querySelectorAll("button").forEach((b) => (b.disabled = true));
+    try {
+      await callWorker(`/jobs/${id}/review`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action }),
+      });
+      card.remove();
+      if (!jobList.children.length) {
+        emptyState.style.display = "block";
+      }
+    } catch (err) {
+      if (err.unauthorized) {
+        clearStoredPassword();
+        showLogin("Session expired. Enter the password again.");
+        return;
+      }
+      card.querySelectorAll("button").forEach((b) => (b.disabled = false));
+      alert(`Failed to save: ${err.message}`);
+    }
+  }
+
+  async function loadFlagged() {
+    statusLine.textContent = "Loading…";
+    jobList.innerHTML = "";
+    emptyState.style.display = "none";
+    try {
+      const data = await callWorker("/jobs/flagged");
+      statusLine.textContent = "";
+      if (!data.flagged.length) {
+        emptyState.style.display = "block";
+        return;
+      }
+      for (const job of data.flagged) {
+        jobList.appendChild(renderJobCard(job));
+      }
+    } catch (err) {
+      if (err.unauthorized) {
+        clearStoredPassword();
+        showLogin("Session expired. Enter the password again.");
+        return;
+      }
+      statusLine.textContent = `Failed to load: ${err.message}`;
+    }
+  }
+
+  async function tryUnlock(password) {
+    unlockBtn.disabled = true;
+    loginError.textContent = "";
+    storePassword(password);
+    try {
+      await callWorker("/jobs/flagged");
+      showReview();
+      loadFlagged();
+    } catch (err) {
+      clearStoredPassword();
+      loginError.textContent = err.unauthorized ? "Wrong password." : `Error: ${err.message}`;
+    } finally {
+      unlockBtn.disabled = false;
+    }
+  }
+
+  unlockBtn.addEventListener("click", () => {
+    const password = passwordInput.value.trim();
+    if (password) tryUnlock(password);
+  });
+  passwordInput.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") unlockBtn.click();
+  });
+  logoutBtn.addEventListener("click", () => {
+    clearStoredPassword();
+    passwordInput.value = "";
+    showLogin();
+  });
+
+  // On load: if a password is already stored, try it silently rather than
+  // showing the login form again every visit.
+  (async () => {
+    const stored = getStoredPassword();
+    if (!stored) {
+      showLogin();
+      return;
+    }
+    try {
+      await callWorker("/jobs/flagged");
+      showReview();
+      loadFlagged();
+    } catch {
+      clearStoredPassword();
+      showLogin();
+    }
+  })();
+</script>
+
+</body>
+</html>
