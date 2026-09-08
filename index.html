@@ -176,22 +176,23 @@
     <div id="wordcloud-view">
       <div class="section-head">
         <h1>Job title word cloud</h1>
-        <p>The most frequent words across every scraped job title. Click a word marked <strong>+</strong> to queue it as a tag candidate — it still needs adding to Baserow's Tags field and the TAGS list in code by hand, this just tracks what's worth adding.</p>
+        <p>The most frequent words across every scraped job title. Click a word marked <strong>+</strong> to tag it — it's committed straight into <code>TAGS</code> in <code>src/anthropic.js</code> automatically, no code edit needed. The one manual step left: add it as a select option on Baserow's Tags field too (Baserow's API tokens can't do that part at all, only the full web UI can).</p>
       </div>
       <div id="cloud-status" class="status-line" style="color:var(--ink-soft);font-size:14px;padding:20px 0;text-align:center;"></div>
       <div class="cloud-card" id="cloud-card" style="display:none;">
         <div class="cloud-legend">
           <span><span class="swatch" style="background:var(--accent-soft);"></span>less frequent</span>
           <span><span class="swatch" style="background:var(--accent);"></span>more frequent</span>
-          <span style="margin-left:auto;">Words marked <strong style="color:var(--accent);">+</strong> aren't a Tag yet — click to queue</span>
+          <span style="margin-left:auto;">Words marked <strong style="color:var(--accent);">+</strong> aren't a Tag yet — click to tag</span>
         </div>
         <svg id="cloud-svg" viewBox="0 0 800 440" xmlns="http://www.w3.org/2000/svg"></svg>
       </div>
+      <div id="candidate-toast" style="display:none;font-size:13px;padding:10px 14px;border-radius:8px;margin-bottom:20px;"></div>
 
       <div class="candidates-head">
         <div>
-          <h2>Queued tag candidates</h2>
-          <p>Words you've flagged from the cloud above. Add each to Baserow's Tags field and <code>TAGS</code> in <code>src/anthropic.js</code>, then dismiss it here.</p>
+          <h2>Queued — still need a Baserow option</h2>
+          <p>Already committed to <code>TAGS</code> in code. Add each as a select option on Baserow's Tags field, then dismiss it here.</p>
         </div>
       </div>
       <div id="candidates-list" class="candidate-chips"></div>
@@ -221,6 +222,7 @@
   const cloudSvg = document.getElementById("cloud-svg");
   const candidatesList = document.getElementById("candidates-list");
   const candidatesEmpty = document.getElementById("candidates-empty");
+  const candidateToast = document.getElementById("candidate-toast");
 
   function getStoredPassword() {
     try {
@@ -504,6 +506,17 @@
     });
   }
 
+  function showCandidateToast(text, kind) {
+    candidateToast.textContent = text;
+    candidateToast.style.display = "block";
+    candidateToast.style.background = kind === "error" ? "var(--danger-soft)" : "var(--accent-soft)";
+    candidateToast.style.color = kind === "error" ? "var(--danger)" : "var(--accent)";
+    clearTimeout(showCandidateToast._t);
+    showCandidateToast._t = setTimeout(() => {
+      candidateToast.style.display = "none";
+    }, 5000);
+  }
+
   async function toggleCandidate(word) {
     try {
       if (candidateWords.includes(word)) {
@@ -520,6 +533,14 @@
           body: JSON.stringify({ word }),
         });
         candidateWords = data.candidates;
+        const result = data.codeResult;
+        if (result?.status === "added") {
+          showCandidateToast(`"${word}" committed to TAGS in code. Still needs the Baserow select option.`, "ok");
+        } else if (result?.status === "already-present") {
+          showCandidateToast(`"${word}" is already in TAGS. Still needs the Baserow select option.`, "ok");
+        } else if (result?.status === "error") {
+          showCandidateToast(`Queued, but couldn't commit to code: ${result.detail || "unknown error"}`, "error");
+        }
       }
       renderCandidates();
       renderWordCloud(lastWords);
