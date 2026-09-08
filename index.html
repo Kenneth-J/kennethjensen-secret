@@ -380,6 +380,20 @@
     return escapeHtml(str).replace(/"/g, "&quot;");
   }
 
+  // job.jobUrl comes from scraped third-party listings — never trust its
+  // scheme. Only render it as a link when it's actually http(s); a
+  // javascript: URL smuggled in as a "job link" would otherwise execute on
+  // click.
+  function safeJobUrl(url) {
+    if (!url) return null;
+    try {
+      const parsed = new URL(url, location.href);
+      return parsed.protocol === "http:" || parsed.protocol === "https:" ? parsed.href : null;
+    } catch {
+      return null;
+    }
+  }
+
   function showLogin(message) {
     loginView.style.display = "block";
     appView.style.display = "none";
@@ -415,7 +429,7 @@
     if (job.sourceSite) metaParts.push(escapeHtml(job.sourceSite));
 
     card.innerHTML = `
-      <h3>${job.jobUrl ? `<a href="${escapeAttr(job.jobUrl)}" target="_blank" rel="noopener">${escapeHtml(job.jobTitle || "(untitled)")}</a>` : escapeHtml(job.jobTitle || "(untitled)")}</h3>
+      <h3>${(() => { const u = safeJobUrl(job.jobUrl); return u ? `<a href="${escapeAttr(u)}" target="_blank" rel="noopener">${escapeHtml(job.jobTitle || "(untitled)")}</a>` : escapeHtml(job.jobTitle || "(untitled)"); })()}</h3>
       <p class="job-meta">${metaParts.map((p) => `<span>${p}</span>`).join("")}</p>
       ${job.rejectionReason ? `<div class="rejection">${escapeHtml(job.rejectionReason)}</div>` : ""}
       <div class="job-actions">
