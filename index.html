@@ -20,8 +20,10 @@
     --line:#ece8e4;
     --danger:#c0392b;
     --danger-soft:#fdecea;
+    --up:#1a8a5f;
+    --up-soft:#e6f5ef;
     --radius:12px;
-    --maxw:880px;
+    --maxw:920px;
   }
   *{box-sizing:border-box;}
   body{
@@ -33,6 +35,7 @@
     -webkit-font-smoothing:antialiased;
   }
   .wrap{max-width:var(--maxw);margin:0 auto;padding:0 24px;}
+  code{background:var(--bg-alt);border:1px solid var(--line);border-radius:4px;padding:1px 5px;font-size:.92em;}
 
   header{background:var(--bg);border-bottom:1px solid var(--line);}
   .nav{display:flex;align-items:center;justify-content:space-between;padding:18px 0;}
@@ -63,19 +66,20 @@
   #unlock-btn:disabled{opacity:.6;cursor:default;}
   #login-error{color:var(--danger);font-size:13px;margin-top:10px;min-height:18px;}
 
-  /* Review view */
   .section-head{margin:0 0 24px;}
   .section-head h1{font-size:20px;font-weight:800;margin:0 0 6px;letter-spacing:-0.01em;}
-  .section-head p{color:var(--ink-soft);font-size:14px;margin:0;}
+  .section-head p{color:var(--ink-soft);font-size:14px;margin:0;max-width:64ch;}
 
-  .tabs{display:flex;gap:6px;margin-bottom:28px;border-bottom:1px solid var(--line);}
+  .tabs{display:flex;gap:6px;margin-bottom:28px;border-bottom:1px solid var(--line);flex-wrap:wrap;}
   .tab-btn{
     background:none;border:none;padding:10px 4px;margin-right:20px;font-size:14px;font-weight:700;
     color:var(--ink-soft);cursor:pointer;border-bottom:2px solid transparent;translate:0 1px;
   }
   .tab-btn.active{color:var(--accent);border-bottom-color:var(--accent);}
+  .tab-panel{display:none;}
+  .tab-panel.active{display:block;}
 
-  #status-line{color:var(--ink-soft);font-size:14px;padding:40px 0;text-align:center;}
+  .status-line{color:var(--ink-soft);font-size:14px;padding:40px 0;text-align:center;}
 
   .job-card{
     background:#fff;border:1px solid var(--line);border-radius:var(--radius);
@@ -90,6 +94,11 @@
     background:var(--danger-soft);color:var(--danger);font-size:13px;
     padding:8px 12px;border-radius:8px;margin:0 0 14px;display:inline-block;
   }
+  .missing-tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px;}
+  .missing-tag{
+    background:var(--danger-soft);color:var(--danger);font-size:11.5px;font-weight:700;
+    padding:3px 9px;border-radius:999px;text-transform:uppercase;letter-spacing:.02em;
+  }
   .job-actions{display:flex;gap:10px;}
   .btn{
     border:none;padding:9px 16px;border-radius:999px;font-size:13px;font-weight:700;
@@ -101,33 +110,30 @@
   .btn-override{background:var(--accent-soft);color:var(--accent);}
   .btn-override:hover:not(:disabled){opacity:.85;}
 
-  #empty-state{text-align:center;padding:60px 0;color:var(--ink-soft);}
-  #empty-state .checkmark{font-size:32px;margin-bottom:12px;}
+  .empty-state{text-align:center;padding:60px 0;color:var(--ink-soft);}
+  .empty-state .checkmark{font-size:32px;margin-bottom:12px;}
 
-  /* Word cloud view */
-  #wordcloud-view{display:none;}
+  /* Word cloud */
   .cloud-card{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:16px;margin-bottom:24px;}
   #cloud-svg{width:100%;height:auto;display:block;}
   #cloud-svg text{cursor:default;user-select:none;}
-  #cloud-svg text.candidate{cursor:pointer;}
-  #cloud-svg text.candidate:hover{opacity:.7;}
-  .cloud-legend{display:flex;align-items:center;gap:16px;font-size:12.5px;color:var(--ink-soft);margin-bottom:6px;}
+  #cloud-svg text.tag-target{cursor:pointer;}
+  #cloud-svg text.tag-target:hover{opacity:.7;}
+  .cloud-legend{display:flex;align-items:center;gap:16px;font-size:12.5px;color:var(--ink-soft);margin-bottom:6px;flex-wrap:wrap;}
   .cloud-legend .swatch{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:5px;vertical-align:-1px;}
+  #tag-toast{display:none;font-size:13px;padding:10px 14px;border-radius:8px;margin-bottom:20px;}
 
-  .candidates-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
-  .candidates-head h2{font-size:15.5px;font-weight:800;margin:0;letter-spacing:-0.01em;}
-  .candidates-head p{color:var(--ink-soft);font-size:13px;margin:2px 0 0;}
-  .candidate-chips{display:flex;flex-wrap:wrap;gap:8px;}
-  .candidate-chip{
-    display:inline-flex;align-items:center;gap:8px;background:var(--accent-soft);color:var(--accent);
-    padding:7px 8px 7px 14px;border-radius:999px;font-size:13px;font-weight:700;
-  }
-  .candidate-chip button{
-    background:#fff;border:none;color:var(--accent);width:18px;height:18px;border-radius:50%;
-    font-size:13px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;
-  }
-  .candidate-chip button:hover{background:var(--accent);color:#fff;}
-  #candidates-empty{color:var(--ink-soft);font-size:13px;font-style:italic;}
+  /* Missing data */
+  .missing-summary{color:var(--ink-soft);font-size:13.5px;margin-bottom:18px;}
+
+  /* Docs */
+  .doc-card{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:22px 24px;margin-bottom:16px;}
+  .doc-card h3{font-size:15px;font-weight:800;margin:0 0 8px;letter-spacing:-0.01em;}
+  .doc-card p{font-size:13.5px;color:var(--ink-soft);margin:0 0 10px;}
+  .doc-card p:last-child{margin-bottom:0;}
+  .doc-card ul{margin:0 0 10px;padding-left:20px;font-size:13.5px;color:var(--ink-soft);}
+  .doc-card li{margin-bottom:4px;}
+  .doc-tier{display:inline-block;font-size:11.5px;font-weight:800;letter-spacing:.03em;text-transform:uppercase;color:var(--accent);background:var(--accent-soft);padding:3px 10px;border-radius:999px;margin-bottom:10px;}
 </style>
 </head>
 <body>
@@ -158,45 +164,80 @@
     <div class="tabs">
       <button class="tab-btn active" data-tab="review">Flagged Jobs</button>
       <button class="tab-btn" data-tab="wordcloud">Word Cloud</button>
+      <button class="tab-btn" data-tab="missing">Missing Data</button>
+      <button class="tab-btn" data-tab="docs">How We Classify</button>
     </div>
 
-    <div id="review-view">
+    <div id="review-panel" class="tab-panel active">
       <div class="section-head">
         <h1>Flagged as not-a-job</h1>
         <p>Jobs the AI classifier didn't think were genuine listings. Confirm or override each one.</p>
       </div>
-      <div id="status-line"></div>
+      <div id="review-status" class="status-line"></div>
       <div id="job-list"></div>
-      <div id="empty-state" style="display:none;">
+      <div id="review-empty" class="empty-state" style="display:none;">
         <div class="checkmark">✓</div>
         Nothing to review right now.
       </div>
     </div>
 
-    <div id="wordcloud-view">
+    <div id="wordcloud-panel" class="tab-panel">
       <div class="section-head">
         <h1>Job title word cloud</h1>
-        <p>The most frequent words across every scraped job title. Click a word marked <strong>+</strong> to tag it — it's committed straight into <code>TAGS</code> in <code>src/anthropic.js</code> automatically, no code edit needed. The one manual step left: add it as a select option on Baserow's Tags field too (Baserow's API tokens can't do that part at all, only the full web UI can).</p>
+        <p>The most frequent words across every scraped job title. Click a word marked <strong>+</strong> to tag it — it's created directly in Baserow's Tags table, live immediately, nothing else to do. Click an already-tagged word (<strong>✓</strong>) to remove it.</p>
       </div>
-      <div id="cloud-status" class="status-line" style="color:var(--ink-soft);font-size:14px;padding:20px 0;text-align:center;"></div>
+      <div id="cloud-status" class="status-line"></div>
       <div class="cloud-card" id="cloud-card" style="display:none;">
         <div class="cloud-legend">
           <span><span class="swatch" style="background:var(--accent-soft);"></span>less frequent</span>
           <span><span class="swatch" style="background:var(--accent);"></span>more frequent</span>
-          <span style="margin-left:auto;">Words marked <strong style="color:var(--accent);">+</strong> aren't a Tag yet — click to tag</span>
+          <span>Marked <strong style="color:var(--accent);">+</strong> = not a tag yet · <strong style="color:var(--up);">✓</strong> = already a tag</span>
         </div>
         <svg id="cloud-svg" viewBox="0 0 800 440" xmlns="http://www.w3.org/2000/svg"></svg>
       </div>
-      <div id="candidate-toast" style="display:none;font-size:13px;padding:10px 14px;border-radius:8px;margin-bottom:20px;"></div>
+      <div id="tag-toast"></div>
+    </div>
 
-      <div class="candidates-head">
-        <div>
-          <h2>Queued — still need a Baserow option</h2>
-          <p>Already committed to <code>TAGS</code> in code. Add each as a select option on Baserow's Tags field, then dismiss it here.</p>
-        </div>
+    <div id="missing-panel" class="tab-panel">
+      <div class="section-head">
+        <h1>Missing data</h1>
+        <p>Active jobs missing a salary, job URL, seniority classification, or country. Most of this fills in automatically on the next scrape as titles get re-seen — this is a spot-check, not a to-do list.</p>
       </div>
-      <div id="candidates-list" class="candidate-chips"></div>
-      <div id="candidates-empty" style="display:none;">Nothing queued yet.</div>
+      <div id="missing-status" class="status-line"></div>
+      <div id="missing-summary" class="missing-summary" style="display:none;"></div>
+      <div id="missing-list"></div>
+      <div id="missing-empty" class="empty-state" style="display:none;">
+        <div class="checkmark">✓</div>
+        Nothing missing right now.
+      </div>
+    </div>
+
+    <div id="docs-panel" class="tab-panel">
+      <div class="section-head">
+        <h1>How we classify</h1>
+        <p>What each automated field actually checks, in plain terms.</p>
+      </div>
+
+      <div class="doc-card">
+        <span class="doc-tier">Seniority</span>
+        <h3>Five tiers, from the job title</h3>
+        <p>Every scraped job gets a seniority guess — Entry, Junior, Mid, Senior, or C-Level — computed fresh from its title by <code>src/seniority.js</code> in the scraper. No AI call, no cost: it's pattern matching against English and Danish signal words, checked in this order (most specific first, so "Senior Software Engineering Intern" resolves to Entry, not Senior):</p>
+        <ul>
+          <li><strong>C-Level</strong> — CEO/CFO/COO/CTO/CIO/CMO/CHRO/CPO/CCO, "Chief … Officer", President, Managing Director, Danish "Adm. Direktør".</li>
+          <li><strong>Entry</strong> — intern, internship, trainee, graduate, apprentice, entry-level, working/student assistant, and Danish elev/praktikant/fritidsjob/sommerjob (including compounds like "Kontorelev" with no space).</li>
+          <li><strong>Junior</strong> — junior, jr.</li>
+          <li><strong>Senior</strong> — senior, sr., lead, principal, head of, director, VP/vice president, manager, and Danish "chef" (e.g. "Salgschef" — manager, not the English "cook").</li>
+          <li><strong>Mid</strong> — only an explicit "mid-level"/"mid level" in the title.</li>
+        </ul>
+        <p>If nothing matches, it falls back to whatever the source site itself reported (only two of nine sites provide this). If that's empty too, Seniority is left blank rather than guessed — most titles never self-identify a level at all, and a wrong guess is worse than an honest blank (see the Missing Data tab).</p>
+      </div>
+
+      <div class="doc-card">
+        <span class="doc-tier">Language</span>
+        <h3>An AI call, not a fixed algorithm</h3>
+        <p>Unlike Seniority, Language detection isn't a hand-written rule set — it's one question inside the same Claude Haiku 4.5 call that also generates Tags and checks whether a listing is a real job (<code>classifyJob()</code> in <code>src/anthropic.js</code>). The model is asked for the two-letter ISO 639-1 code of the language the job title (and company name, if it helps) is written in, and returns <code>null</code> if it can't tell — never a guess.</p>
+        <p>Because it rides on a call that's already happening for Tags/job-verification, it costs nothing extra. It's also why Language is currently empty for most rows: that whole classification step needs Anthropic API credit, which the account has been out of since 2026-09-05.</p>
+      </div>
     </div>
   </div>
 </main>
@@ -207,22 +248,31 @@
 
   const loginView = document.getElementById("login-view");
   const appView = document.getElementById("app-view");
-  const reviewView = document.getElementById("review-view");
-  const wordcloudView = document.getElementById("wordcloud-view");
   const passwordInput = document.getElementById("password-input");
   const unlockBtn = document.getElementById("unlock-btn");
   const loginError = document.getElementById("login-error");
   const logoutBtn = document.getElementById("logout-btn");
-  const statusLine = document.getElementById("status-line");
-  const jobList = document.getElementById("job-list");
-  const emptyState = document.getElementById("empty-state");
   const tabBtns = document.querySelectorAll(".tab-btn");
+  const panels = {
+    review: document.getElementById("review-panel"),
+    wordcloud: document.getElementById("wordcloud-panel"),
+    missing: document.getElementById("missing-panel"),
+    docs: document.getElementById("docs-panel"),
+  };
+
+  const reviewStatus = document.getElementById("review-status");
+  const jobList = document.getElementById("job-list");
+  const reviewEmpty = document.getElementById("review-empty");
+
   const cloudStatus = document.getElementById("cloud-status");
   const cloudCard = document.getElementById("cloud-card");
   const cloudSvg = document.getElementById("cloud-svg");
-  const candidatesList = document.getElementById("candidates-list");
-  const candidatesEmpty = document.getElementById("candidates-empty");
-  const candidateToast = document.getElementById("candidate-toast");
+  const tagToast = document.getElementById("tag-toast");
+
+  const missingStatus = document.getElementById("missing-status");
+  const missingSummary = document.getElementById("missing-summary");
+  const missingList = document.getElementById("missing-list");
+  const missingEmpty = document.getElementById("missing-empty");
 
   function getStoredPassword() {
     try {
@@ -269,6 +319,16 @@
     return res.json();
   }
 
+  function escapeHtml(str) {
+    const div = document.createElement("div");
+    div.textContent = str;
+    return div.innerHTML;
+  }
+
+  function escapeAttr(str) {
+    return escapeHtml(str).replace(/"/g, "&quot;");
+  }
+
   function showLogin(message) {
     loginView.style.display = "block";
     appView.style.display = "none";
@@ -282,26 +342,22 @@
     logoutBtn.style.display = "inline-block";
   }
 
-  let activeTab = "review";
-  let wordCloudLoaded = false;
+  const loaded = { review: false, wordcloud: false, missing: false };
 
   function setTab(tab) {
-    activeTab = tab;
     tabBtns.forEach((btn) => btn.classList.toggle("active", btn.dataset.tab === tab));
-    reviewView.style.display = tab === "review" ? "block" : "none";
-    wordcloudView.style.display = tab === "wordcloud" ? "block" : "none";
-    if (tab === "wordcloud" && !wordCloudLoaded) {
-      wordCloudLoaded = true;
-      loadWordCloud();
-    }
+    Object.entries(panels).forEach(([name, el]) => el.classList.toggle("active", name === tab));
+    if (tab === "review" && !loaded.review) { loaded.review = true; loadFlagged(); }
+    if (tab === "wordcloud" && !loaded.wordcloud) { loaded.wordcloud = true; loadWordCloud(); }
+    if (tab === "missing" && !loaded.missing) { loaded.missing = true; loadMissingData(); }
   }
 
   tabBtns.forEach((btn) => btn.addEventListener("click", () => setTab(btn.dataset.tab)));
 
+  // --- Flagged jobs ---
   function renderJobCard(job) {
     const card = document.createElement("div");
     card.className = "job-card";
-
     const metaParts = [];
     if (job.company) metaParts.push(escapeHtml(job.company));
     if (job.location) metaParts.push(escapeHtml(job.location));
@@ -316,22 +372,10 @@
         <button class="btn btn-override" data-action="override">Override — it's real</button>
       </div>
     `;
-
     card.querySelectorAll("button[data-action]").forEach((btn) => {
       btn.addEventListener("click", () => reviewJob(job.id, btn.dataset.action, card));
     });
-
     return card;
-  }
-
-  function escapeHtml(str) {
-    const div = document.createElement("div");
-    div.textContent = str;
-    return div.innerHTML;
-  }
-
-  function escapeAttr(str) {
-    return escapeHtml(str).replace(/"/g, "&quot;");
   }
 
   async function reviewJob(id, action, card) {
@@ -343,136 +387,112 @@
         body: JSON.stringify({ action }),
       });
       card.remove();
-      if (!jobList.children.length) {
-        emptyState.style.display = "block";
-      }
+      if (!jobList.children.length) reviewEmpty.style.display = "block";
     } catch (err) {
-      if (err.unauthorized) {
-        clearStoredPassword();
-        showLogin("Session expired. Enter the password again.");
-        return;
-      }
+      if (err.unauthorized) { clearStoredPassword(); showLogin("Session expired. Enter the password again."); return; }
       card.querySelectorAll("button").forEach((b) => (b.disabled = false));
       alert(`Failed to save: ${err.message}`);
     }
   }
 
   async function loadFlagged() {
-    statusLine.textContent = "Loading…";
+    reviewStatus.textContent = "Loading…";
     jobList.innerHTML = "";
-    emptyState.style.display = "none";
+    reviewEmpty.style.display = "none";
     try {
       const data = await callWorker("/jobs/flagged");
-      statusLine.textContent = "";
-      if (!data.flagged.length) {
-        emptyState.style.display = "block";
-        return;
-      }
-      for (const job of data.flagged) {
-        jobList.appendChild(renderJobCard(job));
-      }
+      reviewStatus.textContent = "";
+      if (!data.flagged.length) { reviewEmpty.style.display = "block"; return; }
+      for (const job of data.flagged) jobList.appendChild(renderJobCard(job));
     } catch (err) {
-      if (err.unauthorized) {
-        clearStoredPassword();
-        showLogin("Session expired. Enter the password again.");
-        return;
-      }
-      statusLine.textContent = `Failed to load: ${err.message}`;
+      if (err.unauthorized) { clearStoredPassword(); showLogin("Session expired. Enter the password again."); return; }
+      reviewStatus.textContent = `Failed to load: ${err.message}`;
     }
   }
 
-  async function tryUnlock(password) {
-    unlockBtn.disabled = true;
-    loginError.textContent = "";
-    storePassword(password);
+  // --- Missing data ---
+  function renderMissingCard(job) {
+    const card = document.createElement("div");
+    card.className = "job-card";
+    const metaParts = [];
+    if (job.company) metaParts.push(escapeHtml(job.company));
+    if (job.sourceSite) metaParts.push(escapeHtml(job.sourceSite));
+    card.innerHTML = `
+      <h3>${job.jobUrl ? `<a href="${escapeAttr(job.jobUrl)}" target="_blank" rel="noopener">${escapeHtml(job.jobTitle || "(untitled)")}</a>` : escapeHtml(job.jobTitle || "(untitled)")}</h3>
+      <p class="job-meta">${metaParts.map((p) => `<span>${p}</span>`).join("")}</p>
+      <div class="missing-tags">${job.missing.map((m) => `<span class="missing-tag">${escapeHtml(m)}</span>`).join("")}</div>
+    `;
+    return card;
+  }
+
+  async function loadMissingData() {
+    missingStatus.textContent = "Loading…";
+    missingSummary.style.display = "none";
+    missingList.innerHTML = "";
+    missingEmpty.style.display = "none";
     try {
-      await callWorker("/jobs/flagged");
-      showApp();
-      loadFlagged();
+      const data = await callWorker("/jobs/missing-data");
+      missingStatus.textContent = "";
+      if (!data.missing.length) { missingEmpty.style.display = "block"; return; }
+      missingSummary.style.display = "block";
+      missingSummary.textContent = `${data.missing.length} of ${data.totalActive} active jobs are missing at least one field.`;
+      for (const job of data.missing) missingList.appendChild(renderMissingCard(job));
     } catch (err) {
-      clearStoredPassword();
-      loginError.textContent = err.unauthorized ? "Wrong password." : `Error: ${err.message}`;
-    } finally {
-      unlockBtn.disabled = false;
+      if (err.unauthorized) { clearStoredPassword(); showLogin("Session expired. Enter the password again."); return; }
+      missingStatus.textContent = `Failed to load: ${err.message}`;
     }
   }
-
-  unlockBtn.addEventListener("click", () => {
-    const password = passwordInput.value.trim();
-    if (password) tryUnlock(password);
-  });
-  passwordInput.addEventListener("keydown", (e) => {
-    if (e.key === "Enter") unlockBtn.click();
-  });
-  logoutBtn.addEventListener("click", () => {
-    clearStoredPassword();
-    passwordInput.value = "";
-    setTab("review");
-    showLogin();
-  });
 
   // --- Word cloud ---
-  // Hand-rolled spiral layout, same "no charting/rendering library" choice
-  // as the public stats page: place words largest-first, spiraling outward
-  // from center until a candidate spot doesn't overlap anything already
-  // placed. Text is measured with real getBBox() (accurate, unlike
-  // estimating width from character count), so placement accounts for
-  // each word's actual rendered size.
+  // Hand-rolled spiral layout: place words largest-first, spiraling
+  // outward from center until a candidate spot doesn't overlap anything
+  // already placed. Real getBBox() measurement, not an estimate, so
+  // placement matches each word's actual rendered size.
   const SVG_NS = "http://www.w3.org/2000/svg";
-  let candidateWords = [];
+  let lastWords = [];
 
   function rectsOverlap(a, b, pad) {
     return !(a.x + a.w + pad < b.x || b.x + b.w + pad < a.x || a.y + a.h + pad < b.y || b.y + b.h + pad < a.y);
   }
 
   function mixColor(c1, c2, t) {
-    const mix = c1.map((v, i) => Math.round(v + (c2[i] - v) * t));
-    return `rgb(${mix.join(",")})`;
+    return `rgb(${c1.map((v, i) => Math.round(v + (c2[i] - v) * t)).join(",")})`;
   }
 
   function renderWordCloud(words) {
-    const width = 800;
-    const height = 440;
+    const width = 800, height = 440;
     cloudSvg.innerHTML = "";
-
     if (!words.length) return;
+
     const counts = words.map((w) => w.count);
     const maxCount = Math.max(...counts);
     const minCount = Math.min(...counts);
-    const minFont = 13;
-    const maxFont = 50;
+    const minFont = 13, maxFont = 50;
     const fontSizeFor = (c) => {
       if (maxCount === minCount) return (minFont + maxFont) / 2;
-      const t = Math.sqrt((c - minCount) / (maxCount - minCount)); // sqrt: less extreme spread
-      return minFont + t * (maxFont - minFont);
+      return minFont + Math.sqrt((c - minCount) / (maxCount - minCount)) * (maxFont - minFont);
     };
-    const softAccent = [241, 236, 254]; // --accent-soft
-    const accent = [108, 58, 237]; // --accent
+    const softAccent = [241, 236, 254], accent = [108, 58, 237];
     const colorFor = (c) => {
       const t = maxCount === minCount ? 0.6 : (c - minCount) / (maxCount - minCount);
-      return mixColor(softAccent, accent, 0.25 + t * 0.75); // never fully washed out
+      return mixColor(softAccent, accent, 0.25 + t * 0.75);
     };
 
     const placed = [];
-    const centerX = width / 2;
-    const centerY = height / 2;
+    const centerX = width / 2, centerY = height / 2;
 
     words.forEach((w) => {
-      const isCandidate = !w.isTag; // clickable target — queue/dismiss
-      const alreadyQueued = candidateWords.includes(w.word);
-
       const el = document.createElementNS(SVG_NS, "text");
       el.setAttribute("font-weight", "700");
       el.setAttribute("font-family", "inherit");
-      if (isCandidate) el.classList.add("candidate");
+      el.classList.add("tag-target");
 
-      if (isCandidate) {
-        const prefix = document.createElementNS(SVG_NS, "tspan");
-        prefix.textContent = (alreadyQueued ? "✓ " : "+ ");
-        prefix.setAttribute("font-size", fontSizeFor(w.count) * 0.55);
-        prefix.setAttribute("fill", alreadyQueued ? "#1a8a5f" : "#6c3aed");
-        el.appendChild(prefix);
-      }
+      const prefix = document.createElementNS(SVG_NS, "tspan");
+      prefix.textContent = w.isTag ? "✓ " : "+ ";
+      prefix.setAttribute("font-size", fontSizeFor(w.count) * 0.55);
+      prefix.setAttribute("fill", w.isTag ? "#1a8a5f" : "#6c3aed");
+      el.appendChild(prefix);
+
       const wordSpan = document.createElementNS(SVG_NS, "tspan");
       wordSpan.textContent = w.word;
       wordSpan.setAttribute("font-size", fontSizeFor(w.count));
@@ -482,16 +502,13 @@
       cloudSvg.appendChild(el);
       const bbox = el.getBBox();
 
-      let x = centerX - bbox.width / 2;
-      let y = centerY - bbox.height / 2;
-      let angle = Math.random() * Math.PI * 2;
-      let radius = 0;
+      let x = centerX - bbox.width / 2, y = centerY - bbox.height / 2;
+      let angle = Math.random() * Math.PI * 2, radius = 0;
       for (let attempt = 0; attempt < 3000; attempt++) {
         x = centerX + radius * Math.cos(angle) - bbox.width / 2;
-        y = centerY + radius * Math.sin(angle) * 0.6 - bbox.height / 2; // flatten vertically, wide layout
+        y = centerY + radius * Math.sin(angle) * 0.6 - bbox.height / 2;
         const rect = { x, y, w: bbox.width, h: bbox.height };
-        const fits =
-          rect.x > 4 && rect.y > 4 && rect.x + rect.w < width - 4 && rect.y + rect.h < height - 4;
+        const fits = rect.x > 4 && rect.y > 4 && rect.x + rect.w < width - 4 && rect.y + rect.h < height - 4;
         if (fits && !placed.some((p) => rectsOverlap(rect, p, 3))) break;
         angle += 0.28;
         radius += 1.4;
@@ -500,103 +517,88 @@
       el.setAttribute("y", y + bbox.height * 0.8);
       placed.push({ x, y, w: bbox.width, h: bbox.height });
 
-      if (isCandidate) {
-        el.addEventListener("click", () => toggleCandidate(w.word));
-      }
+      el.addEventListener("click", () => toggleTag(w));
     });
   }
 
-  function showCandidateToast(text, kind) {
-    candidateToast.textContent = text;
-    candidateToast.style.display = "block";
-    candidateToast.style.background = kind === "error" ? "var(--danger-soft)" : "var(--accent-soft)";
-    candidateToast.style.color = kind === "error" ? "var(--danger)" : "var(--accent)";
-    clearTimeout(showCandidateToast._t);
-    showCandidateToast._t = setTimeout(() => {
-      candidateToast.style.display = "none";
-    }, 5000);
+  function showTagToast(text, kind) {
+    tagToast.textContent = text;
+    tagToast.style.display = "block";
+    tagToast.style.background = kind === "error" ? "var(--danger-soft)" : "var(--up-soft)";
+    tagToast.style.color = kind === "error" ? "var(--danger)" : "var(--up)";
+    clearTimeout(showTagToast._t);
+    showTagToast._t = setTimeout(() => { tagToast.style.display = "none"; }, 4000);
   }
 
-  async function toggleCandidate(word) {
+  async function toggleTag(w) {
     try {
-      if (candidateWords.includes(word)) {
-        const data = await callWorker("/words/candidates/dismiss", {
-          method: "POST",
+      if (w.isTag) {
+        await callWorker("/words/tags", {
+          method: "DELETE",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ word }),
+          body: JSON.stringify({ name: w.word }),
         });
-        candidateWords = data.candidates;
+        showTagToast(`Removed "${w.word}" from Tags.`, "ok");
       } else {
-        const data = await callWorker("/words/candidates", {
+        const result = await callWorker("/words/tags", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ word }),
+          body: JSON.stringify({ name: w.word }),
         });
-        candidateWords = data.candidates;
-        const result = data.codeResult;
-        if (result?.status === "added") {
-          showCandidateToast(`"${word}" committed to TAGS in code. Still needs the Baserow select option.`, "ok");
-        } else if (result?.status === "already-present") {
-          showCandidateToast(`"${word}" is already in TAGS. Still needs the Baserow select option.`, "ok");
-        } else if (result?.status === "error") {
-          showCandidateToast(`Queued, but couldn't commit to code: ${result.detail || "unknown error"}`, "error");
-        }
+        showTagToast(`"${result.name}" is now a Tag.`, "ok");
       }
-      renderCandidates();
-      renderWordCloud(lastWords);
+      loaded.wordcloud = false;
+      await loadWordCloud();
     } catch (err) {
-      if (err.unauthorized) {
-        clearStoredPassword();
-        showLogin("Session expired. Enter the password again.");
-        return;
-      }
-      alert(`Failed to update candidates: ${err.message}`);
+      if (err.unauthorized) { clearStoredPassword(); showLogin("Session expired. Enter the password again."); return; }
+      showTagToast(`Failed: ${err.message}`, "error");
     }
   }
-
-  function renderCandidates() {
-    candidatesList.innerHTML = "";
-    if (!candidateWords.length) {
-      candidatesEmpty.style.display = "block";
-      return;
-    }
-    candidatesEmpty.style.display = "none";
-    candidateWords.forEach((word) => {
-      const chip = document.createElement("span");
-      chip.className = "candidate-chip";
-      chip.innerHTML = `${escapeHtml(word)} <button type="button" aria-label="Dismiss">×</button>`;
-      chip.querySelector("button").addEventListener("click", () => toggleCandidate(word));
-      candidatesList.appendChild(chip);
-    });
-  }
-
-  let lastWords = [];
 
   async function loadWordCloud() {
+    loaded.wordcloud = true;
     cloudStatus.textContent = "Loading…";
     cloudCard.style.display = "none";
     try {
-      const [freqData, candData] = await Promise.all([
-        callWorker("/words/frequency"),
-        callWorker("/words/candidates"),
-      ]);
-      candidateWords = candData.candidates || [];
-      lastWords = freqData.words || [];
-      renderCandidates();
-      if (!lastWords.length) {
-        cloudStatus.textContent = "No job titles to analyze yet.";
-        return;
-      }
+      const data = await callWorker("/words/frequency");
+      lastWords = data.words || [];
+      if (!lastWords.length) { cloudStatus.textContent = "No job titles to analyze yet."; return; }
       cloudStatus.textContent = "";
       cloudCard.style.display = "block";
       renderWordCloud(lastWords);
     } catch (err) {
-      if (err.unauthorized) {
-        clearStoredPassword();
-        showLogin("Session expired. Enter the password again.");
-        return;
-      }
+      if (err.unauthorized) { clearStoredPassword(); showLogin("Session expired. Enter the password again."); return; }
       cloudStatus.textContent = `Failed to load: ${err.message}`;
+    }
+  }
+
+  unlockBtn.addEventListener("click", () => {
+    const password = passwordInput.value.trim();
+    if (password) tryUnlock(password);
+  });
+  passwordInput.addEventListener("keydown", (e) => { if (e.key === "Enter") unlockBtn.click(); });
+  logoutBtn.addEventListener("click", () => {
+    clearStoredPassword();
+    passwordInput.value = "";
+    loaded.review = loaded.wordcloud = loaded.missing = false;
+    setTab("review");
+    showLogin();
+  });
+
+  async function tryUnlock(password) {
+    unlockBtn.disabled = true;
+    loginError.textContent = "";
+    storePassword(password);
+    try {
+      await callWorker("/jobs/flagged");
+      showApp();
+      loadFlagged();
+      loaded.review = true;
+    } catch (err) {
+      clearStoredPassword();
+      loginError.textContent = err.unauthorized ? "Wrong password." : `Error: ${err.message}`;
+    } finally {
+      unlockBtn.disabled = false;
     }
   }
 
@@ -604,14 +606,12 @@
   // showing the login form again every visit.
   (async () => {
     const stored = getStoredPassword();
-    if (!stored) {
-      showLogin();
-      return;
-    }
+    if (!stored) { showLogin(); return; }
     try {
       await callWorker("/jobs/flagged");
       showApp();
       loadFlagged();
+      loaded.review = true;
     } catch {
       clearStoredPassword();
       showLogin();
