@@ -23,7 +23,7 @@
     --up:#1a8a5f;
     --up-soft:#e6f5ef;
     --radius:12px;
-    --maxw:920px;
+    --maxw:1080px;
   }
   *{box-sizing:border-box;}
   body{
@@ -125,6 +125,31 @@
 
   /* Missing data */
   .missing-summary{color:var(--ink-soft);font-size:13.5px;margin-bottom:18px;}
+  .missing-table-wrap{background:#fff;border:1px solid var(--line);border-radius:var(--radius);overflow-x:auto;}
+  .missing-table{width:100%;border-collapse:collapse;font-size:13.5px;}
+  .missing-table th{
+    text-align:left;font-size:11.5px;font-weight:800;letter-spacing:.03em;text-transform:uppercase;
+    color:var(--ink-soft);padding:12px 14px;border-bottom:1px solid var(--line);white-space:nowrap;
+  }
+  .missing-table td{padding:8px 14px;border-bottom:1px solid var(--line);vertical-align:middle;}
+  .missing-table tr:last-child td{border-bottom:none;}
+  .missing-table tr:hover td{background:var(--bg-alt);}
+  .missing-job-cell{max-width:280px;}
+  .missing-job-cell a{color:inherit;text-decoration:none;font-weight:600;}
+  .missing-job-cell a:hover{color:var(--accent);}
+  .missing-job-meta{color:var(--ink-soft);font-size:12px;margin-top:2px;}
+  .cell-input, .cell-select{
+    width:100%;min-width:90px;font:inherit;font-size:13px;padding:6px 8px;border-radius:6px;
+    border:1px solid var(--line);background:#fff;color:var(--ink);
+  }
+  .cell-input:focus, .cell-select:focus{outline:2px solid var(--accent);outline-offset:-1px;}
+  .cell-input.dirty, .cell-select.dirty{border-color:var(--accent);background:var(--accent-soft);}
+  .cell-input.saved, .cell-select.saved{border-color:var(--up);}
+  .cell-input.error, .cell-select.error{border-color:var(--danger);}
+  .salary-pair{display:flex;gap:6px;align-items:center;}
+  .salary-pair .cell-input{width:70px;min-width:0;}
+  .salary-sep{color:var(--ink-soft);font-size:12px;}
+  .save-indicator{font-size:11px;color:var(--up);margin-left:6px;white-space:nowrap;}
 
   /* Docs */
   .doc-card{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:22px 24px;margin-bottom:16px;}
@@ -201,11 +226,24 @@
     <div id="missing-panel" class="tab-panel">
       <div class="section-head">
         <h1>Missing data</h1>
-        <p>Active jobs missing a salary, job URL, seniority classification, or country. Most of this fills in automatically on the next scrape as titles get re-seen — this is a spot-check, not a to-do list.</p>
+        <p>Active jobs missing a salary, job URL, seniority classification, or working country. Salary, Seniority, and Working Country are editable right here — edits save automatically. Most of this also fills in on its own as titles get re-seen by a later scrape.</p>
       </div>
       <div id="missing-status" class="status-line"></div>
       <div id="missing-summary" class="missing-summary" style="display:none;"></div>
-      <div id="missing-list"></div>
+      <div class="missing-table-wrap" id="missing-table-wrap" style="display:none;">
+        <table class="missing-table">
+          <thead>
+            <tr>
+              <th>Job</th>
+              <th>Salary Min</th>
+              <th>Salary Max</th>
+              <th>Seniority</th>
+              <th>Working Country</th>
+            </tr>
+          </thead>
+          <tbody id="missing-tbody"></tbody>
+        </table>
+      </div>
       <div id="missing-empty" class="empty-state" style="display:none;">
         <div class="checkmark">✓</div>
         Nothing missing right now.
@@ -237,6 +275,12 @@
         <h3>An AI call, not a fixed algorithm</h3>
         <p>Unlike Seniority, Language detection isn't a hand-written rule set — it's one question inside the same Claude Haiku 4.5 call that also generates Tags and checks whether a listing is a real job (<code>classifyJob()</code> in <code>src/anthropic.js</code>). The model is asked for the two-letter ISO 639-1 code of the language the job title (and company name, if it helps) is written in, and returns <code>null</code> if it can't tell — never a guess.</p>
         <p>Because it rides on a call that's already happening for Tags/job-verification, it costs nothing extra. It's also why Language is currently empty for most rows: that whole classification step needs Anthropic API credit, which the account has been out of since 2026-09-05.</p>
+      </div>
+
+      <div class="doc-card">
+        <span class="doc-tier">Language Requirement / Bonus</span>
+        <h3>Two more questions on the same AI call</h3>
+        <p>Also part of <code>classifyJob()</code>, not a separate call. <strong>Language Requirement</strong> is a language the title states as a hard requirement for the candidate (e.g. "Danish-speaking Sales Manager" or "Tysktalende Kundeservicemedarbejder" implies one). <strong>Language Bonus</strong> is a language mentioned as merely nice-to-have (e.g. "German is a plus"). Both are plain language names, not codes, and both are <code>null</code> unless the title actually states one — most titles state neither, and neither is inferred from the ad's own language (that's the separate Language field above) or from the job's country.</p>
       </div>
     </div>
   </div>
@@ -271,8 +315,15 @@
 
   const missingStatus = document.getElementById("missing-status");
   const missingSummary = document.getElementById("missing-summary");
-  const missingList = document.getElementById("missing-list");
+  const missingTableWrap = document.getElementById("missing-table-wrap");
+  const missingTbody = document.getElementById("missing-tbody");
   const missingEmpty = document.getElementById("missing-empty");
+
+  const SENIORITY_OPTIONS = ["Entry", "Junior", "Mid", "Senior", "C-Level"];
+  const WORKING_COUNTRY_OPTIONS = [
+    "Denmark", "Norway", "Sweden", "Finland", "Iceland", "Greenland",
+    "Estonia", "Latvia", "Lithuania", "Baltic", "Remote",
+  ];
 
   function getStoredPassword() {
     try {
@@ -410,25 +461,111 @@
     }
   }
 
-  // --- Missing data ---
-  function renderMissingCard(job) {
-    const card = document.createElement("div");
-    card.className = "job-card";
-    const metaParts = [];
-    if (job.company) metaParts.push(escapeHtml(job.company));
-    if (job.sourceSite) metaParts.push(escapeHtml(job.sourceSite));
-    card.innerHTML = `
-      <h3>${job.jobUrl ? `<a href="${escapeAttr(job.jobUrl)}" target="_blank" rel="noopener">${escapeHtml(job.jobTitle || "(untitled)")}</a>` : escapeHtml(job.jobTitle || "(untitled)")}</h3>
-      <p class="job-meta">${metaParts.map((p) => `<span>${p}</span>`).join("")}</p>
-      <div class="missing-tags">${job.missing.map((m) => `<span class="missing-tag">${escapeHtml(m)}</span>`).join("")}</div>
+  // --- Missing data (editable table) ---
+  function buildSelect(options, current, cssClass) {
+    const select = document.createElement("select");
+    select.className = cssClass;
+    const blank = document.createElement("option");
+    blank.value = "";
+    blank.textContent = "—";
+    select.appendChild(blank);
+    for (const opt of options) {
+      const el = document.createElement("option");
+      el.value = opt;
+      el.textContent = opt;
+      if (opt === current) el.selected = true;
+      select.appendChild(el);
+    }
+    return select;
+  }
+
+  function markCellState(el, state) {
+    el.classList.remove("dirty", "saved", "error");
+    if (state) el.classList.add(state);
+  }
+
+  // Debounced per-field save: fires 700ms after the last change to that
+  // input, and again immediately on blur, so typing a salary number
+  // doesn't fire a save per keystroke.
+  function wireCellSave(el, jobId, fieldName, toBody) {
+    let timer = null;
+    const save = async () => {
+      clearTimeout(timer);
+      const body = toBody(el.value);
+      try {
+        await callWorker(`/jobs/${jobId}/fields`, {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(body),
+        });
+        markCellState(el, "saved");
+        setTimeout(() => markCellState(el, null), 1500);
+      } catch (err) {
+        if (err.unauthorized) { clearStoredPassword(); showLogin("Session expired. Enter the password again."); return; }
+        markCellState(el, "error");
+      }
+    };
+    el.addEventListener("input", () => {
+      markCellState(el, "dirty");
+      clearTimeout(timer);
+      timer = setTimeout(save, 700);
+    });
+    el.addEventListener("change", save); // selects: save immediately on choice
+    el.addEventListener("blur", save);
+  }
+
+  function renderMissingRow(job) {
+    const tr = document.createElement("tr");
+
+    const jobCell = document.createElement("td");
+    jobCell.className = "missing-job-cell";
+    const metaParts = [job.company, job.sourceSite].filter(Boolean).map(escapeHtml).join(" · ");
+    jobCell.innerHTML = `
+      ${job.jobUrl ? `<a href="${escapeAttr(job.jobUrl)}" target="_blank" rel="noopener">${escapeHtml(job.jobTitle || "(untitled)")}</a>` : escapeHtml(job.jobTitle || "(untitled)")}
+      ${metaParts ? `<div class="missing-job-meta">${metaParts}</div>` : ""}
     `;
-    return card;
+    tr.appendChild(jobCell);
+
+    const minCell = document.createElement("td");
+    const minInput = document.createElement("input");
+    minInput.className = "cell-input";
+    minInput.type = "number";
+    minInput.placeholder = "min";
+    if (job.salaryMin != null) minInput.value = job.salaryMin;
+    wireCellSave(minInput, job.id, "salaryMin", (v) => ({ salaryMin: v === "" ? null : Number(v) }));
+    minCell.appendChild(minInput);
+    tr.appendChild(minCell);
+
+    const maxCell = document.createElement("td");
+    const maxInput = document.createElement("input");
+    maxInput.className = "cell-input";
+    maxInput.type = "number";
+    maxInput.placeholder = "max";
+    if (job.salaryMax != null) maxInput.value = job.salaryMax;
+    wireCellSave(maxInput, job.id, "salaryMax", (v) => ({ salaryMax: v === "" ? null : Number(v) }));
+    maxCell.appendChild(maxInput);
+    tr.appendChild(maxCell);
+
+    const seniorityCell = document.createElement("td");
+    const senioritySelect = buildSelect(SENIORITY_OPTIONS, job.seniority, "cell-select");
+    wireCellSave(senioritySelect, job.id, "seniority", (v) => ({ seniority: v === "" ? null : v }));
+    seniorityCell.appendChild(senioritySelect);
+    tr.appendChild(seniorityCell);
+
+    const countryCell = document.createElement("td");
+    const countrySelect = buildSelect(WORKING_COUNTRY_OPTIONS, job.workingCountry, "cell-select");
+    wireCellSave(countrySelect, job.id, "workingCountry", (v) => ({ workingCountry: v === "" ? null : v }));
+    countryCell.appendChild(countrySelect);
+    tr.appendChild(countryCell);
+
+    return tr;
   }
 
   async function loadMissingData() {
     missingStatus.textContent = "Loading…";
     missingSummary.style.display = "none";
-    missingList.innerHTML = "";
+    missingTableWrap.style.display = "none";
+    missingTbody.innerHTML = "";
     missingEmpty.style.display = "none";
     try {
       const data = await callWorker("/jobs/missing-data");
@@ -436,7 +573,8 @@
       if (!data.missing.length) { missingEmpty.style.display = "block"; return; }
       missingSummary.style.display = "block";
       missingSummary.textContent = `${data.missing.length} of ${data.totalActive} active jobs are missing at least one field.`;
-      for (const job of data.missing) missingList.appendChild(renderMissingCard(job));
+      missingTableWrap.style.display = "block";
+      for (const job of data.missing) missingTbody.appendChild(renderMissingRow(job));
     } catch (err) {
       if (err.unauthorized) { clearStoredPassword(); showLogin("Session expired. Enter the password again."); return; }
       missingStatus.textContent = `Failed to load: ${err.message}`;
