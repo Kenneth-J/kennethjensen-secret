@@ -69,6 +69,13 @@
   .section-head h1{font-size:20px;font-weight:800;margin:0 0 6px;letter-spacing:-0.01em;}
   .section-head p{color:var(--ink-soft);font-size:14px;margin:0;}
 
+  .tabs{display:flex;gap:6px;margin-bottom:28px;border-bottom:1px solid var(--line);}
+  .tab-btn{
+    background:none;border:none;padding:10px 4px;margin-right:20px;font-size:14px;font-weight:700;
+    color:var(--ink-soft);cursor:pointer;border-bottom:2px solid transparent;translate:0 1px;
+  }
+  .tab-btn.active{color:var(--accent);border-bottom-color:var(--accent);}
+
   #status-line{color:var(--ink-soft);font-size:14px;padding:40px 0;text-align:center;}
 
   .job-card{
@@ -97,6 +104,31 @@
 
   #empty-state{text-align:center;padding:60px 0;color:var(--ink-soft);}
   #empty-state .checkmark{font-size:32px;margin-bottom:12px;}
+
+  /* Word cloud view */
+  #wordcloud-view{display:none;}
+  .cloud-card{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:16px;margin-bottom:24px;}
+  #cloud-svg{width:100%;height:auto;display:block;}
+  #cloud-svg text{cursor:default;user-select:none;}
+  #cloud-svg text.candidate{cursor:pointer;}
+  #cloud-svg text.candidate:hover{opacity:.7;}
+  .cloud-legend{display:flex;align-items:center;gap:16px;font-size:12.5px;color:var(--ink-soft);margin-bottom:6px;}
+  .cloud-legend .swatch{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:5px;vertical-align:-1px;}
+
+  .candidates-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
+  .candidates-head h2{font-size:15.5px;font-weight:800;margin:0;letter-spacing:-0.01em;}
+  .candidates-head p{color:var(--ink-soft);font-size:13px;margin:2px 0 0;}
+  .candidate-chips{display:flex;flex-wrap:wrap;gap:8px;}
+  .candidate-chip{
+    display:inline-flex;align-items:center;gap:8px;background:var(--accent-soft);color:var(--accent);
+    padding:7px 8px 7px 14px;border-radius:999px;font-size:13px;font-weight:700;
+  }
+  .candidate-chip button{
+    background:#fff;border:none;color:var(--accent);width:18px;height:18px;border-radius:50%;
+    font-size:13px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;
+  }
+  .candidate-chip button:hover{background:var(--accent);color:#fff;}
+  #candidates-empty{color:var(--ink-soft);font-size:13px;font-style:italic;}
 </style>
 </head>
 <body>
@@ -123,16 +155,48 @@
     <div id="login-error"></div>
   </div>
 
-  <div id="review-view">
-    <div class="section-head">
-      <h1>Flagged as not-a-job</h1>
-      <p>Jobs the AI classifier didn't think were genuine listings. Confirm or override each one.</p>
+  <div id="app-view" style="display:none;">
+    <div class="tabs">
+      <button class="tab-btn active" data-tab="review">Flagged Jobs</button>
+      <button class="tab-btn" data-tab="wordcloud">Word Cloud</button>
     </div>
-    <div id="status-line"></div>
-    <div id="job-list"></div>
-    <div id="empty-state" style="display:none;">
-      <div class="checkmark">✓</div>
-      Nothing to review right now.
+
+    <div id="review-view">
+      <div class="section-head">
+        <h1>Flagged as not-a-job</h1>
+        <p>Jobs the AI classifier didn't think were genuine listings. Confirm or override each one.</p>
+      </div>
+      <div id="status-line"></div>
+      <div id="job-list"></div>
+      <div id="empty-state" style="display:none;">
+        <div class="checkmark">✓</div>
+        Nothing to review right now.
+      </div>
+    </div>
+
+    <div id="wordcloud-view">
+      <div class="section-head">
+        <h1>Job title word cloud</h1>
+        <p>The most frequent words across every scraped job title. Click a word marked <strong>+</strong> to queue it as a tag candidate — it still needs adding to Baserow's Tags field and the TAGS list in code by hand, this just tracks what's worth adding.</p>
+      </div>
+      <div id="cloud-status" class="status-line" style="color:var(--ink-soft);font-size:14px;padding:20px 0;text-align:center;"></div>
+      <div class="cloud-card" id="cloud-card" style="display:none;">
+        <div class="cloud-legend">
+          <span><span class="swatch" style="background:var(--accent-soft);"></span>less frequent</span>
+          <span><span class="swatch" style="background:var(--accent);"></span>more frequent</span>
+          <span style="margin-left:auto;">Words marked <strong style="color:var(--accent);">+</strong> aren't a Tag yet — click to queue</span>
+        </div>
+        <svg id="cloud-svg" viewBox="0 0 800 440" xmlns="http://www.w3.org/2000/svg"></svg>
+      </div>
+
+      <div class="candidates-head">
+        <div>
+          <h2>Queued tag candidates</h2>
+          <p>Words you've flagged from the cloud above. Add each to Baserow's Tags field and <code>TAGS</code> in <code>src/anthropic.js</code>, then dismiss it here.</p>
+        </div>
+      </div>
+      <div id="candidates-list" class="candidate-chips"></div>
+      <div id="candidates-empty" style="display:none;">Nothing queued yet.</div>
     </div>
   </div>
 </main>
@@ -142,7 +206,9 @@
   const STORAGE_KEY = "jobmatch_admin_password";
 
   const loginView = document.getElementById("login-view");
+  const appView = document.getElementById("app-view");
   const reviewView = document.getElementById("review-view");
+  const wordcloudView = document.getElementById("wordcloud-view");
   const passwordInput = document.getElementById("password-input");
   const unlockBtn = document.getElementById("unlock-btn");
   const loginError = document.getElementById("login-error");
@@ -150,6 +216,12 @@
   const statusLine = document.getElementById("status-line");
   const jobList = document.getElementById("job-list");
   const emptyState = document.getElementById("empty-state");
+  const tabBtns = document.querySelectorAll(".tab-btn");
+  const cloudStatus = document.getElementById("cloud-status");
+  const cloudCard = document.getElementById("cloud-card");
+  const cloudSvg = document.getElementById("cloud-svg");
+  const candidatesList = document.getElementById("candidates-list");
+  const candidatesEmpty = document.getElementById("candidates-empty");
 
   function getStoredPassword() {
     try {
@@ -198,16 +270,32 @@
 
   function showLogin(message) {
     loginView.style.display = "block";
-    reviewView.style.display = "none";
+    appView.style.display = "none";
     logoutBtn.style.display = "none";
     loginError.textContent = message || "";
   }
 
-  function showReview() {
+  function showApp() {
     loginView.style.display = "none";
-    reviewView.style.display = "block";
+    appView.style.display = "block";
     logoutBtn.style.display = "inline-block";
   }
+
+  let activeTab = "review";
+  let wordCloudLoaded = false;
+
+  function setTab(tab) {
+    activeTab = tab;
+    tabBtns.forEach((btn) => btn.classList.toggle("active", btn.dataset.tab === tab));
+    reviewView.style.display = tab === "review" ? "block" : "none";
+    wordcloudView.style.display = tab === "wordcloud" ? "block" : "none";
+    if (tab === "wordcloud" && !wordCloudLoaded) {
+      wordCloudLoaded = true;
+      loadWordCloud();
+    }
+  }
+
+  tabBtns.forEach((btn) => btn.addEventListener("click", () => setTab(btn.dataset.tab)));
 
   function renderJobCard(job) {
     const card = document.createElement("div");
@@ -298,7 +386,7 @@
     storePassword(password);
     try {
       await callWorker("/jobs/flagged");
-      showReview();
+      showApp();
       loadFlagged();
     } catch (err) {
       clearStoredPassword();
@@ -318,8 +406,179 @@
   logoutBtn.addEventListener("click", () => {
     clearStoredPassword();
     passwordInput.value = "";
+    setTab("review");
     showLogin();
   });
+
+  // --- Word cloud ---
+  // Hand-rolled spiral layout, same "no charting/rendering library" choice
+  // as the public stats page: place words largest-first, spiraling outward
+  // from center until a candidate spot doesn't overlap anything already
+  // placed. Text is measured with real getBBox() (accurate, unlike
+  // estimating width from character count), so placement accounts for
+  // each word's actual rendered size.
+  const SVG_NS = "http://www.w3.org/2000/svg";
+  let candidateWords = [];
+
+  function rectsOverlap(a, b, pad) {
+    return !(a.x + a.w + pad < b.x || b.x + b.w + pad < a.x || a.y + a.h + pad < b.y || b.y + b.h + pad < a.y);
+  }
+
+  function mixColor(c1, c2, t) {
+    const mix = c1.map((v, i) => Math.round(v + (c2[i] - v) * t));
+    return `rgb(${mix.join(",")})`;
+  }
+
+  function renderWordCloud(words) {
+    const width = 800;
+    const height = 440;
+    cloudSvg.innerHTML = "";
+
+    if (!words.length) return;
+    const counts = words.map((w) => w.count);
+    const maxCount = Math.max(...counts);
+    const minCount = Math.min(...counts);
+    const minFont = 13;
+    const maxFont = 50;
+    const fontSizeFor = (c) => {
+      if (maxCount === minCount) return (minFont + maxFont) / 2;
+      const t = Math.sqrt((c - minCount) / (maxCount - minCount)); // sqrt: less extreme spread
+      return minFont + t * (maxFont - minFont);
+    };
+    const softAccent = [241, 236, 254]; // --accent-soft
+    const accent = [108, 58, 237]; // --accent
+    const colorFor = (c) => {
+      const t = maxCount === minCount ? 0.6 : (c - minCount) / (maxCount - minCount);
+      return mixColor(softAccent, accent, 0.25 + t * 0.75); // never fully washed out
+    };
+
+    const placed = [];
+    const centerX = width / 2;
+    const centerY = height / 2;
+
+    words.forEach((w) => {
+      const isCandidate = !w.isTag; // clickable target — queue/dismiss
+      const alreadyQueued = candidateWords.includes(w.word);
+
+      const el = document.createElementNS(SVG_NS, "text");
+      el.setAttribute("font-weight", "700");
+      el.setAttribute("font-family", "inherit");
+      if (isCandidate) el.classList.add("candidate");
+
+      if (isCandidate) {
+        const prefix = document.createElementNS(SVG_NS, "tspan");
+        prefix.textContent = (alreadyQueued ? "✓ " : "+ ");
+        prefix.setAttribute("font-size", fontSizeFor(w.count) * 0.55);
+        prefix.setAttribute("fill", alreadyQueued ? "#1a8a5f" : "#6c3aed");
+        el.appendChild(prefix);
+      }
+      const wordSpan = document.createElementNS(SVG_NS, "tspan");
+      wordSpan.textContent = w.word;
+      wordSpan.setAttribute("font-size", fontSizeFor(w.count));
+      wordSpan.setAttribute("fill", colorFor(w.count));
+      el.appendChild(wordSpan);
+
+      cloudSvg.appendChild(el);
+      const bbox = el.getBBox();
+
+      let x = centerX - bbox.width / 2;
+      let y = centerY - bbox.height / 2;
+      let angle = Math.random() * Math.PI * 2;
+      let radius = 0;
+      for (let attempt = 0; attempt < 3000; attempt++) {
+        x = centerX + radius * Math.cos(angle) - bbox.width / 2;
+        y = centerY + radius * Math.sin(angle) * 0.6 - bbox.height / 2; // flatten vertically, wide layout
+        const rect = { x, y, w: bbox.width, h: bbox.height };
+        const fits =
+          rect.x > 4 && rect.y > 4 && rect.x + rect.w < width - 4 && rect.y + rect.h < height - 4;
+        if (fits && !placed.some((p) => rectsOverlap(rect, p, 3))) break;
+        angle += 0.28;
+        radius += 1.4;
+      }
+      el.setAttribute("x", x);
+      el.setAttribute("y", y + bbox.height * 0.8);
+      placed.push({ x, y, w: bbox.width, h: bbox.height });
+
+      if (isCandidate) {
+        el.addEventListener("click", () => toggleCandidate(w.word));
+      }
+    });
+  }
+
+  async function toggleCandidate(word) {
+    try {
+      if (candidateWords.includes(word)) {
+        const data = await callWorker("/words/candidates/dismiss", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ word }),
+        });
+        candidateWords = data.candidates;
+      } else {
+        const data = await callWorker("/words/candidates", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ word }),
+        });
+        candidateWords = data.candidates;
+      }
+      renderCandidates();
+      renderWordCloud(lastWords);
+    } catch (err) {
+      if (err.unauthorized) {
+        clearStoredPassword();
+        showLogin("Session expired. Enter the password again.");
+        return;
+      }
+      alert(`Failed to update candidates: ${err.message}`);
+    }
+  }
+
+  function renderCandidates() {
+    candidatesList.innerHTML = "";
+    if (!candidateWords.length) {
+      candidatesEmpty.style.display = "block";
+      return;
+    }
+    candidatesEmpty.style.display = "none";
+    candidateWords.forEach((word) => {
+      const chip = document.createElement("span");
+      chip.className = "candidate-chip";
+      chip.innerHTML = `${escapeHtml(word)} <button type="button" aria-label="Dismiss">×</button>`;
+      chip.querySelector("button").addEventListener("click", () => toggleCandidate(word));
+      candidatesList.appendChild(chip);
+    });
+  }
+
+  let lastWords = [];
+
+  async function loadWordCloud() {
+    cloudStatus.textContent = "Loading…";
+    cloudCard.style.display = "none";
+    try {
+      const [freqData, candData] = await Promise.all([
+        callWorker("/words/frequency"),
+        callWorker("/words/candidates"),
+      ]);
+      candidateWords = candData.candidates || [];
+      lastWords = freqData.words || [];
+      renderCandidates();
+      if (!lastWords.length) {
+        cloudStatus.textContent = "No job titles to analyze yet.";
+        return;
+      }
+      cloudStatus.textContent = "";
+      cloudCard.style.display = "block";
+      renderWordCloud(lastWords);
+    } catch (err) {
+      if (err.unauthorized) {
+        clearStoredPassword();
+        showLogin("Session expired. Enter the password again.");
+        return;
+      }
+      cloudStatus.textContent = `Failed to load: ${err.message}`;
+    }
+  }
 
   // On load: if a password is already stored, try it silently rather than
   // showing the login form again every visit.
@@ -331,7 +590,7 @@
     }
     try {
       await callWorker("/jobs/flagged");
-      showReview();
+      showApp();
       loadFlagged();
     } catch {
       clearStoredPassword();
