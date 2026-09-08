@@ -288,7 +288,8 @@
 
 <script>
   const WORKER_URL = "https://jobmatch-worker.kennethj.workers.dev";
-  const STORAGE_KEY = "jobmatch_admin_password";
+  // Holds {token, expiresAt} from POST /login — never the password itself.
+  const STORAGE_KEY = "jobmatch_admin_session";
 
   const loginView = document.getElementById("login-view");
   const appView = document.getElementById("app-view");
@@ -325,24 +326,34 @@
     "Estonia", "Latvia", "Lithuania", "Baltic", "Remote",
   ];
 
-  function getStoredPassword() {
+  // Returns {token, expiresAt} if a still-valid session is stored, else
+  // null (and clears anything stale/malformed it finds).
+  function getStoredSession() {
     try {
-      return localStorage.getItem(STORAGE_KEY);
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return null;
+      const session = JSON.parse(raw);
+      if (!session.token || !session.expiresAt || session.expiresAt * 1000 <= Date.now()) {
+        localStorage.removeItem(STORAGE_KEY);
+        return null;
+      }
+      return session;
     } catch {
+      try { localStorage.removeItem(STORAGE_KEY); } catch { /* ignore */ }
       return null;
     }
   }
 
-  function storePassword(password) {
+  function storeSession(session) {
     try {
-      localStorage.setItem(STORAGE_KEY, password);
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(session));
     } catch {
-      // localStorage unavailable (private browsing, etc.) — password just
+      // localStorage unavailable (private browsing, etc.) — session just
       // won't persist across reloads; not fatal, the gate still works.
     }
   }
 
-  function clearStoredPassword() {
+  function clearStoredSession() {
     try {
       localStorage.removeItem(STORAGE_KEY);
     } catch {
@@ -350,16 +361,38 @@
     }
   }
 
+  async function login(password) {
+    const res = await fetch(WORKER_URL + "/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ password }),
+    });
+    if (!res.ok) {
+      const err = new Error("unauthorized");
+      err.unauthorized = true;
+      throw err;
+    }
+    const session = await res.json();
+    storeSession(session);
+    return session;
+  }
+
   async function callWorker(path, options = {}) {
-    const password = getStoredPassword();
+    const session = getStoredSession();
+    if (!session) {
+      const err = new Error("unauthorized");
+      err.unauthorized = true;
+      throw err;
+    }
     const res = await fetch(WORKER_URL + path, {
       ...options,
       headers: {
-        Authorization: `Bearer ${password}`,
+        Authorization: `Bearer ${session.token}`,
         ...(options.headers || {}),
       },
     });
     if (res.status === 403) {
+      clearStoredSession();
       const err = new Error("unauthorized");
       err.unauthorized = true;
       throw err;
@@ -454,7 +487,7 @@
       card.remove();
       if (!jobList.children.length) reviewEmpty.style.display = "block";
     } catch (err) {
-      if (err.unauthorized) { clearStoredPassword(); showLogin("Session expired. Enter the password again."); return; }
+      if (err.unauthorized) { clearStoredSession(); showLogin("Session expired. Enter the password again."); return; }
       card.querySelectorAll("button").forEach((b) => (b.disabled = false));
       alert(`Failed to save: ${err.message}`);
     }
@@ -470,7 +503,7 @@
       if (!data.flagged.length) { reviewEmpty.style.display = "block"; return; }
       for (const job of data.flagged) jobList.appendChild(renderJobCard(job));
     } catch (err) {
-      if (err.unauthorized) { clearStoredPassword(); showLogin("Session expired. Enter the password again."); return; }
+      if (err.unauthorized) { clearStoredSession(); showLogin("Session expired. Enter the password again."); return; }
       reviewStatus.textContent = `Failed to load: ${err.message}`;
     }
   }
@@ -515,7 +548,7 @@
         markCellState(el, "saved");
         setTimeout(() => markCellState(el, null), 1500);
       } catch (err) {
-        if (err.unauthorized) { clearStoredPassword(); showLogin("Session expired. Enter the password again."); return; }
+        if (err.unauthorized) { clearStoredSession(); showLogin("Session expired. Enter the password again."); return; }
         markCellState(el, "error");
       }
     };
@@ -590,7 +623,7 @@
       missingTableWrap.style.display = "block";
       for (const job of data.missing) missingTbody.appendChild(renderMissingRow(job));
     } catch (err) {
-      if (err.unauthorized) { clearStoredPassword(); showLogin("Session expired. Enter the password again."); return; }
+      if (err.unauthorized) { clearStoredSession(); showLogin("Session expired. Enter the password again."); return; }
       missingStatus.textContent = `Failed to load: ${err.message}`;
     }
   }
@@ -702,7 +735,7 @@
       loaded.wordcloud = false;
       await loadWordCloud();
     } catch (err) {
-      if (err.unauthorized) { clearStoredPassword(); showLogin("Session expired. Enter the password again."); return; }
+      if (err.unauthorized) { clearStoredSession(); showLogin("Session expired. Enter the password again."); return; }
       showTagToast(`Failed: ${err.message}`, "error");
     }
   }
@@ -719,7 +752,7 @@
       cloudCard.style.display = "block";
       renderWordCloud(lastWords);
     } catch (err) {
-      if (err.unauthorized) { clearStoredPassword(); showLogin("Session expired. Enter the password again."); return; }
+      if (err.unauthorized) { clearStoredSession(); showLogin("Session expired. Enter the password again."); return; }
       cloudStatus.textContent = `Failed to load: ${err.message}`;
     }
   }
@@ -730,7 +763,7 @@
   });
   passwordInput.addEventListener("keydown", (e) => { if (e.key === "Enter") unlockBtn.click(); });
   logoutBtn.addEventListener("click", () => {
-    clearStoredPassword();
+    clearStoredSession();
     passwordInput.value = "";
     loaded.review = loaded.wordcloud = loaded.missing = false;
     setTab("review");
@@ -740,32 +773,30 @@
   async function tryUnlock(password) {
     unlockBtn.disabled = true;
     loginError.textContent = "";
-    storePassword(password);
     try {
-      await callWorker("/jobs/flagged");
+      await login(password);
       showApp();
       loadFlagged();
       loaded.review = true;
     } catch (err) {
-      clearStoredPassword();
+      clearStoredSession();
       loginError.textContent = err.unauthorized ? "Wrong password." : `Error: ${err.message}`;
     } finally {
       unlockBtn.disabled = false;
     }
   }
 
-  // On load: if a password is already stored, try it silently rather than
-  // showing the login form again every visit.
+  // On load: if a still-valid session is stored, use it silently rather
+  // than showing the login form again every visit.
   (async () => {
-    const stored = getStoredPassword();
-    if (!stored) { showLogin(); return; }
+    if (!getStoredSession()) { showLogin(); return; }
     try {
       await callWorker("/jobs/flagged");
       showApp();
       loadFlagged();
       loaded.review = true;
     } catch {
-      clearStoredPassword();
+      clearStoredSession();
       showLogin();
     }
   })();
