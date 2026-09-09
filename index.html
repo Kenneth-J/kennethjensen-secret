@@ -164,6 +164,35 @@
   .doc-card ul{margin:0 0 10px;padding-left:20px;font-size:13.5px;color:var(--ink-soft);}
   .doc-card li{margin-bottom:4px;}
   .doc-tier{display:inline-block;font-size:11.5px;font-weight:800;letter-spacing:.03em;text-transform:uppercase;color:var(--accent);background:var(--accent-soft);padding:3px 10px;border-radius:999px;margin-bottom:10px;}
+
+  /* Site health */
+  .health-summary{display:flex;gap:20px;flex-wrap:wrap;margin-bottom:20px;font-size:13.5px;color:var(--ink-soft);}
+  .health-summary strong{color:var(--ink);}
+  .health-generated{font-size:12.5px;color:var(--ink-soft);margin-bottom:18px;}
+  .status-pill{display:inline-flex;align-items:center;gap:5px;font-size:11.5px;font-weight:800;letter-spacing:.02em;text-transform:uppercase;padding:3px 10px;border-radius:999px;}
+  .status-pill.healthy{background:var(--up-soft);color:var(--up);}
+  .status-pill.degraded{background:#fdf4e3;color:#a3690a;}
+  .status-pill.down{background:var(--danger-soft);color:var(--danger);}
+  .health-row{cursor:pointer;}
+  .health-row td{white-space:nowrap;}
+  .health-row .site-name{font-weight:700;white-space:normal;}
+  .health-row .caret{display:inline-block;transition:transform .15s;color:var(--ink-soft);margin-left:6px;}
+  .health-row.expanded .caret{transform:rotate(90deg);}
+  .health-detail-row td{padding:0;border-bottom:1px solid var(--line);}
+  .health-detail{padding:18px 22px;background:var(--bg-alt);}
+  .health-checks{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;margin-bottom:16px;}
+  .health-check{background:#fff;border:1px solid var(--line);border-radius:8px;padding:10px 12px;}
+  .health-check .check-label{font-size:11px;font-weight:800;letter-spacing:.02em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:4px;}
+  .health-check .check-value{font-size:13px;}
+  .health-check.check-fail{border-color:var(--danger);}
+  .health-check.check-warn{border-color:#c98a1f;}
+  .field-table{width:100%;border-collapse:collapse;font-size:12.5px;background:#fff;border:1px solid var(--line);border-radius:8px;overflow:hidden;}
+  .field-table th{text-align:left;font-weight:800;color:var(--ink-soft);padding:8px 12px;border-bottom:1px solid var(--line);text-transform:uppercase;font-size:10.5px;letter-spacing:.02em;}
+  .field-table td{padding:6px 12px;border-bottom:1px solid var(--line);}
+  .field-table tr:last-child td{border-bottom:none;}
+  .field-bar-wrap{display:flex;align-items:center;gap:8px;}
+  .field-bar{flex:1;height:6px;border-radius:3px;background:var(--up-soft);overflow:hidden;}
+  .field-bar-fill{height:100%;background:var(--danger);}
 </style>
 </head>
 <body>
@@ -196,6 +225,7 @@
       <button class="tab-btn" data-tab="wordcloud">Word Cloud</button>
       <button class="tab-btn" data-tab="missing">Missing Data</button>
       <button class="tab-btn" data-tab="clicks">Top Clicked</button>
+      <button class="tab-btn" data-tab="health">Site Health</button>
       <button class="tab-btn" data-tab="docs">How We Classify</button>
     </div>
 
@@ -277,6 +307,33 @@
       <div id="clicks-empty" class="empty-state" style="display:none;">
         <div class="checkmark">✓</div>
         No click-throughs yet.
+      </div>
+    </div>
+
+    <div id="health-panel" class="tab-panel">
+      <div class="section-head">
+        <h1>Site health</h1>
+        <p>Six checks per site, run at the end of every scraper run: reachability, field completeness, keyword/location match rate, yield vs. the previous run, data freshness, and save success. Click a row for details.</p>
+      </div>
+      <div id="health-status" class="status-line"></div>
+      <div id="health-content" style="display:none;">
+        <div id="health-generated" class="health-generated"></div>
+        <div id="health-summary" class="health-summary"></div>
+        <div class="missing-table-wrap">
+          <table class="missing-table">
+            <thead>
+              <tr>
+                <th>Site</th>
+                <th>Status</th>
+                <th>Fetched</th>
+                <th>Matched</th>
+                <th>Saved</th>
+                <th>Last seen</th>
+              </tr>
+            </thead>
+            <tbody id="health-tbody"></tbody>
+          </table>
+        </div>
       </div>
     </div>
 
