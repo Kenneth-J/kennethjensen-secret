@@ -19,6 +19,7 @@ const panels = {
   review: document.getElementById("review-panel"),
   wordcloud: document.getElementById("wordcloud-panel"),
   missing: document.getElementById("missing-panel"),
+  clicks: document.getElementById("clicks-panel"),
   docs: document.getElementById("docs-panel"),
 };
 
@@ -36,6 +37,11 @@ const missingSummary = document.getElementById("missing-summary");
 const missingTableWrap = document.getElementById("missing-table-wrap");
 const missingTbody = document.getElementById("missing-tbody");
 const missingEmpty = document.getElementById("missing-empty");
+
+const clicksStatus = document.getElementById("clicks-status");
+const clicksTableWrap = document.getElementById("clicks-table-wrap");
+const clicksTbody = document.getElementById("clicks-tbody");
+const clicksEmpty = document.getElementById("clicks-empty");
 
 const SENIORITY_OPTIONS = ["Entry", "Junior", "Mid", "Senior", "C-Level"];
 const WORKING_COUNTRY_OPTIONS = [
@@ -144,6 +150,22 @@ function safeJobUrl(url) {
   }
 }
 
+// Every rendered job link routes through the worker's /go/<id> redirect
+// instead of the raw scraped URL, so a click here counts toward the Top
+// Clicked tab the same way a future public job list or digest link
+// eventually will — one tracker, every surface. Still gated on
+// safeJobUrl() first so an unsafe scheme never even gets a link to click.
+//
+// NOTE: this browser-side gate is a UI nicety, not a security control. The
+// worker resolves /go/<id> against the stored URL, so anything that hits that
+// endpoint directly — a public job list, a digest email, or someone typing the
+// URL — bypasses this check entirely. The worker must validate the scheme (and
+// ideally the host, against the configured source sites) at redirect time, or
+// /go/<id> is an open redirect on our own domain.
+function trackedJobUrl(job) {
+  return safeJobUrl(job.jobUrl) ? `${WORKER_URL}/go/${encodeURIComponent(job.id)}` : null;
+}
+
 function showLogin(message) {
   loginView.style.display = "block";
   appView.style.display = "none";
@@ -157,7 +179,7 @@ function showApp() {
   logoutBtn.style.display = "inline-block";
 }
 
-const loaded = { review: false, wordcloud: false, missing: false };
+const loaded = { review: false, wordcloud: false, missing: false, clicks: false };
 
 function setTab(tab) {
   tabBtns.forEach((btn) => btn.classList.toggle("active", btn.dataset.tab === tab));
@@ -165,6 +187,7 @@ function setTab(tab) {
   if (tab === "review" && !loaded.review) { loaded.review = true; loadFlagged(); }
   if (tab === "wordcloud" && !loaded.wordcloud) { loaded.wordcloud = true; loadWordCloud(); }
   if (tab === "missing" && !loaded.missing) { loaded.missing = true; loadMissingData(); }
+  if (tab === "clicks" && !loaded.clicks) { loaded.clicks = true; loadTopClicked(); }
 }
 
 tabBtns.forEach((btn) => btn.addEventListener("click", () => setTab(btn.dataset.tab)));
@@ -179,7 +202,7 @@ function renderJobCard(job) {
   if (job.sourceSite) metaParts.push(escapeHtml(job.sourceSite));
 
   card.innerHTML = `
-    <h3>${(() => { const u = safeJobUrl(job.jobUrl); return u ? `<a href="${escapeAttr(u)}" target="_blank" rel="noopener">${escapeHtml(job.jobTitle || "(untitled)")}</a>` : escapeHtml(job.jobTitle || "(untitled)"); })()}</h3>
+    <h3>${(() => { const u = trackedJobUrl(job); return u ? `<a href="${escapeAttr(u)}" target="_blank" rel="noopener">${escapeHtml(job.jobTitle || "(untitled)")}</a>` : escapeHtml(job.jobTitle || "(untitled)"); })()}</h3>
     <p class="job-meta">${metaParts.map((p) => `<span>${p}</span>`).join("")}</p>
     ${job.rejectionReason ? `<div class="rejection">${escapeHtml(job.rejectionReason)}</div>` : ""}
     <div class="job-actions">
@@ -285,7 +308,7 @@ function renderMissingRow(job) {
   jobCell.className = "missing-job-cell";
   const metaParts = [job.company, job.sourceSite].filter(Boolean).map(escapeHtml).join(" · ");
   jobCell.innerHTML = `
-    ${(() => { const u = safeJobUrl(job.jobUrl); return u ? `<a href="${escapeAttr(u)}" target="_blank" rel="noopener">${escapeHtml(job.jobTitle || "(untitled)")}</a>` : escapeHtml(job.jobTitle || "(untitled)"); })()}
+    ${(() => { const u = trackedJobUrl(job); return u ? `<a href="${escapeAttr(u)}" target="_blank" rel="noopener">${escapeHtml(job.jobTitle || "(untitled)")}</a>` : escapeHtml(job.jobTitle || "(untitled)"); })()}
     ${metaParts ? `<div class="missing-job-meta">${metaParts}</div>` : ""}
   `;
   tr.appendChild(jobCell);
@@ -342,6 +365,52 @@ async function loadMissingData() {
   } catch (err) {
     if (err.unauthorized) { clearStoredSession(); showLogin("Session expired. Enter the password again."); return; }
     missingStatus.textContent = `Failed to load: ${err.message}`;
+  }
+}
+
+// --- Top clicked ---
+function renderClickRow(job) {
+  const tr = document.createElement("tr");
+
+  const jobCell = document.createElement("td");
+  jobCell.className = "missing-job-cell";
+  const trackedUrl = trackedJobUrl(job);
+  jobCell.innerHTML = trackedUrl
+    ? `<a href="${escapeAttr(trackedUrl)}" target="_blank" rel="noopener">${escapeHtml(job.jobTitle || "(untitled)")}</a>`
+    : escapeHtml(job.jobTitle || "(untitled)");
+  if (job.company) {
+    const meta = document.createElement("div");
+    meta.className = "missing-job-meta";
+    meta.textContent = job.company;
+    jobCell.appendChild(meta);
+  }
+  tr.appendChild(jobCell);
+
+  const sourceCell = document.createElement("td");
+  sourceCell.textContent = job.sourceSite || "—";
+  tr.appendChild(sourceCell);
+
+  const countCell = document.createElement("td");
+  countCell.textContent = job.clickCount;
+  tr.appendChild(countCell);
+
+  return tr;
+}
+
+async function loadTopClicked() {
+  clicksStatus.textContent = "Loading…";
+  clicksTableWrap.style.display = "none";
+  clicksTbody.innerHTML = "";
+  clicksEmpty.style.display = "none";
+  try {
+    const data = await callWorker("/jobs/top-clicked");
+    clicksStatus.textContent = "";
+    if (!data.topClicked.length) { clicksEmpty.style.display = "block"; return; }
+    clicksTableWrap.style.display = "block";
+    for (const job of data.topClicked) clicksTbody.appendChild(renderClickRow(job));
+  } catch (err) {
+    if (err.unauthorized) { clearStoredSession(); showLogin("Session expired. Enter the password again."); return; }
+    clicksStatus.textContent = `Failed to load: ${err.message}`;
   }
 }
 
@@ -482,7 +551,7 @@ passwordInput.addEventListener("keydown", (e) => { if (e.key === "Enter") unlock
 logoutBtn.addEventListener("click", () => {
   clearStoredSession();
   passwordInput.value = "";
-  loaded.review = loaded.wordcloud = loaded.missing = false;
+  loaded.review = loaded.wordcloud = loaded.missing = loaded.clicks = false;
   setTab("review");
   showLogin();
 });

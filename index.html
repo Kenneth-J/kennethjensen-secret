@@ -195,6 +195,7 @@
       <button class="tab-btn active" data-tab="review">Flagged Jobs</button>
       <button class="tab-btn" data-tab="wordcloud">Word Cloud</button>
       <button class="tab-btn" data-tab="missing">Missing Data</button>
+      <button class="tab-btn" data-tab="clicks">Top Clicked</button>
       <button class="tab-btn" data-tab="docs">How We Classify</button>
     </div>
 
@@ -252,6 +253,30 @@
       <div id="missing-empty" class="empty-state" style="display:none;">
         <div class="checkmark">✓</div>
         Nothing missing right now.
+      </div>
+    </div>
+
+    <div id="clicks-panel" class="tab-panel">
+      <div class="section-head">
+        <h1>Top clicked jobs</h1>
+        <p>Every job link across the site routes through a tracked redirect, so this counts real click-throughs — most clicked first.</p>
+      </div>
+      <div id="clicks-status" class="status-line"></div>
+      <div class="missing-table-wrap" id="clicks-table-wrap" style="display:none;">
+        <table class="missing-table">
+          <thead>
+            <tr>
+              <th>Job</th>
+              <th>Source</th>
+              <th>Clicks</th>
+            </tr>
+          </thead>
+          <tbody id="clicks-tbody"></tbody>
+        </table>
+      </div>
+      <div id="clicks-empty" class="empty-state" style="display:none;">
+        <div class="checkmark">✓</div>
+        No click-throughs yet.
       </div>
     </div>
 
