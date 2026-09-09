@@ -20,6 +20,7 @@ const panels = {
   wordcloud: document.getElementById("wordcloud-panel"),
   missing: document.getElementById("missing-panel"),
   clicks: document.getElementById("clicks-panel"),
+  health: document.getElementById("health-panel"),
   docs: document.getElementById("docs-panel"),
 };
 
@@ -42,6 +43,12 @@ const clicksStatus = document.getElementById("clicks-status");
 const clicksTableWrap = document.getElementById("clicks-table-wrap");
 const clicksTbody = document.getElementById("clicks-tbody");
 const clicksEmpty = document.getElementById("clicks-empty");
+
+const healthStatus = document.getElementById("health-status");
+const healthContent = document.getElementById("health-content");
+const healthGenerated = document.getElementById("health-generated");
+const healthSummary = document.getElementById("health-summary");
+const healthTbody = document.getElementById("health-tbody");
 
 const SENIORITY_OPTIONS = ["Entry", "Junior", "Mid", "Senior", "C-Level"];
 const WORKING_COUNTRY_OPTIONS = [
@@ -179,7 +186,7 @@ function showApp() {
   logoutBtn.style.display = "inline-block";
 }
 
-const loaded = { review: false, wordcloud: false, missing: false, clicks: false };
+const loaded = { review: false, wordcloud: false, missing: false, clicks: false, health: false };
 
 function setTab(tab) {
   tabBtns.forEach((btn) => btn.classList.toggle("active", btn.dataset.tab === tab));
@@ -188,6 +195,7 @@ function setTab(tab) {
   if (tab === "wordcloud" && !loaded.wordcloud) { loaded.wordcloud = true; loadWordCloud(); }
   if (tab === "missing" && !loaded.missing) { loaded.missing = true; loadMissingData(); }
   if (tab === "clicks" && !loaded.clicks) { loaded.clicks = true; loadTopClicked(); }
+  if (tab === "health" && !loaded.health) { loaded.health = true; loadHealth(); }
 }
 
 tabBtns.forEach((btn) => btn.addEventListener("click", () => setTab(btn.dataset.tab)));
@@ -414,6 +422,140 @@ async function loadTopClicked() {
   }
 }
 
+// --- Site health ---
+// Fetched as a plain same-origin static file, not through callWorker() —
+// health/data.json is written by the scraper's own src/index.js and
+// published by CI (see jobmatch's scraper.yml), never touches Baserow
+// live, and carries no more sensitive data than the public stats.json/
+// jobs.json snapshots kennethjensen.me/jobmatch/stats already serves —
+// same "static JSON, no backend query" posture, no session token needed.
+const HEALTH_STATUS_ORDER = { down: 0, degraded: 1, healthy: 2 };
+const HEALTH_STATUS_LABEL = { healthy: "Healthy", degraded: "Degraded", down: "Down" };
+
+function renderHealthCheck(label, status, valueHtml) {
+  const el = document.createElement("div");
+  el.className = "health-check" + (status === "fail" ? " check-fail" : status === "warn" ? " check-warn" : "");
+  el.innerHTML = `<div class="check-label">${escapeHtml(label)}</div><div class="check-value">${valueHtml}</div>`;
+  return el;
+}
+
+function renderHealthDetail(site) {
+  const wrap = document.createElement("div");
+  wrap.className = "health-detail";
+  const c = site.checks;
+
+  const checksGrid = document.createElement("div");
+  checksGrid.className = "health-checks";
+  checksGrid.appendChild(renderHealthCheck(
+    "Reachability", c.reachability.status,
+    c.reachability.error ? escapeHtml(c.reachability.error) : "Reachable"
+  ));
+  checksGrid.appendChild(renderHealthCheck(
+    "Match rate", c.matchRate.status,
+    `${c.matchRate.matched} / ${c.matchRate.fetched} matched${c.matchRate.matchPercent == null ? "" : ` (${c.matchRate.matchPercent}%)`}`
+  ));
+  checksGrid.appendChild(renderHealthCheck(
+    "Yield vs. last run", c.yield.status,
+    c.yield.previousFetched == null
+      ? `${c.yield.fetched} fetched (no prior run to compare)`
+      : `${c.yield.fetched} fetched (was ${c.yield.previousFetched}${c.yield.percentChange != null ? `, ${c.yield.percentChange > 0 ? "+" : ""}${c.yield.percentChange}%` : ""})`
+  ));
+  checksGrid.appendChild(renderHealthCheck(
+    "Freshness", c.freshness.status,
+    c.freshness.daysSinceLastSeen == null ? "No rows yet" : `${c.freshness.daysSinceLastSeen}d since last update`
+  ));
+  checksGrid.appendChild(renderHealthCheck(
+    "Save success", c.saveSuccess.status,
+    `${c.saveSuccess.saved} saved${c.saveSuccess.saveFailed ? `, ${c.saveSuccess.saveFailed} failed` : ""}`
+  ));
+  wrap.appendChild(checksGrid);
+
+  const fieldTable = document.createElement("table");
+  fieldTable.className = "field-table";
+  fieldTable.innerHTML = "<thead><tr><th>Field (this run's saved jobs)</th><th>Empty</th><th></th></tr></thead>";
+  const tbody = document.createElement("tbody");
+  for (const f of c.fieldCompleteness.fields) {
+    const pct = f.emptyPercent == null ? 0 : f.emptyPercent;
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td>${escapeHtml(f.field)}</td>
+      <td>${f.total ? `${f.emptyCount} / ${f.total} (${f.emptyPercent}%)` : "no rows this run"}</td>
+      <td><div class="field-bar-wrap"><div class="field-bar"><div class="field-bar-fill" style="width:${pct}%"></div></div></div></td>
+    `;
+    tbody.appendChild(tr);
+  }
+  fieldTable.appendChild(tbody);
+  wrap.appendChild(fieldTable);
+
+  return wrap;
+}
+
+function renderHealthRow(site) {
+  const c = site.checks;
+  const tr = document.createElement("tr");
+  tr.className = "health-row";
+  tr.innerHTML = `
+    <td class="site-name">${escapeHtml(site.site)}<span class="caret">▸</span></td>
+    <td><span class="status-pill ${site.status}">${HEALTH_STATUS_LABEL[site.status] || site.status}</span></td>
+    <td>${c.matchRate.fetched}</td>
+    <td>${c.matchRate.matched}</td>
+    <td>${c.saveSuccess.saved}</td>
+    <td>${c.freshness.daysSinceLastSeen == null ? "—" : `${c.freshness.daysSinceLastSeen}d ago`}</td>
+  `;
+
+  const detailTr = document.createElement("tr");
+  detailTr.className = "health-detail-row";
+  detailTr.style.display = "none";
+  const detailTd = document.createElement("td");
+  detailTd.colSpan = 6;
+  detailTd.appendChild(renderHealthDetail(site));
+  detailTr.appendChild(detailTd);
+
+  tr.addEventListener("click", () => {
+    const showing = detailTr.style.display !== "none";
+    detailTr.style.display = showing ? "none" : "table-row";
+    tr.classList.toggle("expanded", !showing);
+  });
+
+  return [tr, detailTr];
+}
+
+async function loadHealth() {
+  healthStatus.textContent = "Loading…";
+  healthContent.style.display = "none";
+  healthTbody.innerHTML = "";
+  try {
+    const res = await fetch("/health/data.json", { cache: "no-store" });
+    if (!res.ok) {
+      healthStatus.textContent = res.status === 404
+        ? "No health data published yet — it appears after the next scraper run."
+        : `Failed to load: ${res.status}`;
+      return;
+    }
+    const data = await res.json();
+    healthStatus.textContent = "";
+    healthContent.style.display = "block";
+    healthGenerated.textContent = data.generatedAt ? `Last run: ${new Date(data.generatedAt).toLocaleString()}` : "";
+
+    const counts = { healthy: 0, degraded: 0, down: 0 };
+    for (const site of data.sites || []) counts[site.status] = (counts[site.status] || 0) + 1;
+    healthSummary.innerHTML = `
+      <span><strong>${counts.healthy || 0}</strong> healthy</span>
+      <span><strong>${counts.degraded || 0}</strong> degraded</span>
+      <span><strong>${counts.down || 0}</strong> down</span>
+    `;
+
+    const sorted = [...(data.sites || [])].sort(
+      (a, b) => (HEALTH_STATUS_ORDER[a.status] ?? 3) - (HEALTH_STATUS_ORDER[b.status] ?? 3)
+    );
+    for (const site of sorted) {
+      for (const row of renderHealthRow(site)) healthTbody.appendChild(row);
+    }
+  } catch (err) {
+    healthStatus.textContent = `Failed to load: ${err.message}`;
+  }
+}
+
 // --- Word cloud ---
 // Hand-rolled spiral layout: place words largest-first, spiraling
 // outward from center until a candidate spot doesn't overlap anything
@@ -551,7 +693,7 @@ passwordInput.addEventListener("keydown", (e) => { if (e.key === "Enter") unlock
 logoutBtn.addEventListener("click", () => {
   clearStoredSession();
   passwordInput.value = "";
-  loaded.review = loaded.wordcloud = loaded.missing = loaded.clicks = false;
+  loaded.review = loaded.wordcloud = loaded.missing = loaded.clicks = loaded.health = false;
   setTab("review");
   showLogin();
 });
