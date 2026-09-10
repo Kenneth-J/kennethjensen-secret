@@ -281,8 +281,10 @@ function markCellState(el, state) {
 
 // Debounced per-field save: fires 700ms after the last change to that
 // input, and again immediately on blur, so typing a salary number
-// doesn't fire a save per keystroke.
-function wireCellSave(el, jobId, fieldName, toBody) {
+// doesn't fire a save per keystroke. `onSaved` (optional) fires only after
+// a successful save — used by renderMissingRow() below to check whether a
+// row just became fully filled in.
+function wireCellSave(el, jobId, fieldName, toBody, onSaved) {
   let timer = null;
   const save = async () => {
     clearTimeout(timer);
@@ -295,6 +297,7 @@ function wireCellSave(el, jobId, fieldName, toBody) {
       });
       markCellState(el, "saved");
       setTimeout(() => markCellState(el, null), 1500);
+      if (onSaved) onSaved();
     } catch (err) {
       if (err.unauthorized) { clearStoredSession(); showLogin("Session expired. Enter the password again."); return; }
       markCellState(el, "error");
@@ -309,7 +312,18 @@ function wireCellSave(el, jobId, fieldName, toBody) {
   el.addEventListener("blur", save);
 }
 
-function renderMissingRow(job) {
+// Once every field a row was originally missing has been filled in, it's
+// no longer useful clutter in this table — Kenneth's request: wait 10s
+// (giving a moment to notice a mistaken value before it's gone from view),
+// then remove the row, with an Undo button that cancels the countdown and
+// leaves the row exactly as it was. Nothing is deleted from Baserow either
+// way — this only ever controls what's rendered here.
+const ROW_REMOVAL_DELAY_SECONDS = 10;
+
+// `onRowRemoved` (optional) fires once the row is actually taken out of
+// the table (after the countdown completes, not on Undo) — used by
+// loadMissingData() to keep its summary count and empty-state in sync.
+function renderMissingRow(job, onRowRemoved) {
   const tr = document.createElement("tr");
 
   const jobCell = document.createElement("td");
@@ -323,15 +337,77 @@ function renderMissingRow(job) {
 
   const seniorityCell = document.createElement("td");
   const senioritySelect = buildSelect(SENIORITY_OPTIONS, job.seniority, "cell-select");
-  wireCellSave(senioritySelect, job.id, "seniority", (v) => ({ seniority: v === "" ? null : v }));
   seniorityCell.appendChild(senioritySelect);
   tr.appendChild(seniorityCell);
 
   const countryCell = document.createElement("td");
   const countrySelect = buildSelect(WORKING_COUNTRY_OPTIONS, job.workingCountry, "cell-select");
-  wireCellSave(countrySelect, job.id, "workingCountry", (v) => ({ workingCountry: v === "" ? null : v }));
   countryCell.appendChild(countrySelect);
   tr.appendChild(countryCell);
+
+  // Job URL can't be fixed from this table (see loadMissingData()'s own
+  // comment) — only Seniority/Working Country ever count toward "this row
+  // is done." A row that was only missing a URL has nothing to complete
+  // here, so the auto-remove behavior below simply never triggers for it.
+  const requiredFields = (job.missing || []).filter((f) => f === "seniority" || f === "workingCountry");
+  let countdownTimer = null;
+
+  function isRowComplete() {
+    return requiredFields.every((f) => (f === "seniority" ? senioritySelect.value : countrySelect.value) !== "");
+  }
+
+  function cancelRemoval() {
+    clearInterval(countdownTimer);
+    countdownTimer = null;
+    tr.classList.remove("row-completing");
+    const banner = tr.querySelector(".completing-banner-cell");
+    if (banner) banner.remove();
+    tr.appendChild(seniorityCell);
+    tr.appendChild(countryCell);
+  }
+
+  function startRemovalCountdown() {
+    tr.classList.add("row-completing");
+    seniorityCell.remove();
+    countryCell.remove();
+
+    const bannerCell = document.createElement("td");
+    bannerCell.className = "completing-banner-cell";
+    bannerCell.colSpan = 2;
+    let secondsLeft = ROW_REMOVAL_DELAY_SECONDS;
+    const banner = document.createElement("div");
+    banner.className = "completing-banner";
+    const msg = document.createElement("span");
+    msg.textContent = `All fields filled — removing in ${secondsLeft}s`;
+    const undoBtn = document.createElement("button");
+    undoBtn.className = "btn btn-override undo-btn";
+    undoBtn.textContent = "Undo";
+    undoBtn.addEventListener("click", cancelRemoval);
+    banner.appendChild(msg);
+    banner.appendChild(undoBtn);
+    bannerCell.appendChild(banner);
+    tr.appendChild(bannerCell);
+
+    countdownTimer = setInterval(() => {
+      secondsLeft -= 1;
+      if (secondsLeft <= 0) {
+        clearInterval(countdownTimer);
+        countdownTimer = null;
+        tr.remove();
+        if (onRowRemoved) onRowRemoved();
+        return;
+      }
+      msg.textContent = `All fields filled — removing in ${secondsLeft}s`;
+    }, 1000);
+  }
+
+  function checkCompletion() {
+    if (countdownTimer || requiredFields.length === 0) return; // already pending, or nothing to complete
+    if (isRowComplete()) startRemovalCountdown();
+  }
+
+  wireCellSave(senioritySelect, job.id, "seniority", (v) => ({ seniority: v === "" ? null : v }), checkCompletion);
+  wireCellSave(countrySelect, job.id, "workingCountry", (v) => ({ workingCountry: v === "" ? null : v }), checkCompletion);
 
   return tr;
 }
@@ -346,10 +422,25 @@ async function loadMissingData() {
     const data = await callWorker("/jobs/missing-data");
     missingStatus.textContent = "";
     if (!data.missing.length) { missingEmpty.style.display = "block"; return; }
+    let remaining = data.missing.length;
+    const updateSummary = () => {
+      missingSummary.textContent = `${remaining} of ${data.totalActive} active jobs are missing at least one field.`;
+    };
+    updateSummary();
     missingSummary.style.display = "block";
-    missingSummary.textContent = `${data.missing.length} of ${data.totalActive} active jobs are missing at least one field.`;
     missingTableWrap.style.display = "block";
-    for (const job of data.missing) missingTbody.appendChild(renderMissingRow(job));
+    for (const job of data.missing) {
+      missingTbody.appendChild(renderMissingRow(job, () => {
+        remaining -= 1;
+        if (remaining <= 0) {
+          missingSummary.style.display = "none";
+          missingTableWrap.style.display = "none";
+          missingEmpty.style.display = "block";
+        } else {
+          updateSummary();
+        }
+      }));
+    }
   } catch (err) {
     if (err.unauthorized) { clearStoredSession(); showLogin("Session expired. Enter the password again."); return; }
     missingStatus.textContent = `Failed to load: ${err.message}`;
@@ -470,6 +561,40 @@ function renderHealthDetail(site) {
   return wrap;
 }
 
+// One recommended next step per site, derived entirely from the same six
+// checks already in health/data.json — no extra data needed. Ordered most-
+// to-least severe/actionable: an unreachable site needs attention before
+// anything else even means something, then the two "answered but the
+// content is wrong" patterns (0 fetched at all vs. real volume but 0
+// matched — the thehub.io 2026-09-09 pattern specifically), then a save
+// failure (the site/filter did their job, Baserow didn't take it), then
+// staleness (fail before warn), then a yield drop, else nothing to do.
+function recommendedAction(site) {
+  const c = site.checks;
+  if (c.reachability.status === "fail") {
+    return "Unreachable — check for a block (headers/IP) or a changed page structure.";
+  }
+  if (c.yield.status === "fail") {
+    return "Fetched 0 jobs this run — check the parser against the live site.";
+  }
+  if (c.matchRate.status === "fail") {
+    return "Real volume fetched but 0 matched — possible soft block serving different content (see thehub.io precedent).";
+  }
+  if (c.saveSuccess.status === "fail") {
+    return "Jobs matched but failed to save — check Baserow field validation errors.";
+  }
+  if (c.freshness.status === "fail") {
+    return "No rows updated in over 10 days — investigate why nothing is landing.";
+  }
+  if (c.yield.status === "warn") {
+    return `Fetch volume dropped ${c.yield.percentChange}% vs. last run — verify the site/parser still works.`;
+  }
+  if (c.freshness.status === "warn") {
+    return "Getting stale — keep an eye on this site.";
+  }
+  return "No action needed.";
+}
+
 function renderHealthRow(site) {
   const c = site.checks;
   const tr = document.createElement("tr");
@@ -477,6 +602,7 @@ function renderHealthRow(site) {
   tr.innerHTML = `
     <td class="site-name">${escapeHtml(site.site)}<span class="caret">▸</span></td>
     <td><span class="status-pill ${site.status}">${HEALTH_STATUS_LABEL[site.status] || site.status}</span></td>
+    <td class="recommended-action${site.status === "healthy" ? "" : " action-needed"}">${escapeHtml(recommendedAction(site))}</td>
     <td>${c.matchRate.fetched}</td>
     <td>${c.matchRate.matched}</td>
     <td>${c.saveSuccess.saved}</td>
@@ -487,7 +613,7 @@ function renderHealthRow(site) {
   detailTr.className = "health-detail-row";
   detailTr.style.display = "none";
   const detailTd = document.createElement("td");
-  detailTd.colSpan = 6;
+  detailTd.colSpan = 7;
   detailTd.appendChild(renderHealthDetail(site));
   detailTr.appendChild(detailTd);
 

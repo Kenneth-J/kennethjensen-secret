@@ -151,10 +151,12 @@
   .cell-input.dirty, .cell-select.dirty{border-color:var(--accent);background:var(--accent-soft);}
   .cell-input.saved, .cell-select.saved{border-color:var(--up);}
   .cell-input.error, .cell-select.error{border-color:var(--danger);}
-  .salary-pair{display:flex;gap:6px;align-items:center;}
-  .salary-pair .cell-input{width:70px;min-width:0;}
-  .salary-sep{color:var(--ink-soft);font-size:12px;}
   .save-indicator{font-size:11px;color:var(--up);margin-left:6px;white-space:nowrap;}
+  .missing-table tr.row-completing td{background:var(--up-soft) !important;}
+  .completing-banner{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:0;color:var(--up);font-weight:600;font-size:13px;}
+  .completing-banner .undo-btn{padding:6px 14px;font-size:12.5px;flex:none;}
+  .recommended-action{font-size:12.5px;color:var(--ink-soft);max-width:260px;}
+  .recommended-action.action-needed{color:var(--ink);}
 
   /* Docs */
   .doc-card{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:22px 24px;margin-bottom:16px;}
@@ -323,6 +325,7 @@
               <tr>
                 <th>Site</th>
                 <th>Status</th>
+                <th>Recommended Action</th>
                 <th>Fetched</th>
                 <th>Matched</th>
                 <th>Saved</th>
