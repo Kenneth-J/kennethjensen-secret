@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-10T10:03:35.322Z",
+  "generatedAt": "2026-09-10T10:17:50.646Z",
   "sites": [
     {
       "site": "landing.jobs",
@@ -167,12 +167,12 @@
         "yield": {
           "status": "ok",
           "fetched": 279,
-          "previousFetched": 267
+          "previousFetched": 279
         },
         "freshness": {
           "status": "ok",
           "daysSinceLastSeen": 0,
-          "lastSeen": "2026-09-10T09:51:32.080Z"
+          "lastSeen": "2026-09-10T10:04:52.355Z"
         },
         "saveSuccess": {
           "status": "ok",
@@ -183,7 +183,7 @@
     },
     {
       "site": "jobindex.dk",
-      "status": "healthy",
+      "status": "degraded",
       "checks": {
         "reachability": {
           "status": "ok",
@@ -194,79 +194,80 @@
           "fields": [
             {
               "field": "Location",
-              "emptyCount": 6,
-              "total": 91,
-              "emptyPercent": 7
+              "emptyCount": 0,
+              "total": 26,
+              "emptyPercent": 0
             },
             {
               "field": "Working Country",
-              "emptyCount": 6,
-              "total": 91,
-              "emptyPercent": 7
+              "emptyCount": 0,
+              "total": 26,
+              "emptyPercent": 0
             },
             {
               "field": "City",
-              "emptyCount": 7,
-              "total": 91,
-              "emptyPercent": 8
+              "emptyCount": 0,
+              "total": 26,
+              "emptyPercent": 0
             },
             {
               "field": "Employment Type",
-              "emptyCount": 91,
-              "total": 91,
+              "emptyCount": 26,
+              "total": 26,
               "emptyPercent": 100
             },
             {
               "field": "Salary",
-              "emptyCount": 91,
-              "total": 91,
+              "emptyCount": 26,
+              "total": 26,
               "emptyPercent": 100
             },
             {
               "field": "Date Posted",
               "emptyCount": 0,
-              "total": 91,
+              "total": 26,
               "emptyPercent": 0
             },
             {
               "field": "Experience Level",
-              "emptyCount": 61,
-              "total": 91,
-              "emptyPercent": 67
+              "emptyCount": 16,
+              "total": 26,
+              "emptyPercent": 62
             },
             {
               "field": "Company Size",
-              "emptyCount": 91,
-              "total": 91,
+              "emptyCount": 26,
+              "total": 26,
               "emptyPercent": 100
             },
             {
               "field": "Raw Description",
-              "emptyCount": 26,
-              "total": 91,
-              "emptyPercent": 29
+              "emptyCount": 8,
+              "total": 26,
+              "emptyPercent": 31
             }
           ]
         },
         "matchRate": {
           "status": "ok",
-          "fetched": 687,
-          "matched": 91,
-          "matchPercent": 13
+          "fetched": 312,
+          "matched": 26,
+          "matchPercent": 8
         },
         "yield": {
-          "status": "ok",
-          "fetched": 687,
-          "previousFetched": 684
+          "status": "warn",
+          "fetched": 312,
+          "previousFetched": 687,
+          "percentChange": -55
         },
         "freshness": {
           "status": "ok",
           "daysSinceLastSeen": 0,
-          "lastSeen": "2026-09-10T09:56:05.151Z"
+          "lastSeen": "2026-09-10T10:10:47.549Z"
         },
         "saveSuccess": {
           "status": "ok",
-          "saved": 91,
+          "saved": 26,
           "saveFailed": 0
         }
       }
@@ -352,7 +353,7 @@
         "freshness": {
           "status": "ok",
           "daysSinceLastSeen": 0,
-          "lastSeen": "2026-09-10T09:56:26.923Z"
+          "lastSeen": "2026-09-10T10:10:52.576Z"
         },
         "saveSuccess": {
           "status": "ok",
@@ -437,7 +438,7 @@
         "yield": {
           "status": "ok",
           "fetched": 60,
-          "previousFetched": 0
+          "previousFetched": 60
         },
         "freshness": {
           "status": "ok",
@@ -532,7 +533,7 @@
         "freshness": {
           "status": "ok",
           "daysSinceLastSeen": 0,
-          "lastSeen": "2026-09-10T09:56:30.980Z"
+          "lastSeen": "2026-09-10T10:11:14.364Z"
         },
         "saveSuccess": {
           "status": "ok",
@@ -617,7 +618,7 @@
         "yield": {
           "status": "ok",
           "fetched": 339,
-          "previousFetched": 340
+          "previousFetched": 339
         },
         "freshness": {
           "status": "warn",
@@ -802,7 +803,7 @@
         "freshness": {
           "status": "ok",
           "daysSinceLastSeen": 0,
-          "lastSeen": "2026-09-10T09:56:57.476Z"
+          "lastSeen": "2026-09-10T10:11:41.363Z"
         },
         "saveSuccess": {
           "status": "ok",
@@ -892,7 +893,7 @@
         "freshness": {
           "status": "ok",
           "daysSinceLastSeen": 0,
-          "lastSeen": "2026-09-10T09:58:51.958Z"
+          "lastSeen": "2026-09-10T10:13:33.081Z"
         },
         "saveSuccess": {
           "status": "ok",
@@ -970,19 +971,19 @@
         },
         "matchRate": {
           "status": "ok",
-          "fetched": 1639,
+          "fetched": 1640,
           "matched": 173,
           "matchPercent": 11
         },
         "yield": {
           "status": "ok",
-          "fetched": 1639,
-          "previousFetched": 1612
+          "fetched": 1640,
+          "previousFetched": 1639
         },
         "freshness": {
           "status": "ok",
           "daysSinceLastSeen": 0,
-          "lastSeen": "2026-09-10T10:01:19.332Z"
+          "lastSeen": "2026-09-10T10:15:49.571Z"
         },
         "saveSuccess": {
           "status": "ok",
@@ -1067,12 +1068,12 @@
         "yield": {
           "status": "ok",
           "fetched": 160,
-          "previousFetched": 157
+          "previousFetched": 160
         },
         "freshness": {
           "status": "ok",
           "daysSinceLastSeen": 0,
-          "lastSeen": "2026-09-10T10:01:44.726Z"
+          "lastSeen": "2026-09-10T10:16:13.436Z"
         },
         "saveSuccess": {
           "status": "ok",
@@ -1247,12 +1248,12 @@
         "yield": {
           "status": "ok",
           "fetched": 143,
-          "previousFetched": 145
+          "previousFetched": 143
         },
         "freshness": {
           "status": "ok",
           "daysSinceLastSeen": 0,
-          "lastSeen": "2026-09-10T10:01:56.525Z"
+          "lastSeen": "2026-09-10T10:16:23.106Z"
         },
         "saveSuccess": {
           "status": "ok",
@@ -1427,12 +1428,12 @@
         "yield": {
           "status": "ok",
           "fetched": 96,
-          "previousFetched": 5
+          "previousFetched": 96
         },
         "freshness": {
           "status": "ok",
           "daysSinceLastSeen": 0,
-          "lastSeen": "2026-09-10T10:02:24.049Z"
+          "lastSeen": "2026-09-10T10:16:41.445Z"
         },
         "saveSuccess": {
           "status": "ok",
@@ -1517,7 +1518,7 @@
         "yield": {
           "status": "ok",
           "fetched": 140,
-          "previousFetched": 120
+          "previousFetched": 140
         },
         "freshness": {
           "status": "ok",
@@ -1607,12 +1608,12 @@
         "yield": {
           "status": "ok",
           "fetched": 125,
-          "previousFetched": 127
+          "previousFetched": 125
         },
         "freshness": {
           "status": "ok",
           "daysSinceLastSeen": 0,
-          "lastSeen": "2026-09-10T10:02:42.632Z"
+          "lastSeen": "2026-09-10T10:17:00.841Z"
         },
         "saveSuccess": {
           "status": "ok",
@@ -1690,19 +1691,19 @@
         },
         "matchRate": {
           "status": "ok",
-          "fetched": 2404,
+          "fetched": 2405,
           "matched": 26,
           "matchPercent": 1
         },
         "yield": {
           "status": "ok",
-          "fetched": 2404,
-          "previousFetched": 2378
+          "fetched": 2405,
+          "previousFetched": 2404
         },
         "freshness": {
           "status": "ok",
           "daysSinceLastSeen": 0,
-          "lastSeen": "2026-09-10T10:02:57.657Z"
+          "lastSeen": "2026-09-10T10:17:14.449Z"
         },
         "saveSuccess": {
           "status": "ok",
@@ -1787,12 +1788,12 @@
         "yield": {
           "status": "ok",
           "fetched": 108,
-          "previousFetched": 106
+          "previousFetched": 108
         },
         "freshness": {
           "status": "ok",
           "daysSinceLastSeen": 0,
-          "lastSeen": "2026-09-10T10:03:02.474Z"
+          "lastSeen": "2026-09-10T10:17:19.076Z"
         },
         "saveSuccess": {
           "status": "ok",
@@ -1882,7 +1883,7 @@
         "freshness": {
           "status": "ok",
           "daysSinceLastSeen": 0,
-          "lastSeen": "2026-09-10T10:03:15.871Z"
+          "lastSeen": "2026-09-10T10:17:30.182Z"
         },
         "saveSuccess": {
           "status": "ok",
@@ -1967,12 +1968,12 @@
         "yield": {
           "status": "ok",
           "fetched": 450,
-          "previousFetched": 449
+          "previousFetched": 450
         },
         "freshness": {
           "status": "ok",
           "daysSinceLastSeen": 0,
-          "lastSeen": "2026-09-10T10:03:34.975Z"
+          "lastSeen": "2026-09-10T10:17:50.129Z"
         },
         "saveSuccess": {
           "status": "ok",
