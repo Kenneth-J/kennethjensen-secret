@@ -321,26 +321,6 @@ function renderMissingRow(job) {
   `;
   tr.appendChild(jobCell);
 
-  const minCell = document.createElement("td");
-  const minInput = document.createElement("input");
-  minInput.className = "cell-input";
-  minInput.type = "number";
-  minInput.placeholder = "min";
-  if (job.salaryMin != null) minInput.value = job.salaryMin;
-  wireCellSave(minInput, job.id, "salaryMin", (v) => ({ salaryMin: v === "" ? null : Number(v) }));
-  minCell.appendChild(minInput);
-  tr.appendChild(minCell);
-
-  const maxCell = document.createElement("td");
-  const maxInput = document.createElement("input");
-  maxInput.className = "cell-input";
-  maxInput.type = "number";
-  maxInput.placeholder = "max";
-  if (job.salaryMax != null) maxInput.value = job.salaryMax;
-  wireCellSave(maxInput, job.id, "salaryMax", (v) => ({ salaryMax: v === "" ? null : Number(v) }));
-  maxCell.appendChild(maxInput);
-  tr.appendChild(maxCell);
-
   const seniorityCell = document.createElement("td");
   const senioritySelect = buildSelect(SENIORITY_OPTIONS, job.seniority, "cell-select");
   wireCellSave(senioritySelect, job.id, "seniority", (v) => ({ seniority: v === "" ? null : v }));
