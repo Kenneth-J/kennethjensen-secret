@@ -4,6 +4,8 @@ if (window.top !== window.self) {
   throw new Error("framed: refusing to initialise admin panel");
 }
 
+document.getElementById("year").textContent = new Date().getFullYear();
+
 const WORKER_URL = "https://jobmatch-worker.kennethj.workers.dev";
 // Holds {token, expiresAt} from POST /login — never the password itself.
 const STORAGE_KEY = "jobmatch_admin_session";
@@ -18,6 +20,7 @@ const tabBtns = document.querySelectorAll(".tab-btn");
 const panels = {
   review: document.getElementById("review-panel"),
   wordcloud: document.getElementById("wordcloud-panel"),
+  searchterms: document.getElementById("searchterms-panel"),
   missing: document.getElementById("missing-panel"),
   clicks: document.getElementById("clicks-panel"),
   health: document.getElementById("health-panel"),
@@ -32,6 +35,14 @@ const cloudStatus = document.getElementById("cloud-status");
 const cloudCard = document.getElementById("cloud-card");
 const cloudSvg = document.getElementById("cloud-svg");
 const tagToast = document.getElementById("tag-toast");
+
+const searchTermsStatus = document.getElementById("searchterms-status");
+const searchTermsCloudCard = document.getElementById("searchterms-cloud-card");
+const searchTermsCloudSvg = document.getElementById("searchterms-cloud-svg");
+const searchTermsToast = document.getElementById("searchterms-toast");
+const searchTermsTableWrap = document.getElementById("searchterms-table-wrap");
+const searchTermsTbody = document.getElementById("searchterms-tbody");
+const searchTermsEmpty = document.getElementById("searchterms-empty");
 
 const missingStatus = document.getElementById("missing-status");
 const missingSummary = document.getElementById("missing-summary");
@@ -186,13 +197,14 @@ function showApp() {
   logoutBtn.style.display = "inline-block";
 }
 
-const loaded = { review: false, wordcloud: false, missing: false, clicks: false, health: false };
+const loaded = { review: false, wordcloud: false, searchterms: false, missing: false, clicks: false, health: false };
 
 function setTab(tab) {
   tabBtns.forEach((btn) => btn.classList.toggle("active", btn.dataset.tab === tab));
   Object.entries(panels).forEach(([name, el]) => el.classList.toggle("active", name === tab));
   if (tab === "review" && !loaded.review) { loaded.review = true; loadFlagged(); }
   if (tab === "wordcloud" && !loaded.wordcloud) { loaded.wordcloud = true; loadWordCloud(); }
+  if (tab === "searchterms" && !loaded.searchterms) { loaded.searchterms = true; loadSearchTerms(); }
   if (tab === "missing" && !loaded.missing) { loaded.missing = true; loadMissingData(); }
   if (tab === "clicks" && !loaded.clicks) { loaded.clicks = true; loadTopClicked(); }
   if (tab === "health" && !loaded.health) { loaded.health = true; loadHealth(); }
@@ -678,9 +690,12 @@ function mixColor(c1, c2, t) {
   return `rgb(${c1.map((v, i) => Math.round(v + (c2[i] - v) * t)).join(",")})`;
 }
 
-function renderWordCloud(words) {
+// svgEl/onToggle are parameterized so this same layout logic serves both
+// the job-title word cloud and the search-terms word cloud below — the two
+// clouds are otherwise unrelated data, just sharing a renderer.
+function renderWordCloud(svgEl, words, onToggle) {
   const width = 800, height = 440;
-  cloudSvg.innerHTML = "";
+  svgEl.innerHTML = "";
   if (!words.length) return;
 
   const counts = words.map((w) => w.count);
@@ -718,7 +733,7 @@ function renderWordCloud(words) {
     wordSpan.setAttribute("fill", colorFor(w.count));
     el.appendChild(wordSpan);
 
-    cloudSvg.appendChild(el);
+    svgEl.appendChild(el);
     const bbox = el.getBBox();
 
     let x = centerX - bbox.width / 2, y = centerY - bbox.height / 2;
@@ -736,20 +751,24 @@ function renderWordCloud(words) {
     el.setAttribute("y", y + bbox.height * 0.8);
     placed.push({ x, y, w: bbox.width, h: bbox.height });
 
-    el.addEventListener("click", () => toggleTag(w));
+    el.addEventListener("click", () => onToggle(w));
   });
 }
 
-function showTagToast(text, kind) {
-  tagToast.textContent = text;
-  tagToast.style.display = "block";
-  tagToast.style.background = kind === "error" ? "var(--danger-soft)" : "var(--up-soft)";
-  tagToast.style.color = kind === "error" ? "var(--danger)" : "var(--up)";
-  clearTimeout(showTagToast._t);
-  showTagToast._t = setTimeout(() => { tagToast.style.display = "none"; }, 4000);
+function showTagToast(toastEl, text, kind) {
+  toastEl.textContent = text;
+  toastEl.style.display = "block";
+  toastEl.style.background = kind === "error" ? "var(--danger-soft)" : "var(--up-soft)";
+  toastEl.style.color = kind === "error" ? "var(--danger)" : "var(--up)";
+  clearTimeout(toastEl._t);
+  toastEl._t = setTimeout(() => { toastEl.style.display = "none"; }, 4000);
 }
 
-async function toggleTag(w) {
+// toastEl/reload are parameterized for the same reason renderWordCloud()
+// is — the Tags-table create/delete call is identical either way, only
+// which cloud re-renders afterward (and where the confirmation toast shows
+// up) differs.
+async function toggleTag(w, toastEl, reload) {
   try {
     if (w.isTag) {
       await callWorker("/words/tags", {
@@ -757,20 +776,19 @@ async function toggleTag(w) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name: w.word }),
       });
-      showTagToast(`Removed "${w.word}" from Tags.`, "ok");
+      showTagToast(toastEl, `Removed "${w.word}" from Tags.`, "ok");
     } else {
       const result = await callWorker("/words/tags", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name: w.word }),
       });
-      showTagToast(`"${result.name}" is now a Tag.`, "ok");
+      showTagToast(toastEl, `"${result.name}" is now a Tag.`, "ok");
     }
-    loaded.wordcloud = false;
-    await loadWordCloud();
+    await reload();
   } catch (err) {
     if (err.unauthorized) { clearStoredSession(); showLogin("Session expired. Enter the password again."); return; }
-    showTagToast(`Failed: ${err.message}`, "error");
+    showTagToast(toastEl, `Failed: ${err.message}`, "error");
   }
 }
 
@@ -784,10 +802,59 @@ async function loadWordCloud() {
     if (!lastWords.length) { cloudStatus.textContent = "No job titles to analyze yet."; return; }
     cloudStatus.textContent = "";
     cloudCard.style.display = "block";
-    renderWordCloud(lastWords);
+    renderWordCloud(cloudSvg, lastWords, (w) => toggleTag(w, tagToast, async () => { loaded.wordcloud = false; await loadWordCloud(); }));
   } catch (err) {
     if (err.unauthorized) { clearStoredSession(); showLogin("Session expired. Enter the password again."); return; }
     cloudStatus.textContent = `Failed to load: ${err.message}`;
+  }
+}
+
+let lastSearchWords = [];
+
+function renderSearchQueriesTable(queries) {
+  searchTermsTbody.innerHTML = "";
+  if (!queries.length) {
+    searchTermsTableWrap.style.display = "none";
+    return;
+  }
+  searchTermsTableWrap.style.display = "block";
+  for (const q of queries) {
+    const tr = document.createElement("tr");
+    const queryTd = document.createElement("td");
+    queryTd.textContent = q.query;
+    const countTd = document.createElement("td");
+    countTd.textContent = q.count;
+    tr.append(queryTd, countTd);
+    searchTermsTbody.appendChild(tr);
+  }
+}
+
+async function loadSearchTerms() {
+  loaded.searchterms = true;
+  searchTermsStatus.textContent = "Loading…";
+  searchTermsCloudCard.style.display = "none";
+  searchTermsTableWrap.style.display = "none";
+  searchTermsEmpty.style.display = "none";
+  try {
+    const data = await callWorker("/search/terms");
+    lastSearchWords = data.words || [];
+    const topQueries = data.topQueries || [];
+    if (!lastSearchWords.length && !topQueries.length) {
+      searchTermsStatus.textContent = "";
+      searchTermsEmpty.style.display = "block";
+      return;
+    }
+    searchTermsStatus.textContent = "";
+    if (lastSearchWords.length) {
+      searchTermsCloudCard.style.display = "block";
+      renderWordCloud(searchTermsCloudSvg, lastSearchWords, (w) =>
+        toggleTag(w, searchTermsToast, async () => { loaded.searchterms = false; await loadSearchTerms(); })
+      );
+    }
+    renderSearchQueriesTable(topQueries);
+  } catch (err) {
+    if (err.unauthorized) { clearStoredSession(); showLogin("Session expired. Enter the password again."); return; }
+    searchTermsStatus.textContent = `Failed to load: ${err.message}`;
   }
 }
 
@@ -799,7 +866,7 @@ passwordInput.addEventListener("keydown", (e) => { if (e.key === "Enter") unlock
 logoutBtn.addEventListener("click", () => {
   clearStoredSession();
   passwordInput.value = "";
-  loaded.review = loaded.wordcloud = loaded.missing = loaded.clicks = loaded.health = false;
+  loaded.review = loaded.wordcloud = loaded.searchterms = loaded.missing = loaded.clicks = loaded.health = false;
   setTab("review");
   showLogin();
 });

@@ -195,6 +195,12 @@
   .field-bar-wrap{display:flex;align-items:center;gap:8px;}
   .field-bar{flex:1;height:6px;border-radius:3px;background:var(--up-soft);overflow:hidden;}
   .field-bar-fill{height:100%;background:var(--danger);}
+
+  footer{border-top:1px solid var(--line);padding:34px 0;}
+  footer .wrap{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;}
+  .footer-left{font-size:14px;color:var(--ink-soft);}
+  .footer-right a{font-size:14px;color:var(--ink-soft);text-decoration:none;}
+  .footer-right a:hover{color:var(--accent);}
 </style>
 </head>
 <body>
@@ -225,6 +231,7 @@
     <div class="tabs">
       <button class="tab-btn active" data-tab="review">Flagged Jobs</button>
       <button class="tab-btn" data-tab="wordcloud">Word Cloud</button>
+      <button class="tab-btn" data-tab="searchterms">Search Terms</button>
       <button class="tab-btn" data-tab="missing">Missing Data</button>
       <button class="tab-btn" data-tab="clicks">Top Clicked</button>
       <button class="tab-btn" data-tab="health">Site Health</button>
@@ -259,6 +266,38 @@
         <svg id="cloud-svg" viewBox="0 0 800 440" xmlns="http://www.w3.org/2000/svg"></svg>
       </div>
       <div id="tag-toast"></div>
+    </div>
+
+    <div id="searchterms-panel" class="tab-panel">
+      <div class="section-head">
+        <h1>Public search terms</h1>
+        <p>What visitors of the public search page (kennethjensen.me/jobmatch) actually typed, tokenized the same way as the job-title cloud above. Click a word marked <strong>+</strong> to tag it directly. <strong>✓</strong> words are existing Tags people are searching for — real demand for what's already tracked; <strong>+</strong> words with high counts are candidates for a new Tag. "Top queries" below keeps the exact phrases, since a multi-word candidate can lose its meaning once split into single words.</p>
+      </div>
+      <div id="searchterms-status" class="status-line"></div>
+      <div class="cloud-card" id="searchterms-cloud-card" style="display:none;">
+        <div class="cloud-legend">
+          <span><span class="swatch" style="background:var(--accent-soft);"></span>less frequent</span>
+          <span><span class="swatch" style="background:var(--accent);"></span>more frequent</span>
+          <span>Marked <strong style="color:var(--accent);">+</strong> = not a tag yet · <strong style="color:var(--up);">✓</strong> = already a tag</span>
+        </div>
+        <svg id="searchterms-cloud-svg" viewBox="0 0 800 440" xmlns="http://www.w3.org/2000/svg"></svg>
+      </div>
+      <div id="searchterms-toast"></div>
+      <div class="missing-table-wrap" id="searchterms-table-wrap" style="display:none;">
+        <table class="missing-table">
+          <thead>
+            <tr>
+              <th>Query</th>
+              <th>Times searched</th>
+            </tr>
+          </thead>
+          <tbody id="searchterms-tbody"></tbody>
+        </table>
+      </div>
+      <div id="searchterms-empty" class="empty-state" style="display:none;">
+        <div class="checkmark">✓</div>
+        No searches logged yet.
+      </div>
     </div>
 
     <div id="missing-panel" class="tab-panel">
@@ -373,6 +412,13 @@
     </div>
   </div>
 </main>
+
+<footer>
+  <div class="wrap">
+    <div class="footer-left">© <span id="year"></span> Kenneth Jensen, Operations Consulting</div>
+    <div class="footer-right"><a href="mailto:k@kennethjensen.me">k@kennethjensen.me</a></div>
+  </div>
+</footer>
 
 <script src="./admin.js" defer></script>
 
