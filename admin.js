@@ -551,6 +551,21 @@ function renderHealthDetail(site) {
     "Save success", c.saveSuccess.status,
     `${c.saveSuccess.saved} saved${c.saveSuccess.saveFailed ? `, ${c.saveSuccess.saveFailed} failed` : ""}`
   ));
+  // Informational only (see jobmatch's healthCheck.js comment) — a job
+  // genuinely outside the Nordics/Baltics is *supposed* to be dropped here,
+  // so this never turns red/yellow like the checks above. The sample
+  // locations are the actual point: they're what makes a real gap in
+  // CITY_TERMS/COUNTRY_NAME_TERMS visible enough to act on, vs. legitimate
+  // out-of-region jobs.
+  if (c.locationDropped) {
+    checksGrid.appendChild(renderHealthCheck(
+      "Location-gate drops", c.locationDropped.status,
+      c.locationDropped.dropped === 0
+        ? "0 dropped"
+        : `${c.locationDropped.dropped} dropped (${c.locationDropped.droppedPercent}%)` +
+          (c.locationDropped.sampleLocations.length ? ` — e.g. ${c.locationDropped.sampleLocations.map(escapeHtml).join(", ")}` : "")
+    ));
+  }
   wrap.appendChild(checksGrid);
 
   const fieldTable = document.createElement("table");
