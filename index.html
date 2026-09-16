@@ -6,53 +6,23 @@
 <meta name="description" content="Admin panel for the JobMatch job scraper.">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; script-src 'self'; connect-src 'self' https://jobmatch-worker.kennethj.workers.dev; base-uri 'self'; form-action 'self'; upgrade-insecure-requests">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; script-src 'self'; connect-src 'self' https://jobmatch-worker.kennethj.workers.dev https://lemming-worker.kennethj.workers.dev; base-uri 'self'; form-action 'self'; upgrade-insecure-requests">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <!-- Clickjacking guard: stays hidden until framebust.js confirms we are not
      inside someone else's frame. See framebust.js for why this lives here
      rather than in a frame-ancestors header. -->
 <style>html{visibility:hidden}</style>
 <script src="./framebust.js"></script>
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect x='6' y='6' width='20' height='20' rx='4' fill='none' stroke='%236c3aed' stroke-width='2.5'/%3E%3Cpath d='M12 16l3 3 6-6' stroke='%236c3aed' stroke-width='2.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect x='6' y='6' width='20' height='20' rx='4' fill='none' stroke='%2312b892' stroke-width='2.5'/%3E%3Cpath d='M12 16l3 3 6-6' stroke='%2312b892' stroke-width='2.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="design-system.css">
 <style>
-  :root{
-    --ink:#141414;
-    --ink-soft:#5b5f66;
-    --bg:#ffffff;
-    --bg-alt:#faf8f6;
-    --accent:#6c3aed;
-    --accent-soft:#f1ecfe;
-    --line:#ece8e4;
-    --danger:#c0392b;
-    --danger-soft:#fdecea;
-    --up:#1a8a5f;
-    --up-soft:#e6f5ef;
-    --radius:14px;
-    --maxw:1120px;
-  }
-  *{box-sizing:border-box;}
-  body{
-    margin:0;
-    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Inter,Roboto,sans-serif;
-    color:var(--ink);
-    background:var(--bg-alt);
-    line-height:1.5;
-    -webkit-font-smoothing:antialiased;
-  }
-  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 24px;}
-  code{background:var(--bg-alt);border:1px solid var(--line);border-radius:4px;padding:1px 5px;font-size:.92em;}
-
-  header{background:var(--bg);border-bottom:1px solid var(--line);}
-  .nav{display:flex;align-items:center;justify-content:space-between;padding:18px 0;}
-  .brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:17px;letter-spacing:-0.01em;}
-  .brand-mark{width:22px;height:22px;flex:none;}
-  #logout-btn{
-    display:none;background:none;border:1px solid var(--line);color:var(--ink-soft);
-    padding:7px 14px;border-radius:999px;font-size:13px;font-weight:600;cursor:pointer;
-  }
-  #logout-btn:hover{border-color:var(--ink-soft);color:var(--ink);}
-
-  main{padding:40px 0 80px;}
+  /* Page-specific only — tokens, resets, header/nav, tabs, buttons, empty
+     states, and footer all live in design-system.css now (a local copy of
+     kennethjensen-me/assets/base.css's shared tokens — this is a different
+     origin, so it can't <link> that file directly). */
 
   /* Login gate */
   #login-view{max-width:360px;margin:60px auto 0;text-align:center;}
@@ -64,27 +34,12 @@
   }
   #password-input:focus{outline:2px solid var(--accent);outline-offset:1px;}
   #unlock-btn{
-    width:100%;background:var(--accent);color:#fff;border:none;padding:12px;
+    width:100%;background:var(--cta-bg);color:var(--accent-light);border:none;padding:12px;
     border-radius:var(--radius);font-size:14px;font-weight:700;cursor:pointer;
   }
-  #unlock-btn:hover{opacity:.9;}
+  #unlock-btn:hover{opacity:.85;}
   #unlock-btn:disabled{opacity:.6;cursor:default;}
   #login-error{color:var(--danger);font-size:13px;margin-top:10px;min-height:18px;}
-
-  .section-head{margin:0 0 24px;}
-  .section-head h1{font-size:20px;font-weight:800;margin:0 0 6px;letter-spacing:-0.01em;}
-  .section-head p{color:var(--ink-soft);font-size:14px;margin:0;max-width:64ch;}
-
-  .tabs{display:flex;gap:6px;margin-bottom:28px;border-bottom:1px solid var(--line);flex-wrap:wrap;}
-  .tab-btn{
-    background:none;border:none;padding:10px 4px;margin-right:20px;font-size:14px;font-weight:700;
-    color:var(--ink-soft);cursor:pointer;border-bottom:2px solid transparent;translate:0 1px;
-  }
-  .tab-btn.active{color:var(--accent);border-bottom-color:var(--accent);}
-  .tab-panel{display:none;}
-  .tab-panel.active{display:block;}
-
-  .status-line{color:var(--ink-soft);font-size:14px;padding:40px 0;text-align:center;}
 
   .job-card{
     background:#fff;border:1px solid var(--line);border-radius:var(--radius);
@@ -105,18 +60,6 @@
     padding:3px 9px;border-radius:999px;text-transform:uppercase;letter-spacing:.02em;
   }
   .job-actions{display:flex;gap:10px;}
-  .btn{
-    border:none;padding:9px 16px;border-radius:999px;font-size:13px;font-weight:700;
-    cursor:pointer;transition:opacity .15s;
-  }
-  .btn:disabled{opacity:.5;cursor:default;}
-  .btn-confirm{background:var(--ink);color:#fff;}
-  .btn-confirm:hover:not(:disabled){opacity:.85;}
-  .btn-override{background:var(--accent-soft);color:var(--accent);}
-  .btn-override:hover:not(:disabled){opacity:.85;}
-
-  .empty-state{text-align:center;padding:60px 0;color:var(--ink-soft);}
-  .empty-state .checkmark{font-size:32px;margin-bottom:12px;}
 
   /* Word cloud */
   .cloud-card{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:16px;margin-bottom:24px;}
@@ -196,21 +139,33 @@
   .field-bar{flex:1;height:6px;border-radius:3px;background:var(--up-soft);overflow:hidden;}
   .field-bar-fill{height:100%;background:var(--danger);}
 
-  footer{border-top:1px solid var(--line);padding:34px 0;}
-  footer .wrap{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;}
-  .footer-left{font-size:14px;color:var(--ink-soft);}
-  .footer-right a{font-size:14px;color:var(--ink-soft);text-decoration:none;}
-  .footer-right a:hover{color:var(--accent);}
+  /* Log Tracer */
+  .logtracer-summary{color:var(--ink-soft);font-size:13.5px;margin-bottom:18px;}
+  .log-row td{vertical-align:top;}
+  .log-source{
+    display:inline-block;font-size:11px;font-weight:800;letter-spacing:.02em;text-transform:uppercase;
+    padding:3px 9px;border-radius:999px;background:var(--accent-soft);color:var(--accent);white-space:nowrap;
+  }
+  .log-message{font-size:13.5px;margin-top:4px;}
+  .log-time{color:var(--ink-soft);font-size:12.5px;white-space:nowrap;}
+  .log-context{
+    margin:8px 0 0;padding:10px 12px;background:var(--bg-alt);border:1px solid var(--line);border-radius:8px;
+    font-size:12px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;white-space:pre-wrap;word-break:break-word;
+  }
+  .logtracer-relogin{display:flex;gap:8px;max-width:360px;margin-bottom:18px;}
+  .logtracer-relogin input{
+    flex:1;padding:9px 12px;border:1px solid var(--line);border-radius:8px;font-size:13.5px;
+  }
 </style>
 </head>
 <body>
 
 <header>
   <nav class="nav wrap">
-    <div class="brand">
+    <div class="brand display">
       <svg class="brand-mark" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <rect x="6" y="6" width="20" height="20" rx="4" stroke="#6c3aed" stroke-width="2.5"/>
-        <path d="M12 16l3 3 6-6" stroke="#6c3aed" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+        <rect x="6" y="6" width="20" height="20" rx="4" stroke="#12b892" stroke-width="2.5"/>
+        <path d="M12 16l3 3 6-6" stroke="#12b892" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
       </svg>
       JobMatch Admin
     </div>
@@ -235,6 +190,7 @@
       <button class="tab-btn" data-tab="missing">Missing Data</button>
       <button class="tab-btn" data-tab="clicks">Top Clicked</button>
       <button class="tab-btn" data-tab="health">Site Health</button>
+      <button class="tab-btn" data-tab="logtracer">Log Tracer</button>
       <button class="tab-btn" data-tab="docs">How We Classify</button>
     </div>
 
@@ -374,6 +330,35 @@
             <tbody id="health-tbody"></tbody>
           </table>
         </div>
+      </div>
+    </div>
+
+    <div id="logtracer-panel" class="tab-panel">
+      <div class="section-head">
+        <h1>Log Tracer</h1>
+        <p>Errors reported by the Lemming Chrome extension (background.js) — a failure that used to only show up in the extension's own console, unwatched. Kept for 30 days. A separate login from the tabs above: this reads from lemming-worker, not jobmatch-worker.</p>
+      </div>
+      <div id="logtracer-status" class="status-line"></div>
+      <div id="logtracer-relogin" class="logtracer-relogin" style="display:none;">
+        <input id="logtracer-password-input" type="password" placeholder="lemming-worker password" autocomplete="off">
+        <button id="logtracer-unlock-btn" class="btn btn-confirm">Unlock</button>
+      </div>
+      <div class="logtracer-summary" id="logtracer-summary" style="display:none;"></div>
+      <div class="missing-table-wrap" id="logtracer-table-wrap" style="display:none;">
+        <table class="missing-table">
+          <thead>
+            <tr>
+              <th>When</th>
+              <th>Source</th>
+              <th>Message</th>
+            </tr>
+          </thead>
+          <tbody id="logtracer-tbody"></tbody>
+        </table>
+      </div>
+      <div id="logtracer-empty" class="empty-state" style="display:none;">
+        <div class="checkmark">✓</div>
+        No errors logged. Quiet in here.
       </div>
     </div>
 

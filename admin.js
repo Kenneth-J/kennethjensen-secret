@@ -10,6 +10,14 @@ const WORKER_URL = "https://jobmatch-worker.kennethj.workers.dev";
 // Holds {token, expiresAt} from POST /login — never the password itself.
 const STORAGE_KEY = "jobmatch_admin_session";
 
+// Log Tracer tab only — a completely separate backend (Lemming's own
+// Worker, not JobMatch's), with its own login/session, since it's a
+// different product's data. See DOCUMENTATION.md ("Log Tracer") for why
+// this lives here rather than a dedicated Lemming admin page: Kenneth
+// wanted one admin surface, not two.
+const LEMMING_WORKER_URL = "https://lemming-worker.kennethj.workers.dev";
+const LEMMING_STORAGE_KEY = "lemming_admin_session";
+
 const loginView = document.getElementById("login-view");
 const appView = document.getElementById("app-view");
 const passwordInput = document.getElementById("password-input");
@@ -24,6 +32,7 @@ const panels = {
   missing: document.getElementById("missing-panel"),
   clicks: document.getElementById("clicks-panel"),
   health: document.getElementById("health-panel"),
+  logtracer: document.getElementById("logtracer-panel"),
   docs: document.getElementById("docs-panel"),
 };
 
@@ -60,6 +69,15 @@ const healthContent = document.getElementById("health-content");
 const healthGenerated = document.getElementById("health-generated");
 const healthSummary = document.getElementById("health-summary");
 const healthTbody = document.getElementById("health-tbody");
+
+const logTracerStatus = document.getElementById("logtracer-status");
+const logTracerRelogin = document.getElementById("logtracer-relogin");
+const logTracerPasswordInput = document.getElementById("logtracer-password-input");
+const logTracerUnlockBtn = document.getElementById("logtracer-unlock-btn");
+const logTracerSummary = document.getElementById("logtracer-summary");
+const logTracerTableWrap = document.getElementById("logtracer-table-wrap");
+const logTracerTbody = document.getElementById("logtracer-tbody");
+const logTracerEmpty = document.getElementById("logtracer-empty");
 
 const SENIORITY_OPTIONS = ["Entry", "Junior", "Mid", "Senior", "C-Level"];
 const WORKING_COUNTRY_OPTIONS = [
@@ -144,6 +162,86 @@ async function callWorker(path, options = {}) {
   return res.json();
 }
 
+// Mirrors getStoredSession/storeSession/clearStoredSession/login/callWorker
+// above exactly, just pointed at LEMMING_WORKER_URL/LEMMING_STORAGE_KEY —
+// kept as separate functions rather than parameterizing the originals,
+// since the two sessions really are independent (different backend,
+// different password) and mixing them into one generic helper would make
+// call sites less clear about which one they're touching for no real gain.
+function getStoredLemmingSession() {
+  try {
+    const raw = localStorage.getItem(LEMMING_STORAGE_KEY);
+    if (!raw) return null;
+    const session = JSON.parse(raw);
+    if (!session.token || !session.expiresAt || session.expiresAt * 1000 <= Date.now()) {
+      localStorage.removeItem(LEMMING_STORAGE_KEY);
+      return null;
+    }
+    return session;
+  } catch {
+    try { localStorage.removeItem(LEMMING_STORAGE_KEY); } catch { /* ignore */ }
+    return null;
+  }
+}
+
+function storeLemmingSession(session) {
+  try {
+    localStorage.setItem(LEMMING_STORAGE_KEY, JSON.stringify(session));
+  } catch {
+    /* session just won't persist across reloads */
+  }
+}
+
+function clearStoredLemmingSession() {
+  try {
+    localStorage.removeItem(LEMMING_STORAGE_KEY);
+  } catch {
+    /* nothing to clear */
+  }
+}
+
+async function loginLemming(password) {
+  const res = await fetch(LEMMING_WORKER_URL + "/login", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ password }),
+  });
+  if (!res.ok) {
+    const err = new Error("unauthorized");
+    err.unauthorized = true;
+    throw err;
+  }
+  const session = await res.json();
+  storeLemmingSession(session);
+  return session;
+}
+
+async function callLemmingWorker(path, options = {}) {
+  const session = getStoredLemmingSession();
+  if (!session) {
+    const err = new Error("unauthorized");
+    err.unauthorized = true;
+    throw err;
+  }
+  const res = await fetch(LEMMING_WORKER_URL + path, {
+    ...options,
+    headers: {
+      Authorization: `Bearer ${session.token}`,
+      ...(options.headers || {}),
+    },
+  });
+  if (res.status === 403) {
+    clearStoredLemmingSession();
+    const err = new Error("unauthorized");
+    err.unauthorized = true;
+    throw err;
+  }
+  if (!res.ok) {
+    throw new Error(`Request failed: ${res.status}`);
+  }
+  return res.json();
+}
+
 function escapeHtml(str) {
   const div = document.createElement("div");
   div.textContent = str;
@@ -197,7 +295,7 @@ function showApp() {
   logoutBtn.style.display = "inline-block";
 }
 
-const loaded = { review: false, wordcloud: false, searchterms: false, missing: false, clicks: false, health: false };
+const loaded = { review: false, wordcloud: false, searchterms: false, missing: false, clicks: false, health: false, logtracer: false };
 
 function setTab(tab) {
   tabBtns.forEach((btn) => btn.classList.toggle("active", btn.dataset.tab === tab));
@@ -208,6 +306,7 @@ function setTab(tab) {
   if (tab === "missing" && !loaded.missing) { loaded.missing = true; loadMissingData(); }
   if (tab === "clicks" && !loaded.clicks) { loaded.clicks = true; loadTopClicked(); }
   if (tab === "health" && !loaded.health) { loaded.health = true; loadHealth(); }
+  if (tab === "logtracer" && !loaded.logtracer) { loaded.logtracer = true; loadLogTracer(); }
 }
 
 tabBtns.forEach((btn) => btn.addEventListener("click", () => setTab(btn.dataset.tab)));
@@ -689,6 +788,86 @@ async function loadHealth() {
   }
 }
 
+// --- Log Tracer ---
+function formatLogTime(iso) {
+  if (!iso) return "";
+  return new Date(iso).toLocaleString(undefined, { month: "short", day: "numeric", hour: "numeric", minute: "2-digit" });
+}
+
+function renderLogRow(entry) {
+  const tr = document.createElement("tr");
+  tr.className = "log-row";
+  // entry.context is arbitrary data the extension attached to the error —
+  // shown as raw JSON rather than picked apart, since its shape varies by
+  // source and isn't worth modeling here just to display it.
+  const contextHtml = entry.context
+    ? `<pre class="log-context">${escapeHtml(JSON.stringify(entry.context, null, 2))}</pre>`
+    : "";
+  tr.innerHTML = `
+    <td class="log-time">${escapeHtml(formatLogTime(entry.receivedAt))}</td>
+    <td><span class="log-source">${escapeHtml(entry.source || "unknown")}</span></td>
+    <td><div class="log-message">${escapeHtml(entry.message)}</div>${contextHtml}</td>
+  `;
+  return tr;
+}
+
+async function loadLogTracer() {
+  logTracerStatus.textContent = "Loading…";
+  logTracerRelogin.style.display = "none";
+  logTracerSummary.style.display = "none";
+  logTracerTableWrap.style.display = "none";
+  logTracerEmpty.style.display = "none";
+  logTracerTbody.innerHTML = "";
+
+  // A separate session from the main login gate (see LEMMING_STORAGE_KEY's
+  // comment) — tryUnlock() below tries to establish this automatically with
+  // the same password, but if lemming-worker's ADMIN_PASSWORD differs (or
+  // that attempt simply hasn't happened yet), fall back to its own inline
+  // prompt rather than blocking the rest of the site.
+  if (!getStoredLemmingSession()) {
+    logTracerStatus.textContent = "";
+    logTracerRelogin.style.display = "flex";
+    return;
+  }
+
+  try {
+    const data = await callLemmingWorker("/logs");
+    logTracerStatus.textContent = "";
+    const entries = data.entries || [];
+    if (entries.length === 0) {
+      logTracerEmpty.style.display = "block";
+      return;
+    }
+    logTracerSummary.style.display = "block";
+    logTracerSummary.textContent = `${entries.length} error${entries.length === 1 ? "" : "s"} in the last 30 days.`;
+    logTracerTableWrap.style.display = "block";
+    for (const entry of entries) logTracerTbody.appendChild(renderLogRow(entry));
+  } catch (err) {
+    if (err.unauthorized) {
+      logTracerStatus.textContent = "";
+      logTracerRelogin.style.display = "flex";
+      return;
+    }
+    logTracerStatus.textContent = `Failed to load: ${err.message}`;
+  }
+}
+
+logTracerUnlockBtn.addEventListener("click", async () => {
+  const password = logTracerPasswordInput.value.trim();
+  if (!password) return;
+  logTracerUnlockBtn.disabled = true;
+  try {
+    await loginLemming(password);
+    logTracerPasswordInput.value = "";
+    await loadLogTracer();
+  } catch (err) {
+    logTracerStatus.textContent = err.unauthorized ? "Wrong password." : `Error: ${err.message}`;
+  } finally {
+    logTracerUnlockBtn.disabled = false;
+  }
+});
+logTracerPasswordInput.addEventListener("keydown", (e) => { if (e.key === "Enter") logTracerUnlockBtn.click(); });
+
 // --- Word cloud ---
 // Hand-rolled spiral layout: place words largest-first, spiraling
 // outward from center until a candidate spot doesn't overlap anything
@@ -880,8 +1059,9 @@ unlockBtn.addEventListener("click", () => {
 passwordInput.addEventListener("keydown", (e) => { if (e.key === "Enter") unlockBtn.click(); });
 logoutBtn.addEventListener("click", () => {
   clearStoredSession();
+  clearStoredLemmingSession();
   passwordInput.value = "";
-  loaded.review = loaded.wordcloud = loaded.searchterms = loaded.missing = loaded.clicks = loaded.health = false;
+  loaded.review = loaded.wordcloud = loaded.searchterms = loaded.missing = loaded.clicks = loaded.health = loaded.logtracer = false;
   setTab("review");
   showLogin();
 });
@@ -894,6 +1074,12 @@ async function tryUnlock(password) {
     showApp();
     loadFlagged();
     loaded.review = true;
+    // Best-effort: if lemming-worker's ADMIN_PASSWORD is the same value,
+    // this gets the Log Tracer tab ready with no second prompt. If it
+    // fails (different password, or that Worker not yet configured), the
+    // tab just falls back to its own inline login when visited — doesn't
+    // block or fail the unlock that already succeeded above.
+    loginLemming(password).catch(() => {});
   } catch (err) {
     clearStoredSession();
     loginError.textContent = err.unauthorized ? "Wrong password." : `Error: ${err.message}`;

@@ -1,0 +1,84 @@
+/* Local copy of kennethjensen-me/assets/base.css's tokens + base chrome —
+   secret.kennethjensen.me is a different origin from kennethjensen.me, so
+   it can't <link> that file directly. Keep the two in sync by eye when the
+   shared palette changes (last synced 2026-09-16, the niniaazzopardi.com-
+   inspired mint/navy redesign). Only the pieces this admin panel actually
+   reuses (header/nav, tabs, buttons, empty states, footer) live here;
+   admin-specific UI (login gate, job cards, tables, word cloud, health,
+   docs, log tracer) stays inline in index.html. */
+
+:root{
+  --ink:#132a33;
+  --ink-soft:#5c7680;
+  --bg:#ffffff;
+  --bg-alt:#f1faf7;
+  --accent:#12b892;
+  --accent-light:#4fe3bf;
+  --accent-soft:#e2f7f1;
+  --cta-bg:#0f2027;
+  --line:#dcf0ea;
+  --danger:#c0392b;
+  --danger-soft:#fdecea;
+  --up:#1a8a5f;
+  --up-soft:#e6f5ef;
+  --radius:14px;
+  --maxw:1120px;
+}
+*{box-sizing:border-box;}
+body{
+  margin:0;
+  font-family:'Inter',system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+  color:var(--ink);
+  background:var(--bg-alt);
+  line-height:1.5;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 24px;}
+.display{font-family:'Space Grotesk','Inter',system-ui,sans-serif;}
+code{background:var(--bg-alt);border:1px solid var(--line);border-radius:4px;padding:1px 5px;font-size:.92em;}
+
+header{background:var(--bg);border-bottom:1px solid var(--line);}
+.nav{display:flex;align-items:center;justify-content:space-between;padding:18px 0;}
+.brand{display:flex;align-items:center;gap:10px;font-weight:700;font-size:17px;letter-spacing:-0.01em;}
+.brand-mark{width:22px;height:22px;flex:none;}
+#logout-btn{
+  display:none;background:none;border:1px solid var(--line);color:var(--ink-soft);
+  padding:7px 14px;border-radius:999px;font-size:13px;font-weight:600;cursor:pointer;
+}
+#logout-btn:hover{border-color:var(--ink-soft);color:var(--ink);}
+
+main{padding:40px 0 80px;}
+
+.section-head{margin:0 0 24px;}
+.section-head h1{font-family:'Space Grotesk','Inter',system-ui,sans-serif;font-size:20px;font-weight:700;margin:0 0 6px;letter-spacing:-0.01em;}
+.section-head p{color:var(--ink-soft);font-size:14px;margin:0;max-width:64ch;}
+
+.tabs{display:flex;gap:6px;margin-bottom:28px;border-bottom:1px solid var(--line);flex-wrap:wrap;}
+.tab-btn{
+  background:none;border:none;padding:10px 4px;margin-right:20px;font-size:14px;font-weight:700;
+  color:var(--ink-soft);cursor:pointer;border-bottom:2px solid transparent;translate:0 1px;
+}
+.tab-btn.active{color:var(--accent);border-bottom-color:var(--accent);}
+.tab-panel{display:none;}
+.tab-panel.active{display:block;}
+
+.status-line{color:var(--ink-soft);font-size:14px;padding:40px 0;text-align:center;}
+
+.btn{
+  border:none;padding:9px 16px;border-radius:999px;font-size:13px;font-weight:700;
+  cursor:pointer;transition:opacity .15s;
+}
+.btn:disabled{opacity:.5;cursor:default;}
+.btn-confirm{background:var(--cta-bg);color:var(--accent-light);}
+.btn-confirm:hover:not(:disabled){opacity:.85;}
+.btn-override{background:var(--accent-soft);color:var(--accent);}
+.btn-override:hover:not(:disabled){opacity:.85;}
+
+.empty-state{text-align:center;padding:60px 0;color:var(--ink-soft);}
+.empty-state .checkmark{font-size:32px;margin-bottom:12px;}
+
+footer{border-top:1px solid var(--line);padding:34px 0;}
+footer .wrap{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;}
+.footer-left{font-size:14px;color:var(--ink-soft);}
+.footer-right a{font-size:14px;color:var(--ink-soft);text-decoration:none;}
+.footer-right a:hover{color:var(--accent);}
