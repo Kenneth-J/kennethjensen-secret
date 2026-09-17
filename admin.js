@@ -993,7 +993,7 @@ async function loadWordCloud() {
   try {
     const data = await callWorker("/words/frequency");
     lastWords = data.words || [];
-    if (!lastWords.length) { cloudStatus.textContent = "No job titles to analyze yet."; return; }
+    if (!lastWords.length) { cloudStatus.textContent = "No job titles to analyse yet."; return; }
     cloudStatus.textContent = "";
     cloudCard.style.display = "block";
     renderWordCloud(cloudSvg, lastWords, (w) => toggleTag(w, tagToast, async () => { loaded.wordcloud = false; await loadWordCloud(); }));
