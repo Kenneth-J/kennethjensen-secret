@@ -373,7 +373,7 @@ function buildSelect(options, current, cssClass) {
   select.className = cssClass;
   const blank = document.createElement("option");
   blank.value = "";
-  blank.textContent = "—";
+  blank.textContent = "-";
   select.appendChild(blank);
   for (const opt of options) {
     const el = document.createElement("option");
@@ -489,7 +489,7 @@ function renderMissingRow(job, onRowRemoved) {
     const banner = document.createElement("div");
     banner.className = "completing-banner";
     const msg = document.createElement("span");
-    msg.textContent = `All fields filled — removing in ${secondsLeft}s`;
+    msg.textContent = `All fields filled, removing in ${secondsLeft}s`;
     const undoBtn = document.createElement("button");
     undoBtn.className = "btn btn-override undo-btn";
     undoBtn.textContent = "Undo";
@@ -508,7 +508,7 @@ function renderMissingRow(job, onRowRemoved) {
         if (onRowRemoved) onRowRemoved();
         return;
       }
-      msg.textContent = `All fields filled — removing in ${secondsLeft}s`;
+      msg.textContent = `All fields filled, removing in ${secondsLeft}s`;
     }, 1000);
   }
 
@@ -577,7 +577,7 @@ function renderClickRow(job) {
   tr.appendChild(jobCell);
 
   const sourceCell = document.createElement("td");
-  sourceCell.textContent = job.sourceSite || "—";
+  sourceCell.textContent = job.sourceSite || "-";
   tr.appendChild(sourceCell);
 
   const countCell = document.createElement("td");
@@ -662,7 +662,7 @@ function renderHealthDetail(site) {
       c.locationDropped.dropped === 0
         ? "0 dropped"
         : `${c.locationDropped.dropped} dropped (${c.locationDropped.droppedPercent}%)` +
-          (c.locationDropped.sampleLocations.length ? ` — e.g. ${c.locationDropped.sampleLocations.map(escapeHtml).join(", ")}` : "")
+          (c.locationDropped.sampleLocations.length ? `: e.g. ${c.locationDropped.sampleLocations.map(escapeHtml).join(", ")}` : "")
     ));
   }
   wrap.appendChild(checksGrid);
@@ -698,25 +698,25 @@ function renderHealthDetail(site) {
 function recommendedAction(site) {
   const c = site.checks;
   if (c.reachability.status === "fail") {
-    return "Unreachable — check for a block (headers/IP) or a changed page structure.";
+    return "Unreachable, check for a block (headers/IP) or a changed page structure.";
   }
   if (c.yield.status === "fail") {
-    return "Fetched 0 jobs this run — check the parser against the live site.";
+    return "Fetched 0 jobs this run, check the parser against the live site.";
   }
   if (c.matchRate.status === "fail") {
-    return "Real volume fetched but 0 matched — possible soft block serving different content (see thehub.io precedent).";
+    return "Real volume fetched but 0 matched: possible soft block serving different content (see thehub.io precedent).";
   }
   if (c.saveSuccess.status === "fail") {
-    return "Jobs matched but failed to save — check Baserow field validation errors.";
+    return "Jobs matched but failed to save, check Baserow field validation errors.";
   }
   if (c.freshness.status === "fail") {
-    return "No rows updated in over 10 days — investigate why nothing is landing.";
+    return "No rows updated in over 10 days, investigate why nothing is landing.";
   }
   if (c.yield.status === "warn") {
-    return `Fetch volume dropped ${c.yield.percentChange}% vs. last run — verify the site/parser still works.`;
+    return `Fetch volume dropped ${c.yield.percentChange}% vs. last run, verify the site/parser still works.`;
   }
   if (c.freshness.status === "warn") {
-    return "Getting stale — keep an eye on this site.";
+    return "Getting stale, keep an eye on this site.";
   }
   return "No action needed.";
 }
@@ -732,7 +732,7 @@ function renderHealthRow(site) {
     <td>${c.matchRate.fetched}</td>
     <td>${c.matchRate.matched}</td>
     <td>${c.saveSuccess.saved}</td>
-    <td>${c.freshness.daysSinceLastSeen == null ? "—" : `${c.freshness.daysSinceLastSeen}d ago`}</td>
+    <td>${c.freshness.daysSinceLastSeen == null ? "-" : `${c.freshness.daysSinceLastSeen}d ago`}</td>
   `;
 
   const detailTr = document.createElement("tr");
@@ -760,7 +760,7 @@ async function loadHealth() {
     const res = await fetch("/health/data.json", { cache: "no-store" });
     if (!res.ok) {
       healthStatus.textContent = res.status === 404
-        ? "No health data published yet — it appears after the next scraper run."
+        ? "No health data published yet, it appears after the next scraper run."
         : `Failed to load: ${res.status}`;
       return;
     }

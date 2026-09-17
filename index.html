@@ -218,7 +218,7 @@
     <div id="wordcloud-panel" class="tab-panel">
       <div class="section-head">
         <h1>Job title word cloud</h1>
-        <p>The most frequent words across every scraped job title. Click a word marked <strong>+</strong> to tag it — it's created directly in Baserow's Tags table, live immediately, nothing else to do. Click an already-tagged word (<strong>✓</strong>) to remove it.</p>
+        <p>The most frequent words across every scraped job title. Click a word marked <strong>+</strong> to tag it: it's created directly in Baserow's Tags table, live immediately, nothing else to do. Click an already-tagged word (<strong>✓</strong>) to remove it.</p>
       </div>
       <div id="cloud-status" class="status-line"></div>
       <div class="cloud-card" id="cloud-card" style="display:none;">
@@ -235,7 +235,7 @@
     <div id="searchterms-panel" class="tab-panel">
       <div class="section-head">
         <h1>Public search terms</h1>
-        <p>What visitors of the public search page (kennethjensen.me/jobmatch) actually typed, tokenised the same way as the job-title cloud above. Click a word marked <strong>+</strong> to tag it directly. <strong>✓</strong> words are existing Tags people are searching for — real demand for what's already tracked; <strong>+</strong> words with high counts are candidates for a new Tag. "Top queries" below keeps the exact phrases, since a multi-word candidate can lose its meaning once split into single words.</p>
+        <p>What visitors of the public search page (kennethjensen.me/jobmatch) actually typed, tokenised the same way as the job-title cloud above. Click a word marked <strong>+</strong> to tag it directly. <strong>✓</strong> words are existing Tags people are searching for (real demand for what's already tracked); <strong>+</strong> words with high counts are candidates for a new Tag. "Top queries" below keeps the exact phrases, since a multi-word candidate can lose its meaning once split into single words.</p>
       </div>
       <div id="searchterms-status" class="status-line"></div>
       <div class="cloud-card" id="searchterms-cloud-card" style="display:none;">
@@ -267,7 +267,7 @@
     <div id="missing-panel" class="tab-panel">
       <div class="section-head">
         <h1>Missing data</h1>
-        <p>Active jobs missing a job URL, seniority classification, or working country. Seniority and Working Country are editable right here — edits save automatically. Most of this also fills in on its own as titles get re-seen by a later scrape.</p>
+        <p>Active jobs missing a job URL, seniority classification, or working country. Seniority and Working Country are editable right here. Edits save automatically. Most of this also fills in on its own as titles get re-seen by a later scrape.</p>
       </div>
       <div id="missing-status" class="status-line"></div>
       <div id="missing-summary" class="missing-summary" style="display:none;"></div>
@@ -292,7 +292,7 @@
     <div id="clicks-panel" class="tab-panel">
       <div class="section-head">
         <h1>Top clicked jobs</h1>
-        <p>Every job link across the site routes through a tracked redirect, so this counts real click-throughs — most clicked first.</p>
+        <p>Every job link across the site routes through a tracked redirect, so this counts real click-throughs, most clicked first.</p>
       </div>
       <div id="clicks-status" class="status-line"></div>
       <div class="missing-table-wrap" id="clicks-table-wrap" style="display:none;">
@@ -344,7 +344,7 @@
     <div id="logtracer-panel" class="tab-panel">
       <div class="section-head">
         <h1>Log Tracer</h1>
-        <p>Errors reported by the Lemming Chrome extension (background.js) — a failure that used to only show up in the extension's own console, unwatched. Kept for 30 days. A separate login from the tabs above: this reads from lemming-worker, not jobmatch-worker.</p>
+        <p>Errors reported by the Lemming Chrome extension (background.js): a failure that used to only show up in the extension's own console, unwatched. Kept for 30 days. A separate login from the tabs above: this reads from lemming-worker, not jobmatch-worker.</p>
       </div>
       <div id="logtracer-status" class="status-line"></div>
       <div id="logtracer-relogin" class="logtracer-relogin" style="display:none;">
@@ -379,28 +379,28 @@
       <div class="doc-card">
         <span class="doc-tier">Seniority</span>
         <h3>Five tiers, from the job title</h3>
-        <p>Every scraped job gets a seniority guess — Entry, Junior, Mid, Senior, or C-Level — computed fresh from its title by <code>src/seniority.js</code> in the scraper. No AI call, no cost: it's pattern matching against English and Danish signal words, checked in this order (most specific first, so "Senior Software Engineering Intern" resolves to Entry, not Senior):</p>
+        <p>Every scraped job gets a seniority guess (Entry, Junior, Mid, Senior, or C-Level) computed fresh from its title by <code>src/seniority.js</code> in the scraper. No AI call, no cost: it's pattern matching against English and Danish signal words, checked in this order (most specific first, so "Senior Software Engineering Intern" resolves to Entry, not Senior):</p>
         <ul>
-          <li><strong>C-Level</strong> — CEO/CFO/COO/CTO/CIO/CMO/CHRO/CPO/CCO, "Chief … Officer", President, Managing Director, Danish "Adm. Direktør".</li>
-          <li><strong>Entry</strong> — intern, internship, trainee, graduate, apprentice, entry-level, working/student assistant, and Danish elev/praktikant/fritidsjob/sommerjob (including compounds like "Kontorelev" with no space).</li>
-          <li><strong>Junior</strong> — junior, jr.</li>
-          <li><strong>Senior</strong> — senior, sr., lead, principal, head of, director, VP/vice president, manager, and Danish "chef" (e.g. "Salgschef" — manager, not the English "cook").</li>
-          <li><strong>Mid</strong> — only an explicit "mid-level"/"mid level" in the title.</li>
+          <li><strong>C-Level</strong>: CEO/CFO/COO/CTO/CIO/CMO/CHRO/CPO/CCO, "Chief … Officer", President, Managing Director, Danish "Adm. Direktør".</li>
+          <li><strong>Entry</strong>: intern, internship, trainee, graduate, apprentice, entry-level, working/student assistant, and Danish elev/praktikant/fritidsjob/sommerjob (including compounds like "Kontorelev" with no space).</li>
+          <li><strong>Junior</strong>: junior, jr.</li>
+          <li><strong>Senior</strong>: senior, sr., lead, principal, head of, director, VP/vice president, manager, and Danish "chef" (e.g. "Salgschef": manager, not the English "cook").</li>
+          <li><strong>Mid</strong>: only an explicit "mid-level"/"mid level" in the title.</li>
         </ul>
-        <p>If nothing matches, it falls back to whatever the source site itself reported (only two of nine sites provide this). If that's empty too, Seniority is left blank rather than guessed — most titles never self-identify a level at all, and a wrong guess is worse than an honest blank (see the Missing Data tab).</p>
+        <p>If nothing matches, it falls back to whatever the source site itself reported (only two of nine sites provide this). If that's empty too, Seniority is left blank rather than guessed: most titles never self-identify a level at all, and a wrong guess is worse than an honest blank (see the Missing Data tab).</p>
       </div>
 
       <div class="doc-card">
         <span class="doc-tier">Language</span>
         <h3>An AI call, not a fixed algorithm</h3>
-        <p>Unlike Seniority, Language detection isn't a hand-written rule set — it's one question inside the same Claude Haiku 4.5 call that also generates Tags and checks whether a listing is a real job (<code>classifyJob()</code> in <code>src/anthropic.js</code>). The model is asked for the two-letter ISO 639-1 code of the language the job title (and company name, if it helps) is written in, and returns <code>null</code> if it can't tell — never a guess.</p>
+        <p>Unlike Seniority, Language detection isn't a hand-written rule set: it's one question inside the same Claude Haiku 4.5 call that also generates Tags and checks whether a listing is a real job (<code>classifyJob()</code> in <code>src/anthropic.js</code>). The model is asked for the two-letter ISO 639-1 code of the language the job title (and company name, if it helps) is written in, and returns <code>null</code> if it can't tell, never a guess.</p>
         <p>Because it rides on a call that's already happening for Tags/job-verification, it costs nothing extra. It's also why Language is currently empty for most rows: that whole classification step needs Anthropic API credit, which the account has been out of since 2026-09-05.</p>
       </div>
 
       <div class="doc-card">
         <span class="doc-tier">Language Requirement / Bonus</span>
         <h3>Two more questions on the same AI call</h3>
-        <p>Also part of <code>classifyJob()</code>, not a separate call. <strong>Language Requirement</strong> is a language the title states as a hard requirement for the candidate (e.g. "Danish-speaking Sales Manager" or "Tysktalende Kundeservicemedarbejder" implies one). <strong>Language Bonus</strong> is a language mentioned as merely nice-to-have (e.g. "German is a plus"). Both are plain language names, not codes, and both are <code>null</code> unless the title actually states one — most titles state neither, and neither is inferred from the ad's own language (that's the separate Language field above) or from the job's country.</p>
+        <p>Also part of <code>classifyJob()</code>, not a separate call. <strong>Language Requirement</strong> is a language the title states as a hard requirement for the candidate (e.g. "Danish-speaking Sales Manager" or "Tysktalende Kundeservicemedarbejder" implies one). <strong>Language Bonus</strong> is a language mentioned as merely nice-to-have (e.g. "German is a plus"). Both are plain language names, not codes, and both are <code>null</code> unless the title actually states one: most titles state neither, and neither is inferred from the ad's own language (that's the separate Language field above) or from the job's country.</p>
       </div>
     </div>
   </div>
