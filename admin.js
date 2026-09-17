@@ -21,6 +21,7 @@ const LEMMING_STORAGE_KEY = "lemming_admin_session";
 const loginView = document.getElementById("login-view");
 const appView = document.getElementById("app-view");
 const passwordInput = document.getElementById("password-input");
+const totpInput = document.getElementById("totp-input");
 const unlockBtn = document.getElementById("unlock-btn");
 const loginError = document.getElementById("login-error");
 const logoutBtn = document.getElementById("logout-btn");
@@ -120,11 +121,11 @@ function clearStoredSession() {
   }
 }
 
-async function login(password) {
+async function login(password, totpCode) {
   const res = await fetch(WORKER_URL + "/login", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ password }),
+    body: JSON.stringify({ password, totpCode }),
   });
   if (!res.ok) {
     const err = new Error("unauthorized");
@@ -1054,23 +1055,30 @@ async function loadSearchTerms() {
 
 unlockBtn.addEventListener("click", () => {
   const password = passwordInput.value.trim();
-  if (password) tryUnlock(password);
+  const totpCode = totpInput.value.trim();
+  if (password && totpCode) tryUnlock(password, totpCode);
 });
-passwordInput.addEventListener("keydown", (e) => { if (e.key === "Enter") unlockBtn.click(); });
+// Enter in the password field moves to the code field rather than
+// submitting immediately — with two factors now required, submitting on
+// the first field would just bounce back with "wrong code" every time.
+passwordInput.addEventListener("keydown", (e) => { if (e.key === "Enter") totpInput.focus(); });
+totpInput.addEventListener("keydown", (e) => { if (e.key === "Enter") unlockBtn.click(); });
 logoutBtn.addEventListener("click", () => {
   clearStoredSession();
   clearStoredLemmingSession();
   passwordInput.value = "";
+  totpInput.value = "";
   loaded.review = loaded.wordcloud = loaded.searchterms = loaded.missing = loaded.clicks = loaded.health = loaded.logtracer = false;
   setTab("review");
   showLogin();
 });
 
-async function tryUnlock(password) {
+async function tryUnlock(password, totpCode) {
   unlockBtn.disabled = true;
   loginError.textContent = "";
   try {
-    await login(password);
+    await login(password, totpCode);
+    totpInput.value = "";
     showApp();
     loadFlagged();
     loaded.review = true;
@@ -1078,11 +1086,13 @@ async function tryUnlock(password) {
     // this gets the Log Tracer tab ready with no second prompt. If it
     // fails (different password, or that Worker not yet configured), the
     // tab just falls back to its own inline login when visited — doesn't
-    // block or fail the unlock that already succeeded above.
+    // block or fail the unlock that already succeeded above. That Worker
+    // has no TOTP of its own (separate product, separate auth), so this
+    // stays password-only.
     loginLemming(password).catch(() => {});
   } catch (err) {
     clearStoredSession();
-    loginError.textContent = err.unauthorized ? "Wrong password." : `Error: ${err.message}`;
+    loginError.textContent = err.unauthorized ? "Wrong password or code." : `Error: ${err.message}`;
   } finally {
     unlockBtn.disabled = false;
   }

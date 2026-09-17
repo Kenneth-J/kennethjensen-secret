@@ -28,11 +28,12 @@
   #login-view{max-width:360px;margin:60px auto 0;text-align:center;}
   #login-view h1{font-size:19px;font-weight:700;margin:0 0 8px;}
   #login-view p{color:var(--ink-soft);font-size:14px;margin:0 0 24px;}
-  #password-input{
+  #password-input, #totp-input{
     width:100%;padding:12px 14px;border:1px solid var(--line);border-radius:var(--radius);
     font-size:14px;margin-bottom:12px;
   }
-  #password-input:focus{outline:2px solid var(--accent);outline-offset:1px;}
+  #totp-input{letter-spacing:.3em;text-align:center;font-variant-numeric:tabular-nums;}
+  #password-input:focus, #totp-input:focus{outline:2px solid var(--accent);outline-offset:1px;}
   #unlock-btn{
     width:100%;background:var(--cta-bg);color:var(--accent-light);border:none;padding:12px;
     border-radius:var(--radius);font-size:14px;font-weight:700;cursor:pointer;
@@ -186,6 +187,7 @@
     <h1>Enter admin password</h1>
     <p>Access to secret.kennethjensen.me</p>
     <input id="password-input" type="password" placeholder="Password" autocomplete="off">
+    <input id="totp-input" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="6" placeholder="6-digit code" autocomplete="one-time-code">
     <button id="unlock-btn">Unlock</button>
     <div id="login-error"></div>
   </div>
