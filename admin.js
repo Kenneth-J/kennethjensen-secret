@@ -249,7 +249,7 @@ function escapeHtml(str) {
 }
 
 function escapeAttr(str) {
-  return escapeHtml(str).replace(/"/g, "&quot;");
+  return escapeHtml(str).replace(/"/g, "&quot;").replace(/'/g, "&#39;");
 }
 
 // job.jobUrl comes from scraped third-party listings — never trust its
