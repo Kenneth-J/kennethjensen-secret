@@ -95,6 +95,17 @@
   .cell-input.dirty, .cell-select.dirty{border-color:var(--accent);background:var(--accent-soft);}
   .cell-input.saved, .cell-select.saved{border-color:var(--up);}
   .cell-input.error, .cell-select.error{border-color:var(--danger);}
+  .seniority-buttons{display:flex;gap:4px;}
+  .seniority-btn{
+    width:28px;height:28px;font:inherit;font-size:13px;font-weight:700;line-height:1;
+    border-radius:6px;border:1px solid var(--line);background:#fff;color:var(--ink-soft);
+    cursor:pointer;transition:background .15s,border-color .15s,color .15s;
+  }
+  .seniority-btn:hover{border-color:var(--accent);color:var(--ink);}
+  .seniority-btn.active{background:var(--accent);border-color:var(--accent);color:#fff;}
+  .seniority-buttons.dirty{outline:2px solid var(--accent);outline-offset:2px;border-radius:8px;}
+  .seniority-buttons.saved{outline:2px solid var(--up);outline-offset:2px;border-radius:8px;}
+  .seniority-buttons.error{outline:2px solid var(--danger);outline-offset:2px;border-radius:8px;}
   .save-indicator{font-size:11px;color:var(--up);margin-left:6px;white-space:nowrap;}
   .missing-table tr.row-completing td{background:var(--up-soft) !important;}
   .completing-banner{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:0;color:var(--up);font-weight:600;font-size:13px;}

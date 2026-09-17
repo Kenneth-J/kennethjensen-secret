@@ -386,6 +386,49 @@ function buildSelect(options, current, cssClass) {
   return select;
 }
 
+const SENIORITY_BUTTON_LABELS = { Entry: "E", Junior: "J", Mid: "M", Senior: "S", "C-Level": "C" };
+
+// One button per SENIORITY_OPTIONS value rather than a dropdown — Kenneth's
+// request, since this is by far the most-set field in this table and a
+// dropdown needs two clicks (open, then pick) for what's really a single
+// choice among 5. Exposes a `.value` getter/setter and fires a real
+// "change" event on selection, same shape as a native <select>, so it
+// slots into wireCellSave()/isRowComplete() below completely unchanged —
+// no separate save path to keep in sync with the dropdown one.
+function buildSeniorityButtons(current, cssClass) {
+  const container = document.createElement("div");
+  container.className = cssClass;
+  let value = current || "";
+
+  Object.defineProperty(container, "value", {
+    get: () => value,
+    set: (v) => {
+      value = v;
+      container.querySelectorAll("button").forEach((btn) => {
+        btn.classList.toggle("active", btn.dataset.value === v);
+      });
+    },
+  });
+
+  for (const opt of SENIORITY_OPTIONS) {
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "seniority-btn";
+    btn.dataset.value = opt;
+    btn.textContent = SENIORITY_BUTTON_LABELS[opt];
+    btn.title = opt;
+    if (opt === current) btn.classList.add("active");
+    // Clicking the already-active option clears it — same "unset a wrong
+    // guess" capability the dropdown's blank "-" option gave.
+    btn.addEventListener("click", () => {
+      container.value = container.value === opt ? "" : opt;
+      container.dispatchEvent(new Event("change"));
+    });
+    container.appendChild(btn);
+  }
+  return container;
+}
+
 function markCellState(el, state) {
   el.classList.remove("dirty", "saved", "error");
   if (state) el.classList.add(state);
@@ -448,7 +491,7 @@ function renderMissingRow(job, onRowRemoved) {
   tr.appendChild(jobCell);
 
   const seniorityCell = document.createElement("td");
-  const senioritySelect = buildSelect(SENIORITY_OPTIONS, job.seniority, "cell-select");
+  const senioritySelect = buildSeniorityButtons(job.seniority, "seniority-buttons");
   seniorityCell.appendChild(senioritySelect);
   tr.appendChild(seniorityCell);
 
