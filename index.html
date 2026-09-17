@@ -391,7 +391,7 @@
 
       <div class="doc-card">
         <span class="doc-tier">Seniority</span>
-        <h3>Five tiers, from the job title</h3>
+        <h3>Five tiers: free from the title first, AI from the description second</h3>
         <p>Every scraped job gets a seniority guess (Entry, Junior, Mid, Senior, or C-Level) computed fresh from its title by <code>src/seniority.js</code> in the scraper. No AI call, no cost: it's pattern matching against English and Danish signal words, checked in this order (most specific first, so "Senior Software Engineering Intern" resolves to Entry, not Senior):</p>
         <ul>
           <li><strong>C-Level</strong>: CEO/CFO/COO/CTO/CIO/CMO/CHRO/CPO/CCO, "Chief … Officer", President, Managing Director, Danish "Adm. Direktør".</li>
@@ -400,14 +400,14 @@
           <li><strong>Senior</strong>: senior, sr., lead, principal, head of, director, VP/vice president, manager, and Danish "chef" (e.g. "Salgschef": manager, not the English "cook").</li>
           <li><strong>Mid</strong>: only an explicit "mid-level"/"mid level" in the title.</li>
         </ul>
-        <p>If nothing matches, it falls back to whatever the source site itself reported (only two of nine sites provide this). If that's empty too, Seniority is left blank rather than guessed: most titles never self-identify a level at all, and a wrong guess is worse than an honest blank (see the Missing Data tab).</p>
+        <p>If nothing matches, it falls back to whatever the source site itself reported (only two of nine sites provide this). If that's still empty and this job has a full description (jobnet.dk today), the same AI call described under Language below is also asked for a seniority read — only when the description states one explicitly (years of experience, an explicit level word, "leads a team of X", "reports to the COO"), never guessed from tone or responsibilities. Title-only jobs skip this entirely: there's nothing new for the AI to read there that the regex hasn't already seen. Still empty after both? Left blank rather than guessed further — a wrong guess is worse than an honest blank (see the Missing Data tab).</p>
       </div>
 
       <div class="doc-card">
         <span class="doc-tier">Language</span>
         <h3>An AI call, not a fixed algorithm</h3>
-        <p>Unlike Seniority, Language detection isn't a hand-written rule set: it's one question inside the same Claude Haiku 4.5 call that also generates Tags and checks whether a listing is a real job (<code>classifyJob()</code> in <code>src/anthropic.js</code>). The model is asked for the two-letter ISO 639-1 code of the language the job title (and company name, if it helps) is written in, and returns <code>null</code> if it can't tell, never a guess.</p>
-        <p>Because it rides on a call that's already happening for Tags/job-verification, it costs nothing extra. It's also why Language is currently empty for most rows: that whole classification step needs Anthropic API credit, which the account has been out of since 2026-09-05.</p>
+        <p>Language detection isn't a hand-written rule set like Seniority's title-regex layer is: it's one question inside the same Claude Haiku 4.5 call that also generates Tags and checks whether a listing is a real job (<code>classifyJob()</code> in <code>src/anthropic.js</code>). The model is asked for the two-letter ISO 639-1 code of the language the job title (and company name, if it helps) is written in, and returns <code>null</code> if it can't tell, never a guess.</p>
+        <p>Because it rides on a call that's already happening for Tags/job-verification, it costs nothing extra beyond that one call. Seniority's AI supplement (see above) rides on the same call too, when a description is available.</p>
       </div>
 
       <div class="doc-card">
