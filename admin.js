@@ -44,17 +44,22 @@ const reviewEmpty = document.getElementById("review-empty");
 const cloudStatus = document.getElementById("cloud-status");
 const cloudCard = document.getElementById("cloud-card");
 const cloudSvg = document.getElementById("cloud-svg");
+const cloudAddedWords = document.getElementById("cloud-added-words");
+const cloudIgnoredWords = document.getElementById("cloud-ignored-words");
 const tagToast = document.getElementById("tag-toast");
 
 const searchTermsStatus = document.getElementById("searchterms-status");
 const searchTermsCloudCard = document.getElementById("searchterms-cloud-card");
 const searchTermsCloudSvg = document.getElementById("searchterms-cloud-svg");
+const searchTermsAddedWords = document.getElementById("searchterms-added-words");
+const searchTermsIgnoredWords = document.getElementById("searchterms-ignored-words");
 const searchTermsToast = document.getElementById("searchterms-toast");
 const searchTermsTableWrap = document.getElementById("searchterms-table-wrap");
 const searchTermsTbody = document.getElementById("searchterms-tbody");
 const searchTermsEmpty = document.getElementById("searchterms-empty");
 
 const missingStatus = document.getElementById("missing-status");
+const missingToast = document.getElementById("missing-toast");
 const missingSummary = document.getElementById("missing-summary");
 const missingTableWrap = document.getElementById("missing-table-wrap");
 const missingTbody = document.getElementById("missing-tbody");
@@ -369,22 +374,6 @@ async function loadFlagged() {
 }
 
 // --- Missing data (editable table) ---
-function buildSelect(options, current, cssClass) {
-  const select = document.createElement("select");
-  select.className = cssClass;
-  const blank = document.createElement("option");
-  blank.value = "";
-  blank.textContent = "-";
-  select.appendChild(blank);
-  for (const opt of options) {
-    const el = document.createElement("option");
-    el.value = opt;
-    el.textContent = opt;
-    if (opt === current) el.selected = true;
-    select.appendChild(el);
-  }
-  return select;
-}
 
 const SENIORITY_BUTTON_LABELS = { Entry: "E", Junior: "J", Mid: "M", Senior: "S", "C-Level": "C" };
 
@@ -420,6 +409,52 @@ function buildSeniorityButtons(current, cssClass) {
     if (opt === current) btn.classList.add("active");
     // Clicking the already-active option clears it — same "unset a wrong
     // guess" capability the dropdown's blank "-" option gave.
+    btn.addEventListener("click", () => {
+      container.value = container.value === opt ? "" : opt;
+      container.dispatchEvent(new Event("change"));
+    });
+    container.appendChild(btn);
+  }
+  return container;
+}
+
+// ISO 3166-1 alpha-2 for the 9 real countries. "Baltic" and "Remote"
+// aren't countries, so no real ISO code applies to them — kept as short,
+// visually distinct labels instead of a fake two-letter code that could
+// be misread as a real (and wrong) ISO country.
+const COUNTRY_BUTTON_LABELS = {
+  Denmark: "DK", Norway: "NO", Sweden: "SE", Finland: "FI", Iceland: "IS",
+  Greenland: "GL", Estonia: "EE", Latvia: "LV", Lithuania: "LT",
+  Baltic: "BALT", Remote: "RMT",
+};
+
+// Same button-selector pattern as buildSeniorityButtons() above, same
+// reasoning (a dropdown needs two clicks for a single choice among a
+// short list) and same `.value` getter/setter shape, so it slots into
+// wireCellSave()/isRowComplete() unchanged.
+function buildCountryButtons(current, cssClass) {
+  const container = document.createElement("div");
+  container.className = cssClass;
+  let value = current || "";
+
+  Object.defineProperty(container, "value", {
+    get: () => value,
+    set: (v) => {
+      value = v;
+      container.querySelectorAll("button").forEach((btn) => {
+        btn.classList.toggle("active", btn.dataset.value === v);
+      });
+    },
+  });
+
+  for (const opt of WORKING_COUNTRY_OPTIONS) {
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "country-btn";
+    btn.dataset.value = opt;
+    btn.textContent = COUNTRY_BUTTON_LABELS[opt] || opt;
+    btn.title = opt;
+    if (opt === current) btn.classList.add("active");
     btn.addEventListener("click", () => {
       container.value = container.value === opt ? "" : opt;
       container.dispatchEvent(new Event("change"));
@@ -496,9 +531,39 @@ function renderMissingRow(job, onRowRemoved) {
   tr.appendChild(seniorityCell);
 
   const countryCell = document.createElement("td");
-  const countrySelect = buildSelect(WORKING_COUNTRY_OPTIONS, job.workingCountry, "cell-select");
+  const countrySelect = buildCountryButtons(job.workingCountry, "country-buttons");
   countryCell.appendChild(countrySelect);
   tr.appendChild(countryCell);
+
+  // Skip — sends this row to the Flagged Jobs queue (same state as an AI
+  // rejection, see the worker's handleReview() "flag" action) instead of
+  // fixing it here. Applies immediately, no undo countdown, same as the
+  // Flagged Jobs tab's own confirm/override buttons — the underlying
+  // Baserow row isn't deleted, so it's recoverable from there.
+  const skipCell = document.createElement("td");
+  const skipBtn = document.createElement("button");
+  skipBtn.type = "button";
+  skipBtn.className = "skip-btn";
+  skipBtn.textContent = "✕";
+  skipBtn.title = "Send to Flagged Jobs";
+  skipBtn.addEventListener("click", async () => {
+    skipBtn.disabled = true;
+    try {
+      await callWorker(`/jobs/${job.id}/review`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action: "flag" }),
+      });
+      tr.remove();
+      if (onRowRemoved) onRowRemoved();
+    } catch (err) {
+      if (err.unauthorized) { clearStoredSession(); showLogin("Session expired. Enter the password again."); return; }
+      skipBtn.disabled = false;
+      showTagToast(missingToast, `Failed to skip "${job.jobTitle || "this job"}": ${err.message}`, "error");
+    }
+  });
+  skipCell.appendChild(skipBtn);
+  tr.appendChild(skipCell);
 
   // Job URL can't be fixed from this table (see loadMissingData()'s own
   // comment) — only Seniority/Working Country ever count toward "this row
@@ -928,10 +993,14 @@ function mixColor(c1, c2, t) {
   return `rgb(${c1.map((v, i) => Math.round(v + (c2[i] - v) * t)).join(",")})`;
 }
 
-// svgEl/onToggle are parameterized so this same layout logic serves both
-// the job-title word cloud and the search-terms word cloud below — the two
-// clouds are otherwise unrelated data, just sharing a renderer.
-function renderWordCloud(svgEl, words, onToggle) {
+// svgEl/onToggle/onIgnore are parameterized so this same layout logic
+// serves both the job-title word cloud and the search-terms word cloud
+// below — the two clouds are otherwise unrelated data, just sharing a
+// renderer. `words` is expected to already be filtered down to the
+// neutral set (not a Tag, not ignored) by the caller — an added or
+// ignored word doesn't belong in the cloud at all any more, it moves to
+// a plain-text list underneath instead (see renderWordList()).
+function renderWordCloud(svgEl, words, onToggle, onIgnore) {
   const width = 800, height = 440;
   svgEl.innerHTML = "";
   if (!words.length) return;
@@ -957,18 +1026,26 @@ function renderWordCloud(svgEl, words, onToggle) {
     const el = document.createElementNS(SVG_NS, "text");
     el.setAttribute("font-weight", "700");
     el.setAttribute("font-family", "inherit");
-    el.classList.add("tag-target");
 
-    const prefix = document.createElementNS(SVG_NS, "tspan");
-    prefix.textContent = w.isTag ? "✓ " : "+ ";
-    prefix.setAttribute("font-size", fontSizeFor(w.count) * 0.55);
-    prefix.setAttribute("fill", w.isTag ? "#1a8a5f" : "#6c3aed");
-    el.appendChild(prefix);
+    // Ignore control — its own tspan/click target so it doesn't also
+    // trigger the word's own "add as tag" click below; stopPropagation
+    // keeps a click here from bubbling up to el's listener.
+    const cross = document.createElementNS(SVG_NS, "tspan");
+    cross.textContent = "✕ ";
+    cross.setAttribute("font-size", fontSizeFor(w.count) * 0.55);
+    cross.setAttribute("fill", "#d92d20");
+    cross.classList.add("ignore-target");
+    cross.addEventListener("click", (e) => {
+      e.stopPropagation();
+      onIgnore(w);
+    });
+    el.appendChild(cross);
 
     const wordSpan = document.createElementNS(SVG_NS, "tspan");
     wordSpan.textContent = w.word;
     wordSpan.setAttribute("font-size", fontSizeFor(w.count));
     wordSpan.setAttribute("fill", colorFor(w.count));
+    wordSpan.classList.add("tag-target");
     el.appendChild(wordSpan);
 
     svgEl.appendChild(el);
@@ -989,7 +1066,32 @@ function renderWordCloud(svgEl, words, onToggle) {
     el.setAttribute("y", y + bbox.height * 0.8);
     placed.push({ x, y, w: bbox.width, h: bbox.height });
 
-    el.addEventListener("click", () => onToggle(w));
+    wordSpan.addEventListener("click", () => onToggle(w));
+  });
+}
+
+// Plain-text list under a cloud for words that left it — either tagged
+// ("added") or ignored. Each entry has its own small × to undo that one
+// action and drop the word back into the neutral pool the cloud draws
+// from, same click-to-undo convention as the cloud's own tag toggle.
+function renderWordList(el, words, kind, onUndo) {
+  if (!el) return;
+  el.innerHTML = "";
+  if (!words.length) {
+    el.hidden = true;
+    return;
+  }
+  el.hidden = false;
+  const heading = document.createElement("span");
+  heading.className = "word-list-heading";
+  heading.textContent = kind === "added" ? "Added:" : "Ignored:";
+  el.appendChild(heading);
+  words.forEach((w) => {
+    const pill = document.createElement("span");
+    pill.className = "word-pill " + kind;
+    pill.innerHTML = escapeHtml(w.word) + ' <button type="button" aria-label="Remove ' + escapeAttr(w.word) + '">&times;</button>';
+    pill.querySelector("button").addEventListener("click", () => onUndo(w));
+    el.appendChild(pill);
   });
 }
 
@@ -1030,6 +1132,31 @@ async function toggleTag(w, toastEl, reload) {
   }
 }
 
+// toastEl/reload parameterized for the same reason toggleTag() is.
+async function toggleIgnore(w, toastEl, reload) {
+  try {
+    if (w.isIgnored) {
+      await callWorker("/words/ignore", {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name: w.word }),
+      });
+      showTagToast(toastEl, `"${w.word}" is back in the cloud.`, "ok");
+    } else {
+      await callWorker("/words/ignore", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name: w.word }),
+      });
+      showTagToast(toastEl, `Ignoring "${w.word}".`, "ok");
+    }
+    await reload();
+  } catch (err) {
+    if (err.unauthorized) { clearStoredSession(); showLogin("Session expired. Enter the password again."); return; }
+    showTagToast(toastEl, `Failed: ${err.message}`, "error");
+  }
+}
+
 async function loadWordCloud() {
   loaded.wordcloud = true;
   cloudStatus.textContent = "Loading…";
@@ -1040,7 +1167,13 @@ async function loadWordCloud() {
     if (!lastWords.length) { cloudStatus.textContent = "No job titles to analyse yet."; return; }
     cloudStatus.textContent = "";
     cloudCard.style.display = "block";
-    renderWordCloud(cloudSvg, lastWords, (w) => toggleTag(w, tagToast, async () => { loaded.wordcloud = false; await loadWordCloud(); }));
+    const reload = async () => { loaded.wordcloud = false; await loadWordCloud(); };
+    const neutral = lastWords.filter((w) => !w.isTag && !w.isIgnored);
+    renderWordCloud(cloudSvg, neutral,
+      (w) => toggleTag(w, tagToast, reload),
+      (w) => toggleIgnore(w, tagToast, reload));
+    renderWordList(cloudAddedWords, lastWords.filter((w) => w.isTag), "added", (w) => toggleTag(w, tagToast, reload));
+    renderWordList(cloudIgnoredWords, lastWords.filter((w) => !w.isTag && w.isIgnored), "ignored", (w) => toggleIgnore(w, tagToast, reload));
   } catch (err) {
     if (err.unauthorized) { clearStoredSession(); showLogin("Session expired. Enter the password again."); return; }
     cloudStatus.textContent = `Failed to load: ${err.message}`;
@@ -1085,9 +1218,13 @@ async function loadSearchTerms() {
     searchTermsStatus.textContent = "";
     if (lastSearchWords.length) {
       searchTermsCloudCard.style.display = "block";
-      renderWordCloud(searchTermsCloudSvg, lastSearchWords, (w) =>
-        toggleTag(w, searchTermsToast, async () => { loaded.searchterms = false; await loadSearchTerms(); })
-      );
+      const reload = async () => { loaded.searchterms = false; await loadSearchTerms(); };
+      const neutral = lastSearchWords.filter((w) => !w.isTag && !w.isIgnored);
+      renderWordCloud(searchTermsCloudSvg, neutral,
+        (w) => toggleTag(w, searchTermsToast, reload),
+        (w) => toggleIgnore(w, searchTermsToast, reload));
+      renderWordList(searchTermsAddedWords, lastSearchWords.filter((w) => w.isTag), "added", (w) => toggleTag(w, searchTermsToast, reload));
+      renderWordList(searchTermsIgnoredWords, lastSearchWords.filter((w) => !w.isTag && w.isIgnored), "ignored", (w) => toggleIgnore(w, searchTermsToast, reload));
     }
     renderSearchQueriesTable(topQueries);
   } catch (err) {

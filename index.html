@@ -62,15 +62,36 @@
   }
   .job-actions{display:flex;gap:10px;}
 
+  /* Missing Data's "skip" button — sends the row to the Flagged Jobs queue
+     for a confirm/override decision instead of fixing it here. Same red
+     "this removes it from view" language as the word cloud's ignore ✕. */
+  .skip-btn{
+    border:none;background:none;cursor:pointer;color:var(--danger);opacity:.55;
+    font-size:16px;line-height:1;padding:4px;border-radius:6px;transition:opacity .15s,background .15s;
+  }
+  .skip-btn:hover{opacity:1;background:var(--danger-soft);}
+
   /* Word cloud */
   .cloud-card{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:16px;margin-bottom:24px;}
-  #cloud-svg{width:100%;height:auto;display:block;}
-  #cloud-svg text{cursor:default;user-select:none;}
-  #cloud-svg text.tag-target{cursor:pointer;}
-  #cloud-svg text.tag-target:hover{opacity:.7;}
+  .word-cloud-svg{width:100%;height:auto;display:block;}
+  .word-cloud-svg text{cursor:default;user-select:none;}
+  .word-cloud-svg .tag-target{cursor:pointer;}
+  .word-cloud-svg .tag-target:hover{opacity:.7;}
+  .word-cloud-svg .ignore-target{cursor:pointer;}
+  .word-cloud-svg .ignore-target:hover{opacity:.6;}
   .cloud-legend{display:flex;align-items:center;gap:16px;font-size:12.5px;color:var(--ink-soft);margin-bottom:6px;flex-wrap:wrap;}
   .cloud-legend .swatch{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:5px;vertical-align:-1px;}
-  #tag-toast{display:none;font-size:13px;padding:10px 14px;border-radius:8px;margin-bottom:20px;}
+  .toast-box{display:none;font-size:13px;padding:10px 14px;border-radius:8px;margin-bottom:20px;}
+
+  /* Plain-text lists under a cloud — words that left it because they were
+     tagged or ignored (see renderWordList() in admin.js). */
+  .word-list{margin-top:14px;padding-top:14px;border-top:1px solid var(--line);font-size:13px;line-height:2.1;}
+  .word-list-heading{font-weight:700;color:var(--ink);margin-right:8px;}
+  .word-pill{display:inline-flex;align-items:center;gap:4px;margin:0 6px 0 0;padding:3px 9px;border-radius:999px;font-weight:600;}
+  .word-pill.added{background:var(--up-soft);color:var(--up);}
+  .word-pill.ignored{background:var(--danger-soft);color:var(--danger);}
+  .word-pill button{border:none;background:none;cursor:pointer;padding:0;font-size:13px;line-height:1;color:inherit;opacity:.65;}
+  .word-pill button:hover{opacity:1;}
 
   /* Missing data */
   .missing-summary{color:var(--ink-soft);font-size:13.5px;margin-bottom:18px;}
@@ -106,6 +127,21 @@
   .seniority-buttons.dirty{outline:2px solid var(--accent);outline-offset:2px;border-radius:8px;}
   .seniority-buttons.saved{outline:2px solid var(--up);outline-offset:2px;border-radius:8px;}
   .seniority-buttons.error{outline:2px solid var(--danger);outline-offset:2px;border-radius:8px;}
+
+  /* Same button-selector pattern as seniority above, sized for 2-4 letter
+     country codes instead of single letters (fixed 28px would clip
+     "BALT"). */
+  .country-buttons{display:flex;flex-wrap:wrap;gap:4px;max-width:220px;}
+  .country-btn{
+    min-width:28px;height:28px;padding:0 6px;font:inherit;font-size:12px;font-weight:700;line-height:1;
+    border-radius:6px;border:1px solid var(--line);background:#fff;color:var(--ink-soft);
+    cursor:pointer;transition:background .15s,border-color .15s,color .15s;
+  }
+  .country-btn:hover{border-color:var(--accent);color:var(--ink);}
+  .country-btn.active{background:var(--accent);border-color:var(--accent);color:#fff;}
+  .country-buttons.dirty{outline:2px solid var(--accent);outline-offset:2px;border-radius:8px;}
+  .country-buttons.saved{outline:2px solid var(--up);outline-offset:2px;border-radius:8px;}
+  .country-buttons.error{outline:2px solid var(--danger);outline-offset:2px;border-radius:8px;}
   .save-indicator{font-size:11px;color:var(--up);margin-left:6px;white-space:nowrap;}
   .missing-table tr.row-completing td{background:var(--up-soft) !important;}
   .completing-banner{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:0;color:var(--up);font-weight:600;font-size:13px;}
@@ -231,35 +267,39 @@
     <div id="wordcloud-panel" class="tab-panel">
       <div class="section-head">
         <h1>Job title word cloud</h1>
-        <p>The most frequent words across every scraped job title. Click a word marked <strong>+</strong> to tag it: it's created directly in Baserow's Tags table, live immediately, nothing else to do. Click an already-tagged word (<strong>✓</strong>) to remove it.</p>
+        <p>The 500 most frequent words across every scraped job title. Click a word to tag it: it's created directly in Baserow's Tags table, live immediately, nothing else to do. Click the <strong style="color:#d92d20;">✕</strong> next to a word to ignore it instead — it drops out of the cloud either way, and moves to the plain-text list below so you can undo it later.</p>
       </div>
       <div id="cloud-status" class="status-line"></div>
       <div class="cloud-card" id="cloud-card" style="display:none;">
         <div class="cloud-legend">
           <span><span class="swatch" style="background:var(--accent-soft);"></span>less frequent</span>
           <span><span class="swatch" style="background:var(--accent);"></span>more frequent</span>
-          <span>Marked <strong style="color:var(--accent);">+</strong> = not a tag yet · <strong style="color:var(--up);">✓</strong> = already a tag</span>
+          <span>Click a word to tag it · <strong style="color:#d92d20;">✕</strong> to ignore it</span>
         </div>
-        <svg id="cloud-svg" viewBox="0 0 800 440" xmlns="http://www.w3.org/2000/svg"></svg>
+        <svg id="cloud-svg" class="word-cloud-svg" viewBox="0 0 800 440" xmlns="http://www.w3.org/2000/svg"></svg>
+        <div class="word-list" id="cloud-added-words" hidden></div>
+        <div class="word-list" id="cloud-ignored-words" hidden></div>
       </div>
-      <div id="tag-toast"></div>
+      <div id="tag-toast" class="toast-box"></div>
     </div>
 
     <div id="searchterms-panel" class="tab-panel">
       <div class="section-head">
         <h1>Public search terms</h1>
-        <p>What visitors of the public search page (kennethjensen.me/jobmatch) actually typed, tokenised the same way as the job-title cloud above. Click a word marked <strong>+</strong> to tag it directly. <strong>✓</strong> words are existing Tags people are searching for (real demand for what's already tracked); <strong>+</strong> words with high counts are candidates for a new Tag. "Top queries" below keeps the exact phrases, since a multi-word candidate can lose its meaning once split into single words.</p>
+        <p>What visitors of the public search page (kennethjensen.me/jobmatch) actually typed, tokenised the same way as the job-title cloud above. Click a word to tag it directly, or click the <strong style="color:#d92d20;">✕</strong> next to it to ignore it — either way it moves out of the cloud into a plain-text list below, undoable there. High-count words here that aren't yet tagged are candidates for a new Tag. "Top queries" below keeps the exact phrases, since a multi-word candidate can lose its meaning once split into single words.</p>
       </div>
       <div id="searchterms-status" class="status-line"></div>
       <div class="cloud-card" id="searchterms-cloud-card" style="display:none;">
         <div class="cloud-legend">
           <span><span class="swatch" style="background:var(--accent-soft);"></span>less frequent</span>
           <span><span class="swatch" style="background:var(--accent);"></span>more frequent</span>
-          <span>Marked <strong style="color:var(--accent);">+</strong> = not a tag yet · <strong style="color:var(--up);">✓</strong> = already a tag</span>
+          <span>Click a word to tag it · <strong style="color:#d92d20;">✕</strong> to ignore it</span>
         </div>
-        <svg id="searchterms-cloud-svg" viewBox="0 0 800 440" xmlns="http://www.w3.org/2000/svg"></svg>
+        <svg id="searchterms-cloud-svg" class="word-cloud-svg" viewBox="0 0 800 440" xmlns="http://www.w3.org/2000/svg"></svg>
+        <div class="word-list" id="searchterms-added-words" hidden></div>
+        <div class="word-list" id="searchterms-ignored-words" hidden></div>
       </div>
-      <div id="searchterms-toast"></div>
+      <div id="searchterms-toast" class="toast-box"></div>
       <div class="missing-table-wrap" id="searchterms-table-wrap" style="display:none;">
         <table class="missing-table">
           <thead>
@@ -280,9 +320,10 @@
     <div id="missing-panel" class="tab-panel">
       <div class="section-head">
         <h1>Missing data</h1>
-        <p>Active jobs missing a job URL, seniority classification, or working country. Seniority and Working Country are editable right here. Edits save automatically. Most of this also fills in on its own as titles get re-seen by a later scrape.</p>
+        <p>Active jobs missing a job URL, seniority classification, or working country. Seniority and Working Country are editable right here. Edits save automatically. Most of this also fills in on its own as titles get re-seen by a later scrape. Click <strong style="color:var(--danger);">✕</strong> on a row to send it to Flagged Jobs instead of fixing it here.</p>
       </div>
       <div id="missing-status" class="status-line"></div>
+      <div id="missing-toast" class="toast-box"></div>
       <div id="missing-summary" class="missing-summary" style="display:none;"></div>
       <div class="missing-table-wrap" id="missing-table-wrap" style="display:none;">
         <table class="missing-table">
@@ -291,6 +332,7 @@
               <th>Job</th>
               <th>Seniority</th>
               <th>Working Country</th>
+              <th></th>
             </tr>
           </thead>
           <tbody id="missing-tbody"></tbody>
