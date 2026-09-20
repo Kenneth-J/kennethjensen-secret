@@ -446,6 +446,14 @@
       </div>
 
       <div class="doc-card">
+        <span class="doc-tier">Tags</span>
+        <h3>Picked from Baserow's own Tags table, not a hardcoded list</h3>
+        <p>Tags are chosen by the same Claude Haiku 4.5 call as Language below (<code>classifyJob()</code> in <code>src/anthropic.js</code>), from whatever vocabulary currently exists in Baserow's Tags table — fetched fresh each scraper run, so a tag added there takes effect immediately for every job scraped from that point on, no code change needed. The model is told to include only tags from that list that clearly apply, never to invent one; a few source sites (arbetsformedlingen.se, cvkeskus.ee, cvmarket.lv/lt) also pass through their own occupation-category text as a hint for which existing tags might fit, since a title alone often doesn't carry enough signal for a conceptual tag like "Autonomy" or "Asset Heavy".</p>
+        <p><strong>Growing the vocabulary:</strong> add a row to the Tags table directly, or use this panel's <strong>Word Cloud</strong> tab — it surfaces the most frequent candidate words across every active job's title <em>and</em> ad body text (excluding anything already a Tag or already ignored), so a term worth tagging can be spotted from real volume rather than guessed. Clicking a word there creates the Tags-table row directly.</p>
+        <p><strong>Existing jobs don't retroactively pick up a new tag on their own</strong> — a job is never re-classified once tagged. A new tag only reaches jobs scraped after it was added, until either a natural re-scrape happens to re-encounter an existing listing, or <code>src/backfillTags.js</code> is run (a deliberate one-time resweep across every active job, with a real Anthropic cost per row) after bumping <code>TAGS_SCHEMA_VERSION</code> in <code>src/anthropic.js</code>.</p>
+      </div>
+
+      <div class="doc-card">
         <span class="doc-tier">Language</span>
         <h3>An AI call, not a fixed algorithm</h3>
         <p>Language detection isn't a hand-written rule set like Seniority's title-regex layer is: it's one question inside the same Claude Haiku 4.5 call that also generates Tags and checks whether a listing is a real job (<code>classifyJob()</code> in <code>src/anthropic.js</code>). The model is asked for the two-letter ISO 639-1 code of the language the job title (and company name, if it helps) is written in, and returns <code>null</code> if it can't tell, never a guess.</p>
