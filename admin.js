@@ -983,7 +983,6 @@ logTracerPasswordInput.addEventListener("keydown", (e) => { if (e.key === "Enter
 // already placed. Real getBBox() measurement, not an estimate, so
 // placement matches each word's actual rendered size.
 const SVG_NS = "http://www.w3.org/2000/svg";
-let lastWords = [];
 
 function rectsOverlap(a, b, pad) {
   return !(a.x + a.w + pad < b.x || b.x + b.w + pad < a.x || a.y + a.h + pad < b.y || b.y + b.h + pad < a.y);
@@ -996,10 +995,11 @@ function mixColor(c1, c2, t) {
 // svgEl/onToggle/onIgnore are parameterized so this same layout logic
 // serves both the job-title word cloud and the search-terms word cloud
 // below — the two clouds are otherwise unrelated data, just sharing a
-// renderer. `words` is expected to already be filtered down to the
-// neutral set (not a Tag, not ignored) by the caller — an added or
-// ignored word doesn't belong in the cloud at all any more, it moves to
-// a plain-text list underneath instead (see renderWordList()).
+// renderer. `words` is expected to already be the server's candidate
+// list — not a Tag, not ignored (see handleWordFrequency()'s own
+// comment) — an added or ignored word doesn't belong in the cloud at
+// all any more, it lives in the plain-text list underneath instead
+// (see renderWordList()).
 function renderWordCloud(svgEl, words, onToggle, onIgnore) {
   const width = 800, height = 440;
   svgEl.innerHTML = "";
@@ -1070,10 +1070,14 @@ function renderWordCloud(svgEl, words, onToggle, onIgnore) {
   });
 }
 
-// Plain-text list under a cloud for words that left it — either tagged
-// ("added") or ignored. Each entry has its own small × to undo that one
-// action and drop the word back into the neutral pool the cloud draws
-// from, same click-to-undo convention as the cloud's own tag toggle.
+// Plain-text list under a cloud for words that aren't in it — either
+// tagged ("added") or ignored. Unlike the cloud (candidates only, ranked
+// by count), these are the server's *complete* Tags/ignored-words lists
+// (see handleWordFrequency()'s own comment) — a real Tag like "Excel"
+// that never actually occurs in a title or ad shows up here even though
+// it could never have been a cloud candidate in the first place. `words`
+// is a plain array of name strings. Each entry has its own small × to
+// undo that one action.
 function renderWordList(el, words, kind, onUndo) {
   if (!el) return;
   el.innerHTML = "";
@@ -1086,11 +1090,11 @@ function renderWordList(el, words, kind, onUndo) {
   heading.className = "word-list-heading";
   heading.textContent = kind === "added" ? "Added:" : "Ignored:";
   el.appendChild(heading);
-  words.forEach((w) => {
+  words.forEach((word) => {
     const pill = document.createElement("span");
     pill.className = "word-pill " + kind;
-    pill.innerHTML = escapeHtml(w.word) + ' <button type="button" aria-label="Remove ' + escapeAttr(w.word) + '">&times;</button>';
-    pill.querySelector("button").addEventListener("click", () => onUndo(w));
+    pill.innerHTML = escapeHtml(word) + ' <button type="button" aria-label="Remove ' + escapeAttr(word) + '">&times;</button>';
+    pill.querySelector("button").addEventListener("click", () => onUndo(word));
     el.appendChild(pill);
   });
 }
@@ -1104,27 +1108,22 @@ function showTagToast(toastEl, text, kind) {
   toastEl._t = setTimeout(() => { toastEl.style.display = "none"; }, 4000);
 }
 
-// toastEl/reload are parameterized for the same reason renderWordCloud()
-// is — the Tags-table create/delete call is identical either way, only
-// which cloud re-renders afterward (and where the confirmation toast shows
-// up) differs.
-async function toggleTag(w, toastEl, reload) {
+// Four focused actions rather than two toggles — the cloud only ever
+// creates a Tag/ignore entry (a candidate word is by definition neither
+// yet), and the Added/Ignored lists only ever remove one, so there's no
+// state left to branch on at the call site any more (compare the old
+// isTag/isIgnored-checking toggleTag()/toggleIgnore() this replaced).
+// toastEl/reload are parameterized so the same function serves both
+// clouds — the Tags/ignore-list API call is identical either way, only
+// which cloud re-renders afterward (and where the toast shows up) differs.
+async function createTag(word, toastEl, reload) {
   try {
-    if (w.isTag) {
-      await callWorker("/words/tags", {
-        method: "DELETE",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name: w.word }),
-      });
-      showTagToast(toastEl, `Removed "${w.word}" from Tags.`, "ok");
-    } else {
-      const result = await callWorker("/words/tags", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name: w.word }),
-      });
-      showTagToast(toastEl, `"${result.name}" is now a Tag.`, "ok");
-    }
+    const result = await callWorker("/words/tags", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name: word }),
+    });
+    showTagToast(toastEl, `"${result.name}" is now a Tag.`, "ok");
     await reload();
   } catch (err) {
     if (err.unauthorized) { clearStoredSession(); showLogin("Session expired. Enter the password again."); return; }
@@ -1132,24 +1131,44 @@ async function toggleTag(w, toastEl, reload) {
   }
 }
 
-// toastEl/reload parameterized for the same reason toggleTag() is.
-async function toggleIgnore(w, toastEl, reload) {
+async function removeTag(word, toastEl, reload) {
   try {
-    if (w.isIgnored) {
-      await callWorker("/words/ignore", {
-        method: "DELETE",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name: w.word }),
-      });
-      showTagToast(toastEl, `"${w.word}" is back in the cloud.`, "ok");
-    } else {
-      await callWorker("/words/ignore", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name: w.word }),
-      });
-      showTagToast(toastEl, `Ignoring "${w.word}".`, "ok");
-    }
+    await callWorker("/words/tags", {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name: word }),
+    });
+    showTagToast(toastEl, `Removed "${word}" from Tags.`, "ok");
+    await reload();
+  } catch (err) {
+    if (err.unauthorized) { clearStoredSession(); showLogin("Session expired. Enter the password again."); return; }
+    showTagToast(toastEl, `Failed: ${err.message}`, "error");
+  }
+}
+
+async function ignoreWord(word, toastEl, reload) {
+  try {
+    await callWorker("/words/ignore", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name: word }),
+    });
+    showTagToast(toastEl, `Ignoring "${word}".`, "ok");
+    await reload();
+  } catch (err) {
+    if (err.unauthorized) { clearStoredSession(); showLogin("Session expired. Enter the password again."); return; }
+    showTagToast(toastEl, `Failed: ${err.message}`, "error");
+  }
+}
+
+async function unignoreWord(word, toastEl, reload) {
+  try {
+    await callWorker("/words/ignore", {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name: word }),
+    });
+    showTagToast(toastEl, `"${word}" is back in the cloud.`, "ok");
     await reload();
   } catch (err) {
     if (err.unauthorized) { clearStoredSession(); showLogin("Session expired. Enter the password again."); return; }
@@ -1163,24 +1182,23 @@ async function loadWordCloud() {
   cloudCard.style.display = "none";
   try {
     const data = await callWorker("/words/frequency");
-    lastWords = data.words || [];
-    if (!lastWords.length) { cloudStatus.textContent = "No job titles to analyse yet."; return; }
+    const words = data.words || [];
+    const tags = data.tags || [];
+    const ignored = data.ignoredWords || [];
+    if (!words.length && !tags.length && !ignored.length) { cloudStatus.textContent = "No job titles to analyse yet."; return; }
     cloudStatus.textContent = "";
     cloudCard.style.display = "block";
     const reload = async () => { loaded.wordcloud = false; await loadWordCloud(); };
-    const neutral = lastWords.filter((w) => !w.isTag && !w.isIgnored);
-    renderWordCloud(cloudSvg, neutral,
-      (w) => toggleTag(w, tagToast, reload),
-      (w) => toggleIgnore(w, tagToast, reload));
-    renderWordList(cloudAddedWords, lastWords.filter((w) => w.isTag), "added", (w) => toggleTag(w, tagToast, reload));
-    renderWordList(cloudIgnoredWords, lastWords.filter((w) => !w.isTag && w.isIgnored), "ignored", (w) => toggleIgnore(w, tagToast, reload));
+    renderWordCloud(cloudSvg, words,
+      (w) => createTag(w.word, tagToast, reload),
+      (w) => ignoreWord(w.word, tagToast, reload));
+    renderWordList(cloudAddedWords, tags, "added", (word) => removeTag(word, tagToast, reload));
+    renderWordList(cloudIgnoredWords, ignored, "ignored", (word) => unignoreWord(word, tagToast, reload));
   } catch (err) {
     if (err.unauthorized) { clearStoredSession(); showLogin("Session expired. Enter the password again."); return; }
     cloudStatus.textContent = `Failed to load: ${err.message}`;
   }
 }
-
-let lastSearchWords = [];
 
 function renderSearchQueriesTable(queries) {
   searchTermsTbody.innerHTML = "";
@@ -1208,23 +1226,24 @@ async function loadSearchTerms() {
   searchTermsEmpty.style.display = "none";
   try {
     const data = await callWorker("/search/terms");
-    lastSearchWords = data.words || [];
+    const words = data.words || [];
+    const tags = data.tags || [];
+    const ignored = data.ignoredWords || [];
     const topQueries = data.topQueries || [];
-    if (!lastSearchWords.length && !topQueries.length) {
+    if (!words.length && !tags.length && !ignored.length && !topQueries.length) {
       searchTermsStatus.textContent = "";
       searchTermsEmpty.style.display = "block";
       return;
     }
     searchTermsStatus.textContent = "";
-    if (lastSearchWords.length) {
+    if (words.length || tags.length || ignored.length) {
       searchTermsCloudCard.style.display = "block";
       const reload = async () => { loaded.searchterms = false; await loadSearchTerms(); };
-      const neutral = lastSearchWords.filter((w) => !w.isTag && !w.isIgnored);
-      renderWordCloud(searchTermsCloudSvg, neutral,
-        (w) => toggleTag(w, searchTermsToast, reload),
-        (w) => toggleIgnore(w, searchTermsToast, reload));
-      renderWordList(searchTermsAddedWords, lastSearchWords.filter((w) => w.isTag), "added", (w) => toggleTag(w, searchTermsToast, reload));
-      renderWordList(searchTermsIgnoredWords, lastSearchWords.filter((w) => !w.isTag && w.isIgnored), "ignored", (w) => toggleIgnore(w, searchTermsToast, reload));
+      renderWordCloud(searchTermsCloudSvg, words,
+        (w) => createTag(w.word, searchTermsToast, reload),
+        (w) => ignoreWord(w.word, searchTermsToast, reload));
+      renderWordList(searchTermsAddedWords, tags, "added", (word) => removeTag(word, searchTermsToast, reload));
+      renderWordList(searchTermsIgnoredWords, ignored, "ignored", (word) => unignoreWord(word, searchTermsToast, reload));
     }
     renderSearchQueriesTable(topQueries);
   } catch (err) {
