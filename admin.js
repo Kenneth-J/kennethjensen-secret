@@ -258,6 +258,25 @@ function escapeAttr(str) {
   return escapeHtml(str).replace(/"/g, "&quot;").replace(/'/g, "&#39;");
 }
 
+// Shared by every tab's load-failure branch (Missing Data, Word Cloud,
+// Search Terms) — a "Failed to load: Failed to fetch" message with no way
+// to recover short of switching tabs and back was the actual live
+// complaint (2026-09-21) that led to this. `retry` should reset that
+// tab's own `loaded.*` flag before re-calling its load function, same as
+// the existing tab-switch logic in setTab() does.
+function showLoadError(statusEl, err, retry) {
+  statusEl.innerHTML = "";
+  const msg = document.createElement("span");
+  msg.textContent = `Failed to load: ${err.message}`;
+  statusEl.appendChild(msg);
+  const retryBtn = document.createElement("button");
+  retryBtn.type = "button";
+  retryBtn.className = "retry-link";
+  retryBtn.textContent = "Retry";
+  retryBtn.addEventListener("click", retry);
+  statusEl.appendChild(retryBtn);
+}
+
 // job.jobUrl comes from scraped third-party listings — never trust its
 // scheme. Only render it as a link when it's actually http(s); a
 // javascript: URL smuggled in as a "job link" would otherwise execute on
@@ -663,7 +682,7 @@ async function loadMissingData() {
     }
   } catch (err) {
     if (err.unauthorized) { clearStoredSession(); showLogin("Session expired. Enter the password again."); return; }
-    missingStatus.textContent = `Failed to load: ${err.message}`;
+    showLoadError(missingStatus, err, () => { loaded.missing = false; loadMissingData(); });
   }
 }
 
@@ -1196,7 +1215,7 @@ async function loadWordCloud() {
     renderWordList(cloudIgnoredWords, ignored, "ignored", (word) => unignoreWord(word, tagToast, reload));
   } catch (err) {
     if (err.unauthorized) { clearStoredSession(); showLogin("Session expired. Enter the password again."); return; }
-    cloudStatus.textContent = `Failed to load: ${err.message}`;
+    showLoadError(cloudStatus, err, () => { loaded.wordcloud = false; loadWordCloud(); });
   }
 }
 
@@ -1248,7 +1267,7 @@ async function loadSearchTerms() {
     renderSearchQueriesTable(topQueries);
   } catch (err) {
     if (err.unauthorized) { clearStoredSession(); showLogin("Session expired. Enter the password again."); return; }
-    searchTermsStatus.textContent = `Failed to load: ${err.message}`;
+    showLoadError(searchTermsStatus, err, () => { loaded.searchterms = false; loadSearchTerms(); });
   }
 }
 

@@ -71,6 +71,14 @@
   }
   .skip-btn:hover{opacity:1;background:var(--danger-soft);}
 
+  /* Retry link appended after a "Failed to load: ..." status message —
+     see showLoadError() in admin.js. */
+  .retry-link{
+    margin-left:10px;border:none;background:none;color:var(--accent);
+    font:inherit;font-weight:700;text-decoration:underline;cursor:pointer;padding:0;
+  }
+  .retry-link:hover{opacity:.8;}
+
   /* Word cloud */
   .cloud-card{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:16px;margin-bottom:24px;}
   .word-cloud-svg{width:100%;height:auto;display:block;}
