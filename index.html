@@ -162,8 +162,10 @@
   .doc-card h3{font-size:15px;font-weight:800;margin:0 0 8px;letter-spacing:-0.01em;}
   .doc-card p{font-size:13.5px;color:var(--ink-soft);margin:0 0 10px;}
   .doc-card p:last-child{margin-bottom:0;}
-  .doc-card ul{margin:0 0 10px;padding-left:20px;font-size:13.5px;color:var(--ink-soft);}
+  .doc-card ul, .doc-card ol{margin:0 0 10px;padding-left:20px;font-size:13.5px;color:var(--ink-soft);}
   .doc-card li{margin-bottom:4px;}
+  .doc-card li > strong:first-child{color:var(--ink);}
+  .doc-card ol > li > ul{margin-top:4px;}
   .doc-tier{display:inline-block;font-size:11.5px;font-weight:800;letter-spacing:.03em;text-transform:uppercase;color:var(--accent);background:var(--accent-soft);padding:3px 10px;border-radius:999px;margin-bottom:10px;}
 
   /* Site health */
@@ -436,48 +438,78 @@
     <div id="docs-panel" class="tab-panel">
       <div class="section-head">
         <h1>How we classify</h1>
-        <p>Every automated field below follows the same two-layer approach: a free, instant read from data already in hand — a title regex, or a source site's own structured field — first; then, only when that comes up empty and the job has a full ad description, one shared fallback read from a single Anthropic call (<code>classifyJob()</code> in <code>src/anthropic.js</code>) — never a guess. That one call is where Tags, Language, Language Requirement/Bonus, and the Seniority and Work Style fallbacks all come from; it's mentioned once per field below, not explained five times over.</p>
+        <p>Reference for every automated field. Each is computed in priority order — the first source that produces a value wins, later sources aren't consulted. No field is ever guessed: if nothing in the priority list produces a confident value, it's left blank.</p>
+      </div>
+
+      <div class="doc-card">
+        <span class="doc-tier">Reference</span>
+        <h3>Shared terms used below</h3>
+        <ul>
+          <li><strong>Title regex</strong> — <code>src/seniority.js</code>. Free, deterministic, runs on every job.</li>
+          <li><strong>Source site's own field</strong> — a structured value the source site itself provides, mapped by that site's own fetcher in <code>src/sites/</code>. Only some sites provide one, per field.</li>
+          <li><strong>AI read</strong> — one question inside <code>classifyJob()</code> (<code>src/anthropic.js</code>), a single Anthropic (Claude Haiku 4.5) call per job. Tags, Language, Language Requirement, Language Bonus, and the Seniority/Work Style fallbacks all read from this one call, not five separate calls. Only runs when the job has a description; only answers when the description states something explicitly, never inferred from tone, role type, or industry.</li>
+        </ul>
       </div>
 
       <div class="doc-card">
         <span class="doc-tier">Seniority</span>
-        <h3>Five tiers: title regex, then a site's own field, then the AI</h3>
-        <p>Every scraped job gets a seniority guess (Entry, Junior, Mid, Senior, or C-Level) computed fresh from its title by <code>src/seniority.js</code> — free, instant pattern matching against English and Danish signal words, checked in this order (most specific first, so "Senior Software Engineering Intern" resolves to Entry, not Senior):</p>
-        <ul>
-          <li><strong>C-Level</strong>: CEO/CFO/COO/CTO/CIO/CMO/CHRO/CPO/CCO, "Chief … Officer", President, Managing Director, Danish "Adm. Direktør".</li>
-          <li><strong>Entry</strong>: intern, internship, trainee, graduate, apprentice, entry-level, working/student assistant, and Danish elev/praktikant/fritidsjob/sommerjob (including compounds like "Kontorelev" with no space).</li>
-          <li><strong>Junior</strong>: junior, jr.</li>
-          <li><strong>Senior</strong>: senior, sr., lead, principal, head of, director, VP/vice president, manager, and Danish "chef" (e.g. "Salgschef": manager, not the English "cook").</li>
-          <li><strong>Mid</strong>: only an explicit "mid-level"/"mid level" in the title.</li>
-        </ul>
-        <p>If nothing matches, it falls back to whatever the source site itself reported (2 of this project's 23 site fetchers provide one). If that's still empty and a description is available, the shared AI call is asked too — only when the description states a level explicitly (years of experience, an explicit level word, "leads a team of X", "reports to the COO"), never guessed from tone or responsibilities. Still empty after all three? Left blank rather than guessed further — a wrong guess is worse than an honest blank (see the Missing Data tab).</p>
+        <h3>Entry, Junior, Mid, Senior, C-Level</h3>
+        <ol>
+          <li><strong>Title regex</strong> (<code>src/seniority.js</code>), checked most-specific-first:
+            <ul>
+              <li>C-Level: CEO/CFO/COO/CTO/CIO/CMO/CHRO/CPO/CCO, "Chief … Officer", President, Managing Director, Danish "Adm. Direktør"</li>
+              <li>Entry: intern, internship, trainee, graduate, apprentice, entry-level, working/student assistant, Danish elev/praktikant/fritidsjob/sommerjob (incl. compounds, e.g. "Kontorelev")</li>
+              <li>Junior: junior, jr.</li>
+              <li>Senior: senior, sr., lead, principal, head of, director, VP/vice president, manager, Danish "chef"</li>
+              <li>Mid: explicit "mid-level"/"mid level" only</li>
+            </ul>
+          </li>
+          <li><strong>Source site's own field</strong> — 2 of 23 site fetchers provide one.</li>
+          <li><strong>AI read</strong> — an explicit signal only: stated years of experience, an explicit level word, a stated management scope ("leads a team of X", "reports to the COO").</li>
+        </ol>
       </div>
 
       <div class="doc-card">
         <span class="doc-tier">Remote / Hybrid / On-site</span>
-        <h3>Added 2026-09-21, after finding 62% of active jobs had no value here at all</h3>
-        <p>Same shape as Seniority: a site's own field first, the shared AI call second. Most source sites only ever hand this project a job title, so there's nothing structured to read — but a few provide a genuine one. <strong>arbetsformedlingen.se</strong> (Sweden's official board) and <strong>cv.lv</strong> map their own workplace-model field directly, no AI involved. <strong>arbeidsplassen.nav.no</strong> (Norway's official board, added this same day) went from zero coverage to real coverage on roughly half its jobs: its search results carry nothing usable, but each job's own detail page embeds a genuine employer-chosen field — Hjemmekontor/Hybridkontor/"Hjemmekontor ikke mulig" (Home office/Hybrid office/Home office not possible) — fetched and mapped directly, confirmed live against ~80 real listings.</p>
-        <p>For every other site, when there's no structured field and a description is available, the shared AI call is asked — only when the description states it explicitly ("fully remote", "hybrid, 2 days in the office", "must be based at our warehouse"), never guessed from the role type or industry. This is what actually closed most of the gap: <strong>jobindex.dk and jobnet.dk, this project's two largest sources, had zero coverage from either method until this</strong> — jobindex.dk's own description coverage tops out around 50% even so, which turned out to be structural rather than fixable: about half its listings are plain redirect links to another site's own posting, with no page of its own to read.</p>
+        <h3>Remote, Hybrid, On-site</h3>
+        <ol>
+          <li><strong>Source site's own field</strong>, where provided:
+            <ul>
+              <li>arbetsformedlingen.se, cv.lv — the site's own workplace-model field, mapped directly.</li>
+              <li>arbeidsplassen.nav.no — <code>remoteOptions</code>/<code>aiRemoteOptions</code> from each job's own detail page. Hjemmekontor → Remote, Hybridkontor → Hybrid, "Hjemmekontor ikke mulig" → On-site.</li>
+            </ul>
+          </li>
+          <li><strong>AI read</strong> — an explicit statement only: "fully remote", "hybrid, 2 days in the office", "must be based at our site", etc.</li>
+        </ol>
+        <p>No site fetcher provides a structured field for jobindex.dk or jobnet.dk (this project's two largest sources) — both depend entirely on step 2. jobindex.dk's own description coverage is ~50%: about half its listings are redirect links to another site's own posting, with no page of its own to read.</p>
       </div>
 
       <div class="doc-card">
         <span class="doc-tier">Tags</span>
-        <h3>Picked from Baserow's own Tags table, not a hardcoded list</h3>
-        <p>Tags come from the shared AI call, from whatever vocabulary currently exists in Baserow's Tags table — fetched fresh each scraper run, so a tag added there takes effect immediately for every job scraped from that point on, no code change needed. The model is told to include only tags from that list that clearly apply, never to invent one; a few source sites (arbetsformedlingen.se, cvkeskus.ee, cvmarket.lv/lt) also pass through their own occupation-category text as a hint for which existing tags might fit, since a title alone often doesn't carry enough signal for a conceptual tag like "Autonomy" or "Asset Heavy".</p>
-        <p><strong>Growing the vocabulary:</strong> add a row to the Tags table directly, or use this panel's <strong>Word Cloud</strong> tab — it surfaces the most frequent candidate words across every active job's title <em>and</em> ad body text (excluding anything already a Tag or already ignored), so a term worth tagging can be spotted from real volume rather than guessed. Clicking a word there creates the Tags-table row directly.</p>
-        <p><strong>Existing jobs don't retroactively pick up a new tag on their own</strong> — a job is never re-classified once tagged. A new tag (or any other change to what the AI call looks for, like the Work Style addition above) only reaches jobs scraped after it was added, until either a natural re-scrape happens to re-encounter an existing listing, or <code>src/backfillClassification.js</code> is run (<code>npm run backfill-classification</code>, or the "Backfill Classification" GitHub Actions workflow — a deliberate one-time resweep across every active job, with a real Anthropic cost per row) after bumping <code>TAGS_SCHEMA_VERSION</code> in <code>src/anthropic.js</code>.</p>
+        <h3>Selected from Baserow's Tags table</h3>
+        <ol>
+          <li><strong>AI read</strong> — selects only from the current Tags table vocabulary (fetched fresh each scraper run), never invents one. A source site's own occupation-category text (arbetsformedlingen.se, cvkeskus.ee, cvmarket.lv/lt), where provided, is passed in as a hint only.</li>
+        </ol>
+        <ul>
+          <li><strong>Vocabulary:</strong> add a row to the Tags table directly, or use the Word Cloud tab — candidate words ranked by frequency across title + ad text, excluding words already a Tag or already ignored. Clicking a word creates the Tags-table row.</li>
+          <li><strong>Existing jobs:</strong> a job is never re-classified once tagged, so a vocabulary change only reaches newly-scraped jobs on its own. To apply it retroactively: bump <code>TAGS_SCHEMA_VERSION</code> in <code>src/anthropic.js</code>, then run <code>src/backfillClassification.js</code> (<code>npm run backfill-classification</code>, or the "Backfill Classification" GitHub Actions workflow) — real Anthropic cost per row.</li>
+        </ul>
       </div>
 
       <div class="doc-card">
         <span class="doc-tier">Language</span>
-        <h3>An AI call, not a fixed algorithm</h3>
-        <p>Language detection isn't a hand-written rule set like Seniority's title-regex layer is: it's one question inside the shared AI call, which also checks whether a listing is a real job. The model is asked for the two-letter ISO 639-1 code of the language the job title (and company name, if it helps) is written in, and returns <code>null</code> if it can't tell, never a guess. When a description is available, the prompt trusts it over the title — a title is sometimes in a different language than its own body text.</p>
+        <h3>Two-letter ISO 639-1 code</h3>
+        <ol>
+          <li><strong>AI read</strong> — the language the job title (and company name, if it helps) is written in. Trusts the description over the title when both are available.</li>
+        </ol>
       </div>
 
       <div class="doc-card">
-        <span class="doc-tier">Language Requirement / Bonus</span>
-        <h3>Two more questions on the same AI call</h3>
-        <p><strong>Language Requirement</strong> is a language the title states as a hard requirement for the candidate (e.g. "Danish-speaking Sales Manager" or "Tysktalende Kundeservicemedarbejder" implies one). <strong>Language Bonus</strong> is a language mentioned as merely nice-to-have (e.g. "German is a plus"). Both are plain language names, not codes, and both are <code>null</code> unless the title actually states one: most titles state neither, and neither is inferred from the ad's own language (that's the separate Language field above) or from the job's country.</p>
+        <span class="doc-tier">Language Requirement / Language Bonus</span>
+        <h3>Plain language name, not a code</h3>
+        <ol>
+          <li><strong>AI read</strong> — Requirement: a language explicitly stated as mandatory for the candidate. Bonus: a language explicitly mentioned as nice-to-have. Neither is inferred from the ad's own language (see Language above) or from the job's country.</li>
+        </ol>
       </div>
     </div>
   </div>
