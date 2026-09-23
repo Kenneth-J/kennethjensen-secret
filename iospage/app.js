@@ -25,6 +25,8 @@ const logoutBtn = document.getElementById("logout-btn");
 const boardEl = document.getElementById("board");
 const boardStatus = document.getElementById("board-status");
 const addCardFab = document.getElementById("add-card-fab");
+const dictateFab = document.getElementById("dictate-fab");
+const dictateStatus = document.getElementById("dictate-status");
 const filterChips = document.querySelectorAll(".chip");
 
 const modal = document.getElementById("card-modal");
@@ -296,21 +298,25 @@ async function loadBoard() {
 
 // --- Modal -----------------------------------------------------------
 
-function openModal(card) {
+// `draft` prefills a *new* card's fields (e.g. from dictation) without
+// making it an edit — editingCardId stays null so Save still POSTs.
+function openModal(card, draft) {
+  const source = card || draft;
   editingCardId = card ? card.id : null;
   modalTitle.textContent = card ? "Edit idea" : "New idea";
-  fieldTitle.value = card ? card.title : "";
-  fieldDescription.value = card ? card.description : "";
-  fieldCategory.value = card ? card.category : (activeCategory !== "all" ? activeCategory : CATEGORIES[0]);
-  fieldStage.value = card ? card.stage : STAGES[0];
-  fieldEffort.dataset.value = String(card ? card.effort : 1);
-  fieldCost.value = card ? card.cost : "";
-  modalTags = new Set(card ? card.tags : []);
+  fieldTitle.value = source ? source.title || "" : "";
+  fieldDescription.value = source ? source.description || "" : "";
+  fieldCategory.value = source && source.category ? source.category : (activeCategory !== "all" ? activeCategory : CATEGORIES[0]);
+  fieldStage.value = (source && source.stage) || STAGES[0];
+  fieldEffort.dataset.value = String((source && source.effort) || 1);
+  fieldCost.value = source ? source.cost || "" : "";
+  modalTags = new Set(source ? source.tags || [] : []);
   modalError.textContent = "";
   deleteCardBtn.hidden = !card;
   updateEffortDots();
   updateTagToggles();
   modal.hidden = false;
+  if (draft && !card) fieldTitle.focus();
 }
 
 function closeModal() {
@@ -408,6 +414,106 @@ deleteCardBtn.addEventListener("click", async () => {
 
 addCardFab.addEventListener("click", () => openModal(null));
 
+// --- Dictation -----------------------------------------------------
+
+let mediaRecorder = null;
+let audioChunks = [];
+let isRecording = false;
+
+function showDictateStatus(text) {
+  dictateStatus.textContent = text;
+  dictateStatus.hidden = false;
+}
+
+function hideDictateStatus() {
+  dictateStatus.hidden = true;
+}
+
+function deriveTitle(text) {
+  const trimmed = text.trim();
+  const sentenceEnd = trimmed.search(/[.!?](\s|$)/);
+  if (sentenceEnd > 0 && sentenceEnd < 80) return trimmed.slice(0, sentenceEnd + 1);
+  return trimmed.length > 60 ? trimmed.slice(0, 60).trim() + "…" : trimmed;
+}
+
+async function startRecording() {
+  let stream;
+  try {
+    stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+  } catch {
+    showDictateStatus("Microphone access denied.");
+    setTimeout(hideDictateStatus, 2500);
+    return;
+  }
+
+  audioChunks = [];
+  mediaRecorder = new MediaRecorder(stream);
+  mediaRecorder.addEventListener("dataavailable", (e) => {
+    if (e.data.size > 0) audioChunks.push(e.data);
+  });
+  mediaRecorder.addEventListener("stop", () => {
+    stream.getTracks().forEach((track) => track.stop());
+    const blob = new Blob(audioChunks, { type: mediaRecorder.mimeType || "audio/webm" });
+    transcribeAndOpen(blob);
+  });
+
+  mediaRecorder.start();
+  isRecording = true;
+  dictateFab.classList.add("recording");
+  showDictateStatus("Listening… tap to stop");
+}
+
+function stopRecording() {
+  if (!mediaRecorder || mediaRecorder.state === "inactive") return;
+  mediaRecorder.stop();
+  isRecording = false;
+  dictateFab.classList.remove("recording");
+  showDictateStatus("Transcribing…");
+}
+
+async function transcribeAndOpen(blob) {
+  const session = getSession();
+  if (!session) {
+    hideDictateStatus();
+    showLogin("Session expired. Enter the password again.");
+    return;
+  }
+  try {
+    const res = await fetch(WORKER_URL + "/roadmap/transcribe", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${session.token}`,
+        "Content-Type": blob.type || "application/octet-stream",
+      },
+      body: blob,
+    });
+    if (res.status === 403) {
+      clearStoredSession();
+      hideDictateStatus();
+      showLogin("Session expired. Enter the password again.");
+      return;
+    }
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || `status ${res.status}`);
+    hideDictateStatus();
+    const text = (data.text || "").trim();
+    if (!text) {
+      showDictateStatus("Didn't catch that — try again.");
+      setTimeout(hideDictateStatus, 2500);
+      return;
+    }
+    openModal(null, { title: deriveTitle(text), description: text });
+  } catch (err) {
+    showDictateStatus(`Transcription failed: ${err.message}`);
+    setTimeout(hideDictateStatus, 3500);
+  }
+}
+
+dictateFab.addEventListener("click", () => {
+  if (isRecording) stopRecording();
+  else startRecording();
+});
+
 // --- Filters -----------------------------------------------------------
 
 filterChips.forEach((chip) => {
@@ -430,6 +536,7 @@ function tryUnlock(password, totpCode) {
       totpInput.value = "";
       showApp();
       addCardFab.hidden = false;
+      dictateFab.hidden = false;
       loadBoard();
     })
     .catch((err) => {
@@ -451,6 +558,7 @@ totpInput.addEventListener("keydown", (e) => { if (e.key === "Enter") unlockBtn.
 logoutBtn.addEventListener("click", () => {
   clearStoredSession();
   addCardFab.hidden = true;
+  dictateFab.hidden = true;
   showLogin();
 });
 
@@ -461,6 +569,7 @@ document.getElementById("year") && (document.getElementById("year").textContent 
 if (getSession()) {
   showApp();
   addCardFab.hidden = false;
+  dictateFab.hidden = false;
   loadBoard();
 } else {
   showLogin();

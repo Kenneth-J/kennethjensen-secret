@@ -132,6 +132,30 @@ button{font-family:inherit;}
 }
 #add-card-fab:hover{opacity:.92;}
 
+#dictate-fab{
+  position:fixed;right:20px;bottom:calc(88px + env(safe-area-inset-bottom));
+  width:48px;height:48px;border-radius:50%;border:1px solid var(--line);
+  background:var(--bg-card);color:var(--ink);font-size:20px;
+  box-shadow:0 6px 16px rgba(0,0,0,.3);cursor:pointer;z-index:15;
+  display:flex;align-items:center;justify-content:center;line-height:1;
+}
+#dictate-fab:hover{border-color:var(--accent);}
+#dictate-fab.recording{
+  background:var(--danger);border-color:var(--danger);color:#2a0d0a;
+  animation:dictate-pulse 1.4s ease-in-out infinite;
+}
+@keyframes dictate-pulse{
+  0%,100%{box-shadow:0 0 0 0 var(--danger-soft);}
+  50%{box-shadow:0 0 0 12px rgba(255,138,128,0);}
+}
+.dictate-status{
+  position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom));
+  transform:translateX(-50%);z-index:16;
+  background:var(--bg-alt);border:1px solid var(--line);color:var(--ink-soft);
+  padding:9px 16px;border-radius:999px;font-size:13px;font-weight:600;
+  white-space:nowrap;box-shadow:0 4px 14px rgba(0,0,0,.3);
+}
+
 /* Modal */
 .modal-backdrop{
   position:fixed;inset:0;background:rgba(6,12,14,.6);z-index:30;
