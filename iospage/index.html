@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<title>Roadmap</title>
+<meta name="description" content="Kenneth's personal product roadmap board.">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; script-src 'self'; connect-src 'self' https://jobmatch-worker.kennethj.workers.dev; base-uri 'self'; form-action 'self'; upgrade-insecure-requests">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<meta name="theme-color" content="#0f1a1d">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Roadmap">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<!-- Clickjacking guard: stays hidden until framebust.js confirms we are not
+     inside someone else's frame. Same pattern as the main admin panel. -->
+<style>html{visibility:hidden}</style>
+<script src="./framebust.js"></script>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-62 -62 124 124'%3E%3Ccircle r='38' fill='%234fe3bf'/%3E%3Crect x='-7' y='-56' width='14' height='18' rx='4' fill='%234fe3bf'/%3E%3Crect x='-7' y='-56' width='14' height='18' rx='4' fill='%234fe3bf' transform='rotate(45)'/%3E%3Crect x='-7' y='-56' width='14' height='18' rx='4' fill='%234fe3bf' transform='rotate(90)'/%3E%3Crect x='-7' y='-56' width='14' height='18' rx='4' fill='%234fe3bf' transform='rotate(135)'/%3E%3Crect x='-7' y='-56' width='14' height='18' rx='4' fill='%234fe3bf' transform='rotate(180)'/%3E%3Crect x='-7' y='-56' width='14' height='18' rx='4' fill='%234fe3bf' transform='rotate(225)'/%3E%3Crect x='-7' y='-56' width='14' height='18' rx='4' fill='%234fe3bf' transform='rotate(270)'/%3E%3Crect x='-7' y='-56' width='14' height='18' rx='4' fill='%234fe3bf' transform='rotate(315)'/%3E%3Ccircle r='15' fill='%230f1a1d' stroke='%234fe3bf' stroke-width='5'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+  <div class="topbar wrap">
+    <div class="brand display">
+      <svg class="brand-mark" viewBox="-62 -62 124 124" xmlns="http://www.w3.org/2000/svg">
+        <circle r="38" fill="#4fe3bf"/>
+        <rect x="-7" y="-56" width="14" height="18" rx="4" fill="#4fe3bf"/>
+        <rect x="-7" y="-56" width="14" height="18" rx="4" fill="#4fe3bf" transform="rotate(45)"/>
+        <rect x="-7" y="-56" width="14" height="18" rx="4" fill="#4fe3bf" transform="rotate(90)"/>
+        <rect x="-7" y="-56" width="14" height="18" rx="4" fill="#4fe3bf" transform="rotate(135)"/>
+        <rect x="-7" y="-56" width="14" height="18" rx="4" fill="#4fe3bf" transform="rotate(180)"/>
+        <rect x="-7" y="-56" width="14" height="18" rx="4" fill="#4fe3bf" transform="rotate(225)"/>
+        <rect x="-7" y="-56" width="14" height="18" rx="4" fill="#4fe3bf" transform="rotate(270)"/>
+        <rect x="-7" y="-56" width="14" height="18" rx="4" fill="#4fe3bf" transform="rotate(315)"/>
+        <circle r="15" fill="#0f1a1d" stroke="#4fe3bf" stroke-width="5"/>
+      </svg>
+      Roadmap
+    </div>
+    <button id="logout-btn" class="ghost-btn" hidden>Log out</button>
+  </div>
+</header>
+
+<main>
+  <div id="login-view" class="wrap">
+    <h1>Enter admin password</h1>
+    <p>Access to secret.kennethjensen.me</p>
+    <input id="password-input" type="password" placeholder="Password" autocomplete="off">
+    <input id="totp-input" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="6" placeholder="6-digit code" autocomplete="one-time-code">
+    <button id="unlock-btn">Unlock</button>
+    <div id="login-error"></div>
+  </div>
+
+  <div id="app-view" hidden>
+    <div class="filters wrap">
+      <button class="chip active" data-category="all">All</button>
+      <button class="chip" data-category="kennethjensen.me">kennethjensen.me</button>
+      <button class="chip" data-category="stats">stats</button>
+      <button class="chip" data-category="jobmatch">jobmatch</button>
+      <button class="chip" data-category="backend">backend</button>
+    </div>
+
+    <div id="board-status" class="status-line" hidden></div>
+
+    <div id="board" class="board" hidden></div>
+  </div>
+</main>
+
+<div id="card-modal" class="modal-backdrop" hidden>
+  <div class="modal-sheet" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <div class="modal-handle"></div>
+    <h2 id="modal-title">New idea</h2>
+
+    <label>Title
+      <input id="field-title" type="text" placeholder="What's the idea?">
+    </label>
+
+    <label>Description
+      <textarea id="field-description" rows="4" placeholder="Notes, links, why it matters…"></textarea>
+    </label>
+
+    <div class="field-row">
+      <label>Category
+        <select id="field-category">
+          <option value="kennethjensen.me">kennethjensen.me</option>
+          <option value="stats">stats</option>
+          <option value="jobmatch">jobmatch</option>
+          <option value="backend">backend</option>
+        </select>
+      </label>
+      <label>Stage
+        <select id="field-stage">
+          <option value="Backlog">Backlog</option>
+          <option value="Prep">Prep</option>
+          <option value="In Process">In Process</option>
+          <option value="Early Version">Early Version</option>
+          <option value="Solid">Solid</option>
+        </select>
+      </label>
+    </div>
+
+    <div class="field-row">
+      <label>Effort
+        <div id="field-effort" class="dot-picker" data-value="1">
+          <button type="button" class="dot" data-dot="1"></button>
+          <button type="button" class="dot" data-dot="2"></button>
+          <button type="button" class="dot" data-dot="3"></button>
+          <button type="button" class="dot" data-dot="4"></button>
+          <button type="button" class="dot" data-dot="5"></button>
+        </div>
+      </label>
+      <label>Real cost (est. DKK)
+        <input id="field-cost" type="number" min="0" step="1" placeholder="0">
+      </label>
+    </div>
+
+    <label class="tag-toggles">Tags
+      <div class="tag-toggle-row">
+        <button type="button" class="tag-toggle" data-tag="Blocked">Blocked</button>
+        <button type="button" class="tag-toggle" data-tag="Expensive">Expensive</button>
+      </div>
+    </label>
+
+    <div id="modal-error"></div>
+
+    <div class="modal-actions">
+      <button id="delete-card-btn" class="danger-btn" hidden>Delete</button>
+      <div class="modal-actions-right">
+        <button id="cancel-card-btn" class="ghost-btn">Cancel</button>
+        <button id="save-card-btn">Save</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<button id="add-card-fab" hidden aria-label="Add idea">+</button>
+
+<script src="./vendor/sortable.min.js"></script>
+<script src="./app.js"></script>
+</body>
+</html>
