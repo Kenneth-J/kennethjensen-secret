@@ -110,7 +110,14 @@ async function api(path, options = {}) {
     throw err;
   }
   if (!res.ok) {
-    throw new Error(`Request failed: ${res.status}`);
+    let detail = `status ${res.status}`;
+    try {
+      const body = await res.json();
+      if (body && body.error) detail = body.error;
+    } catch {
+      // response wasn't JSON — fall back to the status code above
+    }
+    throw new Error(detail);
   }
   if (res.status === 204) return null;
   return res.json();
