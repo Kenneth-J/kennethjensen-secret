@@ -1010,7 +1010,7 @@ function renderMissingRow(job, onRowRemoved) {
   // Job URL can't be fixed from this table (see loadMissingData()'s own
   // comment) — only Seniority/Working Country ever count toward "this row
   // is done." A row that was only missing a URL has nothing to complete
-  // here, so the auto-remove behavior below simply never triggers for it.
+  // here, so the auto-remove behaviour below simply never triggers for it.
   const requiredFields = (job.missing || []).filter((f) => f === "seniority" || f === "workingCountry");
   let countdownTimer = null;
 
@@ -1350,7 +1350,7 @@ function renderLogRow(entry) {
   tr.className = "log-row";
   // entry.context is arbitrary data the extension attached to the error —
   // shown as raw JSON rather than picked apart, since its shape varies by
-  // source and isn't worth modeling here just to display it.
+  // source and isn't worth modelling here just to display it.
   const contextHtml = entry.context
     ? `<pre class="log-context">${escapeHtml(JSON.stringify(entry.context, null, 2))}</pre>`
     : "";
@@ -1421,7 +1421,7 @@ logTracerPasswordInput.addEventListener("keydown", (e) => { if (e.key === "Enter
 
 // --- Word cloud ---
 // Hand-rolled spiral layout: place words largest-first, spiraling
-// outward from center until a candidate spot doesn't overlap anything
+// outward from centre until a candidate spot doesn't overlap anything
 // already placed. Real getBBox() measurement, not an estimate, so
 // placement matches each word's actual rendered size.
 const SVG_NS = "http://www.w3.org/2000/svg";
