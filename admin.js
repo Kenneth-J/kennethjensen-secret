@@ -335,6 +335,11 @@ function showApp() {
   loginView.style.display = "none";
   appView.style.display = "block";
   logoutBtn.style.display = "inline-block";
+  // Loaded here, not unconditionally at script load — the ticker used to be
+  // visible on the login screen too, but it can carry a failed-login entry
+  // (see fetchLastFailedLogin() below), which needs a valid session to read
+  // in the first place and shouldn't be glanceable pre-login anyway.
+  loadNotificationBar();
 }
 
 const loaded = { review: false, recommendations: false, wordcloud: false, searchterms: false, missing: false, clicks: false, health: false, logtracer: false };
@@ -1406,6 +1411,64 @@ async function fetchLinkedInEntries() {
   }
 }
 
+// Fourth source: the scraper's own most recent run outcome, published as a
+// single-entry file (jobmatch's src/index.js, written right after the
+// pass/fail verdict is known) — distinct from the per-incident errors
+// above, since a clean run produces zero of those, otherwise
+// indistinguishable from "the scraper hasn't run in days." Same id every
+// time (there's only ever one "latest"), so a repeat successful run simply
+// moves this row's timestamp rather than piling up duplicates.
+async function fetchLatestScrapeRun() {
+  try {
+    const res = await fetch("/scrape-run/data.json", { cache: "no-store" });
+    if (!res.ok) return [];
+    const data = await res.json();
+    if (!data.completedAt) return [];
+    const message = data.outcome === "success" ? "Latest scrape: succeeded" : `Latest scrape: failed (${data.reason})`;
+    return [{ id: "latest-scrape-run", receivedAt: data.completedAt, source: "scrape-run", message }];
+  } catch {
+    return [];
+  }
+}
+
+// Fifth source: not a fetch of its own — derived from the scraper error
+// entries already fetched above, since Baserow write failures are already
+// caught there under kind "save" (see scrapeErrors.js's own comment on
+// what each kind means; "save" is specifically the Baserow upsert call).
+// Surfaced as its own single "latest" item rather than left buried among
+// general scraper errors, since Baserow health is worth glancing at on its
+// own. scraperEntries is already sorted newest-first by loadLogTracer()'s
+// caller-side merge... no — normalizeScraperEntry() output isn't sorted at
+// all yet at this point, so this searches the raw fetched array, which
+// errors.json itself writes newest-first (see jobmatch's scrapeErrors.js).
+function latestBaserowError(scraperEntries) {
+  const entry = scraperEntries.find((e) => e.context && e.context.kind === "save");
+  if (!entry) return [];
+  return [{ id: `baserow-${entry.id}`, receivedAt: entry.receivedAt, source: "baserow", message: `Latest Baserow error: ${entry.message}` }];
+}
+
+// Sixth source: jobmatch-worker's own failed-login tracking (see
+// worker/src/index.ts's recordFailedAuth()/handleLastFailedLogin()) —
+// authenticated, unlike every other source above, so it can only ever be
+// fetched once Kenneth is already logged in himself. Country only, no IP
+// or credential guess — see the Worker's own comment on why.
+async function fetchLatestFailedLogin() {
+  try {
+    const data = await callWorker("/auth/last-failure");
+    if (!data.lastFailure) return [];
+    return [
+      {
+        id: "latest-failed-login",
+        receivedAt: data.lastFailure.at,
+        source: "auth",
+        message: `Failed login attempt from ${data.lastFailure.country}`,
+      },
+    ];
+  } catch {
+    return []; // unauthorized/transient — Log Tracer's other sources still render
+  }
+}
+
 function renderLogRow(entry) {
   const tr = document.createElement("tr");
   tr.className = "log-row";
@@ -1419,7 +1482,7 @@ function renderLogRow(entry) {
     : "";
   tr.innerHTML = `
     <td class="log-time">${escapeHtml(formatLogTime(entry.receivedAt))}</td>
-    <td><span class="log-source${entry.source === "scraper" ? " scraper" : ""}">${escapeHtml(entry.source || "unknown")}</span></td>
+    <td><span class="log-source${["scraper", "baserow", "auth"].includes(entry.source) ? " scraper" : ""}">${escapeHtml(entry.source || "unknown")}</span></td>
     <td><div class="log-message">${escapeHtml(entry.message)}</div>${contextHtml}</td>
   `;
   return tr;
@@ -1435,6 +1498,9 @@ async function loadLogTracer() {
 
   const scraperEntries = await fetchScraperErrors();
   const linkedinEntries = await fetchLinkedInEntries();
+  const scrapeRunEntries = await fetchLatestScrapeRun();
+  const baserowEntries = latestBaserowError(scraperEntries);
+  const failedLoginEntries = await fetchLatestFailedLogin();
 
   // A separate session from the main login gate (see LEMMING_STORAGE_KEY's
   // comment) — tryUnlock() elsewhere tries to establish this automatically
@@ -1462,7 +1528,14 @@ async function loadLogTracer() {
     }
   }
 
-  const entries = [...scraperEntries, ...linkedinEntries, ...lemmingEntries].sort(
+  const entries = [
+    ...scraperEntries,
+    ...linkedinEntries,
+    ...scrapeRunEntries,
+    ...baserowEntries,
+    ...failedLoginEntries,
+    ...lemmingEntries,
+  ].sort(
     (a, b) => new Date(b.receivedAt).getTime() - new Date(a.receivedAt).getTime()
   );
 
@@ -1500,11 +1573,14 @@ logTracerUnlockBtn.addEventListener("click", async () => {
 logTracerPasswordInput.addEventListener("keydown", (e) => { if (e.key === "Enter") logTracerUnlockBtn.click(); });
 
 // --- Notification bar ---
-// Always-visible ticker across the bottom of every tab and the login
-// screen alike (see index.html — deliberately outside #login-view/
-// #app-view). First source: the same public errors.json Log Tracer above
-// reads. Clicking an item jumps straight to that row, logging in first if
-// Kenneth isn't already.
+// Ticker across the bottom of every tab once logged in (loaded from
+// showApp() above, not unconditionally at script load — changed 2026-09-24
+// so a failed-login entry, which needs a session to fetch at all, isn't
+// glanceable from the pre-login screen). Sources: the same public
+// errors.json Log Tracer above reads, plus everything loadLogTracer()
+// merges in below (scraper, LinkedIn optimiser, latest Baserow error,
+// latest scrape outcome, latest failed login). Clicking an item jumps
+// straight to that row in Log Tracer.
 const notifBar = document.getElementById("notif-bar");
 const notifBarTrack = document.getElementById("notif-bar-track");
 let pendingLogTracerEntry = null;
@@ -1546,11 +1622,20 @@ function goToLogTracerEntry(id) {
 }
 
 async function loadNotificationBar() {
-  // Only sources that don't need login belong here (same reason Lemming's
-  // own entries are left out) — linkedin-log/data.json is public, same as
-  // errors/data.json.
-  const [scraperEntries, linkedinEntries] = await Promise.all([fetchScraperErrors(), fetchLinkedInEntries()]);
-  const entries = [...scraperEntries, ...linkedinEntries].sort(
+  // The four things Kenneth wants glanceable at a look (2026-09-24): new
+  // LinkedIn conversions, the latest scrape outcome, the latest failed
+  // login, and the latest Baserow error. Lemming's own errors are
+  // deliberately left out here — they sit behind their own separate
+  // unlock (see loadLogTracer() above), not part of this ticker's scope;
+  // they still show in the full Log Tracer table once that's unlocked.
+  const [scraperEntries, linkedinEntries, scrapeRunEntries, failedLoginEntries] = await Promise.all([
+    fetchScraperErrors(),
+    fetchLinkedInEntries(),
+    fetchLatestScrapeRun(),
+    fetchLatestFailedLogin(),
+  ]);
+  const baserowEntries = latestBaserowError(scraperEntries);
+  const entries = [...scraperEntries, ...linkedinEntries, ...scrapeRunEntries, ...baserowEntries, ...failedLoginEntries].sort(
     (a, b) => new Date(b.receivedAt).getTime() - new Date(a.receivedAt).getTime()
   );
   if (entries.length === 0) {
@@ -1577,8 +1662,6 @@ async function loadNotificationBar() {
   });
   notifBar.hidden = false;
 }
-
-loadNotificationBar();
 
 // A page loaded directly with ?entry=<id> (a notification-bar link opened
 // fresh, e.g. in a new tab) jumps straight there once logged in, same as
