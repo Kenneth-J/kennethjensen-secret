@@ -422,6 +422,20 @@ function fmtRecoDate(iso) {
   return new Date(iso + "T00:00:00Z").toLocaleDateString("en-GB", { day: "numeric", month: "short", timeZone: "UTC" });
 }
 
+// The "know someone there" signal, made explicit rather than a hover-only
+// tooltip — Kenneth's own name is the whole point of this badge, so it's
+// shown inline, linked to LinkedIn when Lemming has a URL for them. Same
+// safeJobUrl() scheme check as job links (it's a generic http(s)-only
+// validator despite the name), even though this data comes from Kenneth's
+// own Lemming entries rather than a scraped third-party listing.
+function contactBadgeHtml(contact) {
+  const li = safeJobUrl(contact.linkedin);
+  const nameHtml = li
+    ? `<a href="${escapeAttr(li)}" target="_blank" rel="noopener">${escapeHtml(contact.name)}</a>`
+    : escapeHtml(contact.name);
+  return `<div class="reco-badge know">&#128279; know ${nameHtml}</div>`;
+}
+
 function renderRecoPills() {
   recoPills.innerHTML = "";
   const addPillGroup = (values, cssClass, onRemove) => {
@@ -521,7 +535,7 @@ function renderRecoRow(job) {
   const companyTd = document.createElement("td");
   companyTd.innerHTML = `
     ${escapeHtml(job.company || "")}
-    ${job.contactMatch ? `<div class="reco-badge know" title="${escapeAttr(job.contactMatch.name)}">&#128279; know someone</div>` : ""}
+    ${job.contactMatch ? contactBadgeHtml(job.contactMatch) : ""}
     ${job.alreadyPosted ? `<div class="reco-badge posted">already posted</div>` : ""}
   `;
   tr.appendChild(companyTd);
@@ -548,9 +562,29 @@ function renderRecoRow(job) {
     const td = document.createElement("td");
     td.colSpan = 6;
     const textarea = document.createElement("textarea");
+    textarea.className = "cell-input";
     textarea.placeholder = "Why is this noteworthy?";
     textarea.value = job.recommendationReason || "";
-    textarea.addEventListener("blur", () => saveRecommendation(job, true, textarea.value, starBtn));
+
+    // Debounced autosave (700ms after the last keystroke, same pattern as
+    // Missing Data's wireCellSave()), plus an immediate save on blur — a
+    // typed reason should never be lost to switching tabs or closing the
+    // page before the debounce fires. Star stays on throughout: the point
+    // of this textarea only existing while `job.recommended` is true.
+    let saveTimer = null;
+    const saveReason = async () => {
+      clearTimeout(saveTimer);
+      const ok = await saveRecommendation(job, true, textarea.value, starBtn);
+      markCellState(textarea, ok ? "saved" : "error");
+      if (ok) setTimeout(() => markCellState(textarea, null), 1500);
+    };
+    textarea.addEventListener("input", () => {
+      markCellState(textarea, "dirty");
+      clearTimeout(saveTimer);
+      saveTimer = setTimeout(saveReason, 700);
+    });
+    textarea.addEventListener("blur", saveReason);
+
     td.appendChild(textarea);
     row.appendChild(td);
     return row;
@@ -597,12 +631,14 @@ async function saveRecommendation(job, recommended, reason, starBtn) {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ recommended, reason: reason || "" }),
     });
+    return true;
   } catch (err) {
-    if (err.unauthorized) { clearStoredSession(); showLogin("Session expired. Enter the password again."); return; }
+    if (err.unauthorized) { clearStoredSession(); showLogin("Session expired. Enter the password again."); return false; }
     job.recommended = prevRecommended;
     job.recommendationReason = prevReason;
     starBtn.classList.toggle("on", prevRecommended);
     showTagToast(recoToast, `Failed to save "${job.jobTitle || "this job"}": ${err.message}`, "error");
+    return false;
   }
 }
 
