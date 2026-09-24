@@ -432,6 +432,90 @@ function fmtRecoDate(iso) {
 // safeJobUrl() scheme check as job links (it's a generic http(s)-only
 // validator despite the name), even though this data comes from Kenneth's
 // own Lemming entries rather than a scraped third-party listing.
+// Shared tag editor for both Recommendations tables (added 2026-09-24):
+// click a tag pill's x to remove it, click a suggested "+ TagName" chip or
+// pick from the dropdown to add one. Same optimistic-update / rollback-on-
+// error shape as saveRecommendation() below. suggestTagsForJob() only ever
+// offers a vocabulary tag whose name literally appears as a whole word in
+// the job's own title/company, capped at 4, so a suggestion is never a
+// guess dressed up as one, just fewer than 4 when fewer than 4 actually match.
+function suggestTagsForJob(job) {
+  const text = `${job.jobTitle || ""} ${job.company || ""}`.toLowerCase();
+  const applied = new Set((job.tags || []).map((t) => t.toLowerCase()));
+  return recoTagVocabulary
+    .filter((t) => !applied.has(t.toLowerCase()))
+    .filter((t) => new RegExp(`\\b${t.toLowerCase().replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\b`).test(text))
+    .slice(0, 4);
+}
+
+async function saveJobTags(job, tagNames, cellEl) {
+  const prevTags = job.tags;
+  job.tags = tagNames;
+  renderTagEditor(cellEl, job);
+  try {
+    const data = await callWorker(`/jobs/${job.id}/tags`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ tagNames }),
+    });
+    job.tags = data.tags || tagNames;
+    renderTagEditor(cellEl, job);
+    return true;
+  } catch (err) {
+    if (err.unauthorized) { clearStoredSession(); showLogin("Session expired. Enter the password again."); return false; }
+    job.tags = prevTags;
+    renderTagEditor(cellEl, job);
+    showTagToast(recoToast, `Failed to update tags for "${job.jobTitle || "this job"}": ${err.message}`, "error");
+    return false;
+  }
+}
+
+function renderTagEditor(cellEl, job) {
+  cellEl.innerHTML = "";
+  cellEl.className = "reco-tags";
+
+  (job.tags || []).forEach((t) => {
+    const pill = document.createElement("span");
+    pill.className = "reco-tag reco-tag-editable";
+    pill.innerHTML = `${escapeHtml(t)} <button type="button" aria-label="Remove ${escapeAttr(t)} tag">&times;</button>`;
+    pill.querySelector("button").addEventListener("click", () => {
+      saveJobTags(job, (job.tags || []).filter((x) => x !== t), cellEl);
+    });
+    cellEl.appendChild(pill);
+  });
+
+  suggestTagsForJob(job).forEach((t) => {
+    const chip = document.createElement("button");
+    chip.type = "button";
+    chip.className = "reco-tag-suggest";
+    chip.textContent = `+ ${t}`;
+    chip.title = "Add suggested tag";
+    chip.addEventListener("click", () => {
+      saveJobTags(job, [...(job.tags || []), t], cellEl);
+    });
+    cellEl.appendChild(chip);
+  });
+
+  const addWrap = document.createElement("span");
+  addWrap.className = "reco-tag-add";
+  const select = document.createElement("select");
+  select.innerHTML = `<option value="">+ tag</option>`;
+  const applied = new Set((job.tags || []).map((x) => x.toLowerCase()));
+  recoTagVocabulary
+    .filter((t) => !applied.has(t.toLowerCase()))
+    .forEach((t) => {
+      const opt = document.createElement("option");
+      opt.value = t;
+      opt.textContent = t;
+      select.appendChild(opt);
+    });
+  select.addEventListener("change", () => {
+    if (select.value) saveJobTags(job, [...(job.tags || []), select.value], cellEl);
+  });
+  addWrap.appendChild(select);
+  cellEl.appendChild(addWrap);
+}
+
 function contactBadgeHtml(contact) {
   const li = safeJobUrl(contact.linkedin);
   const nameHtml = li
@@ -566,8 +650,7 @@ function renderRecoRow(job) {
   tr.appendChild(dateTd);
 
   const tagsTd = document.createElement("td");
-  tagsTd.className = "reco-tags";
-  tagsTd.innerHTML = (job.tags || []).map((t) => `<span class="reco-tag">${escapeHtml(t)}</span>`).join("");
+  renderTagEditor(tagsTd, job);
   tr.appendChild(tagsTd);
 
   return tr;
@@ -616,6 +699,10 @@ function renderNoteworthyRow(job) {
     ? `<span class="reco-posted-status posted">&#10003; posted</span>`
     : `<span class="reco-posted-status pending">not yet</span>`;
   tr.appendChild(postedTd);
+
+  const tagsTd = document.createElement("td");
+  renderTagEditor(tagsTd, job);
+  tr.appendChild(tagsTd);
 
   const reasonTd = document.createElement("td");
   const textarea = document.createElement("textarea");

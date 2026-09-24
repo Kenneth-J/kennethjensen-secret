@@ -264,8 +264,17 @@
   .reco-posted-status{font-size:12px;white-space:nowrap;}
   .reco-posted-status.posted{color:var(--up);font-weight:700;}
   .reco-posted-status.pending{color:var(--ink-soft);}
-  .reco-tags{margin-top:4px;}
-  .reco-tag{display:inline-block;font-size:10.5px;padding:1px 7px;border-radius:6px;background:var(--bg-alt);color:var(--ink-soft);margin:0 4px 2px 0;}
+  .reco-tags{margin-top:4px;display:flex;flex-wrap:wrap;align-items:center;gap:4px;max-width:220px;}
+  .reco-tag{display:inline-block;font-size:10.5px;padding:1px 7px;border-radius:6px;background:var(--bg-alt);color:var(--ink-soft);margin:0;}
+  .reco-tag-editable{display:inline-flex;align-items:center;gap:3px;padding-right:3px;}
+  .reco-tag-editable button{border:none;background:none;cursor:pointer;color:inherit;opacity:.6;font-size:12px;line-height:1;padding:0 1px;}
+  .reco-tag-editable button:hover{opacity:1;color:var(--danger);}
+  .reco-tag-suggest{
+    display:inline-block;font-size:10.5px;padding:1px 7px;border-radius:6px;margin:0;
+    border:1px dashed var(--line);background:none;color:var(--ink-soft);cursor:pointer;
+  }
+  .reco-tag-suggest:hover{border-color:var(--accent);color:var(--accent);}
+  .reco-tag-add select{font-size:10.5px;padding:1px 4px;border-radius:6px;border:1px solid var(--line);background:var(--bg);color:var(--ink-soft);max-width:80px;}
   .reco-noteworthy textarea.cell-input{width:100%;min-height:44px;padding:8px 10px;border-radius:8px;resize:vertical;}
   .reco-noteworthy textarea.cell-input:focus{outline:2px solid var(--accent);outline-offset:-1px;}
 </style>
@@ -343,6 +352,7 @@
                 <th></th>
                 <th>Job</th>
                 <th>LinkedIn post</th>
+                <th>Tags</th>
                 <th>Reason</th>
               </tr>
             </thead>
