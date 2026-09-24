@@ -1,0 +1,29 @@
+{
+  "generatedAt": "2026-09-24T18:58:34.847Z",
+  "entries": [
+    {
+      "id": "2026-09-24T18:51:41.591Z-3",
+      "at": "2026-09-24T18:51:41.591Z",
+      "kind": "fetch",
+      "site": "duunitori.fi",
+      "jobTitle": null,
+      "message": "duunitori.fi: all 27 keyword searches failed (last: duunitori.fi: fetch failed with status 403 (haku=mobilitāte, sivu=1))"
+    },
+    {
+      "id": "2026-09-24T18:24:54.973Z-2",
+      "at": "2026-09-24T18:24:54.973Z",
+      "kind": "fetch",
+      "site": "deunemployment.com",
+      "jobTitle": null,
+      "message": "deunemployment.com: all 27 keyword searches failed (last: deunemployment.com: search failed with status 403 (q=mobilitāte))"
+    },
+    {
+      "id": "2026-09-24T18:13:30.033Z-1",
+      "at": "2026-09-24T18:13:30.033Z",
+      "kind": "fetch",
+      "site": "landing.jobs",
+      "jobTitle": null,
+      "message": "landing.jobs: fetch failed with status 403"
+    }
+  ]
+}
