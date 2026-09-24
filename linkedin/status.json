@@ -1,5 +1,11 @@
 [
   {
+    "status": "error",
+    "filename": "notes.txt",
+    "timestamp": "2026-09-24T12:41:45Z",
+    "error": "unsupported file type (.txt)"
+  },
+  {
     "status": "success",
     "filename": "VID_SHORT.mp4",
     "timestamp": "2026-09-24T12:41:42Z"
