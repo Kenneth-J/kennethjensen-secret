@@ -197,6 +197,47 @@
   .field-bar{flex:1;height:6px;border-radius:3px;background:var(--up-soft);overflow:hidden;}
   .field-bar-fill{height:100%;background:var(--danger);}
 
+  /* Notification bar (added 2026-09-24) — fixed across the bottom of every
+     tab AND the login screen, deliberately outside #login-view/#app-view
+     (see index.html body order) so it works with no login at all. First
+     (and so far only) source: the scraper's own errors.json, a public
+     static file, same "no backend of its own" convention health/data.json
+     already uses. Same seamless-loop marquee technique as kennethjensen.me's
+     own .stat-ticker (assets/base.css there) — track content duplicated,
+     animated exactly -50%, paused on hover so an item can actually be read. */
+  body{padding-bottom:46px;}
+  .notif-bar{
+    position:fixed;left:0;right:0;bottom:0;z-index:60;
+    display:flex;align-items:center;background:var(--cta-bg);
+    border-top:1px solid rgba(79,227,191,.22);box-shadow:0 -4px 16px rgba(19,42,51,.14);
+  }
+  .notif-bar[hidden]{display:none;}
+  .notif-bar-label{
+    flex:none;padding:11px 16px 11px 20px;font-size:12px;font-weight:800;letter-spacing:.04em;
+    text-transform:uppercase;color:rgba(216,238,232,.65);white-space:nowrap;
+    border-right:1px solid rgba(79,227,191,.22);
+  }
+  .notif-bar-scroll{flex:1 1 auto;min-width:0;overflow:hidden;}
+  .notif-bar-track{display:flex;align-items:center;width:max-content;height:100%;animation:notif-bar-scroll 34s linear infinite;}
+  .notif-bar:hover .notif-bar-track{animation-play-state:paused;}
+  .notif-bar-item{
+    display:inline-flex;align-items:center;gap:7px;flex:none;
+    padding:10px 26px 10px 0;font-size:13px;color:rgba(216,238,232,.82);text-decoration:none;white-space:nowrap;
+  }
+  .notif-bar-item:hover{color:#fff;}
+  .notif-bar-item .dot{width:6px;height:6px;border-radius:50%;background:#ff8a80;flex:none;}
+  .notif-bar-item .when{color:rgba(216,238,232,.5);}
+  .notif-bar-sep{display:inline-block;flex:none;margin:0 0 0 -14px;padding-right:14px;color:rgba(79,227,191,.35);}
+  @keyframes notif-bar-scroll{from{transform:translateX(0);}to{transform:translateX(-50%);}}
+  @media (prefers-reduced-motion: reduce){
+    .notif-bar-track{animation:none;}
+    .notif-bar-scroll{overflow-x:auto;}
+  }
+  @media (max-width:640px){
+    .notif-bar-label{padding:9px 10px;font-size:10.5px;}
+    .notif-bar-item{padding:9px 20px 9px 0;font-size:12.5px;}
+  }
+
   /* Log Tracer */
   .logtracer-summary{color:var(--ink-soft);font-size:13.5px;margin-bottom:18px;}
   .log-row td{vertical-align:top;}
@@ -210,9 +251,17 @@
     margin:8px 0 0;padding:10px 12px;background:var(--bg-alt);border:1px solid var(--line);border-radius:8px;
     font-size:12px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;white-space:pre-wrap;word-break:break-word;
   }
-  .logtracer-relogin{display:flex;gap:8px;max-width:360px;margin-bottom:18px;}
-  .logtracer-relogin input{
+  .logtracer-relogin{margin-bottom:18px;}
+  .logtracer-relogin-note{color:var(--ink-soft);font-size:13px;margin:0 0 8px;}
+  .logtracer-relogin-row{display:flex;gap:8px;max-width:360px;}
+  .logtracer-relogin-row input{
     flex:1;padding:9px 12px;border:1px solid var(--line);border-radius:8px;font-size:13.5px;
+  }
+  .log-source.scraper{background:var(--danger-soft);color:var(--danger);}
+  .log-row-highlight td{animation:log-row-flash 2.6s ease-out;}
+  @keyframes log-row-flash{
+    0%{background:var(--accent-soft);}
+    100%{background:transparent;}
   }
 
   /* Recommendations */
@@ -529,12 +578,15 @@
     <div id="logtracer-panel" class="tab-panel">
       <div class="section-head">
         <h1>Log Tracer</h1>
-        <p>Errors reported by the Lemming Chrome extension (background.js): a failure that used to only show up in the extension's own console, unwatched. Kept for 30 days. A separate login from the tabs above: this reads from lemming-worker, not jobmatch-worker.</p>
+        <p>Every incident worth knowing about in one place, kept for 30 days: scraping errors published by the scraper itself (no separate login, same public static file Site Health already uses) alongside errors reported by the Lemming Chrome extension (background.js), a completely different backend with its own login below. The notification bar at the bottom of every tab links straight to a row here.</p>
       </div>
       <div id="logtracer-status" class="status-line"></div>
       <div id="logtracer-relogin" class="logtracer-relogin" style="display:none;">
-        <input id="logtracer-password-input" type="password" placeholder="lemming-worker password" autocomplete="off">
-        <button id="logtracer-unlock-btn" class="btn btn-confirm">Unlock</button>
+        <p class="logtracer-relogin-note">Scraping errors above don't need this — log in for Lemming's own errors too.</p>
+        <div class="logtracer-relogin-row">
+          <input id="logtracer-password-input" type="password" placeholder="lemming-worker password" autocomplete="off">
+          <button id="logtracer-unlock-btn" class="btn btn-confirm">Unlock</button>
+        </div>
       </div>
       <div class="logtracer-summary" id="logtracer-summary" style="display:none;"></div>
       <div class="missing-table-wrap" id="logtracer-table-wrap" style="display:none;">
@@ -641,6 +693,13 @@
     <div class="footer-right"><a href="mailto:k@kennethjensen.me">k@kennethjensen.me</a></div>
   </div>
 </footer>
+
+<div class="notif-bar" id="notif-bar" hidden>
+  <span class="notif-bar-label">Recent errors</span>
+  <div class="notif-bar-scroll">
+    <div class="notif-bar-track" id="notif-bar-track"></div>
+  </div>
+</div>
 
 <script src="./admin.js" defer></script>
 

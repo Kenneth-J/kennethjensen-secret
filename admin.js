@@ -1340,23 +1340,66 @@ async function loadHealth() {
 }
 
 // --- Log Tracer ---
+// Merges two independent sources into one time-ordered list (added
+// 2026-09-24): the scraper's own errors.json (public static file, no
+// login — same origin/no-backend convention health/data.json already
+// uses) and Lemming's own /logs (a completely separate backend, its own
+// session, unchanged from before). Scraper entries render even when
+// Kenneth has never logged into lemming-worker at all — that's the whole
+// point of publishing them as a public file instead of putting them
+// behind jobmatch-worker's own auth, since the notification bar (below)
+// needs to work pre-login too.
 function formatLogTime(iso) {
   if (!iso) return "";
   return new Date(iso).toLocaleString(undefined, { month: "short", day: "numeric", hour: "numeric", minute: "2-digit" });
 }
 
+// Mirrors the [job-scraper] console.error() wording index.js's run() logs
+// for each of these four failure kinds — same incident, same words,
+// whether you're reading the GitHub Actions log or this table.
+const SCRAPER_ERROR_VERB = { fetch: "Failed to fetch", tag: "Failed to tag", save: "Failed to save", embed: "Failed to embed" };
+
+function scraperEntryMessage(entry) {
+  const verb = SCRAPER_ERROR_VERB[entry.kind] || "Error";
+  const where = entry.jobTitle ? `"${entry.jobTitle}" (${entry.site})` : entry.site || "unknown site";
+  return `${verb} ${where}: ${entry.message}`;
+}
+
+function normalizeScraperEntry(entry) {
+  return {
+    id: entry.id,
+    receivedAt: entry.at,
+    source: "scraper",
+    message: scraperEntryMessage(entry),
+    context: { site: entry.site, kind: entry.kind, jobTitle: entry.jobTitle || undefined },
+  };
+}
+
+async function fetchScraperErrors() {
+  try {
+    const res = await fetch("/errors/data.json", { cache: "no-store" });
+    if (!res.ok) return [];
+    const data = await res.json();
+    return (data.entries || []).map(normalizeScraperEntry);
+  } catch {
+    return []; // not published yet (first scraper run after this shipped), or a transient fetch failure — fail quiet, Lemming's own entries below still render
+  }
+}
+
 function renderLogRow(entry) {
   const tr = document.createElement("tr");
   tr.className = "log-row";
-  // entry.context is arbitrary data the extension attached to the error —
-  // shown as raw JSON rather than picked apart, since its shape varies by
-  // source and isn't worth modelling here just to display it.
+  tr.id = `logtracer-entry-${entry.id}`;
+  // entry.context is arbitrary data attached to the error — shown as raw
+  // JSON rather than picked apart, since its shape varies by source
+  // (Lemming's own vs. the scraper's site/kind/jobTitle above) and isn't
+  // worth modelling here just to display it.
   const contextHtml = entry.context
     ? `<pre class="log-context">${escapeHtml(JSON.stringify(entry.context, null, 2))}</pre>`
     : "";
   tr.innerHTML = `
     <td class="log-time">${escapeHtml(formatLogTime(entry.receivedAt))}</td>
-    <td><span class="log-source">${escapeHtml(entry.source || "unknown")}</span></td>
+    <td><span class="log-source${entry.source === "scraper" ? " scraper" : ""}">${escapeHtml(entry.source || "unknown")}</span></td>
     <td><div class="log-message">${escapeHtml(entry.message)}</div>${contextHtml}</td>
   `;
   return tr;
@@ -1370,37 +1413,53 @@ async function loadLogTracer() {
   logTracerEmpty.style.display = "none";
   logTracerTbody.innerHTML = "";
 
+  const scraperEntries = await fetchScraperErrors();
+
   // A separate session from the main login gate (see LEMMING_STORAGE_KEY's
-  // comment) — tryUnlock() below tries to establish this automatically with
-  // the same password, but if lemming-worker's ADMIN_PASSWORD differs (or
-  // that attempt simply hasn't happened yet), fall back to its own inline
-  // prompt rather than blocking the rest of the site.
-  if (!getStoredLemmingSession()) {
-    logTracerStatus.textContent = "";
-    logTracerRelogin.style.display = "flex";
-    return;
+  // comment) — tryUnlock() elsewhere tries to establish this automatically
+  // with the same password, but if lemming-worker's ADMIN_PASSWORD differs
+  // (or that attempt simply hasn't happened yet), this falls back to its
+  // own inline prompt. Unlike before, that no longer blocks the whole tab —
+  // scraper entries above render regardless, only Lemming's own are
+  // missing until logged in.
+  let lemmingEntries = [];
+  let lemmingNeedsLogin = !getStoredLemmingSession();
+  if (!lemmingNeedsLogin) {
+    try {
+      const data = await callLemmingWorker("/logs");
+      lemmingEntries = (data.entries || []).map((entry, i) => ({
+        id: `lemming-${i}`,
+        receivedAt: entry.receivedAt,
+        source: entry.source || "unknown",
+        message: entry.message,
+        context: entry.context,
+      }));
+    } catch (err) {
+      if (err.unauthorized) lemmingNeedsLogin = true;
+      // else: a transient Lemming fetch failure shouldn't hide scraper
+      // entries that loaded fine — fall through with lemmingEntries empty.
+    }
   }
 
-  try {
-    const data = await callLemmingWorker("/logs");
-    logTracerStatus.textContent = "";
-    const entries = data.entries || [];
-    if (entries.length === 0) {
-      logTracerEmpty.style.display = "block";
-      return;
-    }
-    logTracerSummary.style.display = "block";
-    logTracerSummary.textContent = `${entries.length} error${entries.length === 1 ? "" : "s"} in the last 30 days.`;
-    logTracerTableWrap.style.display = "block";
-    for (const entry of entries) logTracerTbody.appendChild(renderLogRow(entry));
-  } catch (err) {
-    if (err.unauthorized) {
-      logTracerStatus.textContent = "";
-      logTracerRelogin.style.display = "flex";
-      return;
-    }
-    logTracerStatus.textContent = `Failed to load: ${err.message}`;
+  const entries = [...scraperEntries, ...lemmingEntries].sort(
+    (a, b) => new Date(b.receivedAt).getTime() - new Date(a.receivedAt).getTime()
+  );
+
+  logTracerStatus.textContent = "";
+  if (lemmingNeedsLogin) logTracerRelogin.style.display = "flex";
+
+  if (entries.length === 0) {
+    logTracerEmpty.style.display = "block";
+    return;
   }
+  logTracerSummary.style.display = "block";
+  logTracerSummary.textContent =
+    `${entries.length} entr${entries.length === 1 ? "y" : "ies"} in the last 30 days` +
+    (lemmingNeedsLogin ? " (scraper only — log in below for Lemming's own errors too)." : ".");
+  logTracerTableWrap.style.display = "block";
+  for (const entry of entries) logTracerTbody.appendChild(renderLogRow(entry));
+
+  jumpToPendingLogTracerEntry();
 }
 
 logTracerUnlockBtn.addEventListener("click", async () => {
@@ -1418,6 +1477,90 @@ logTracerUnlockBtn.addEventListener("click", async () => {
   }
 });
 logTracerPasswordInput.addEventListener("keydown", (e) => { if (e.key === "Enter") logTracerUnlockBtn.click(); });
+
+// --- Notification bar ---
+// Always-visible ticker across the bottom of every tab and the login
+// screen alike (see index.html — deliberately outside #login-view/
+// #app-view). First source: the same public errors.json Log Tracer above
+// reads. Clicking an item jumps straight to that row, logging in first if
+// Kenneth isn't already.
+const notifBar = document.getElementById("notif-bar");
+const notifBarTrack = document.getElementById("notif-bar-track");
+let pendingLogTracerEntry = null;
+
+function jumpToPendingLogTracerEntry() {
+  if (!pendingLogTracerEntry) return;
+  const targetId = pendingLogTracerEntry;
+  const tryScroll = () => {
+    if (pendingLogTracerEntry !== targetId) return true; // a concurrent call already handled it
+    const row = document.getElementById(`logtracer-entry-${targetId}`);
+    if (!row) return false;
+    row.scrollIntoView({ behavior: "smooth", block: "center" });
+    row.classList.add("log-row-highlight");
+    setTimeout(() => row.classList.remove("log-row-highlight"), 2600);
+    pendingLogTracerEntry = null;
+    return true;
+  };
+  if (tryScroll()) return;
+  // Log Tracer's own async load (scraper fetch + maybe Lemming's) hasn't
+  // finished rendering rows yet — keep trying briefly rather than assuming
+  // the entry doesn't exist. loadLogTracer() also calls this itself once
+  // it finishes, so this loop is a safety net, not the only path.
+  let attempts = 0;
+  const timer = setInterval(() => {
+    attempts += 1;
+    if (tryScroll() || attempts > 20) clearInterval(timer);
+  }, 200);
+}
+
+function goToLogTracerEntry(id) {
+  pendingLogTracerEntry = id;
+  try { history.replaceState(null, "", `?tab=logtracer&entry=${encodeURIComponent(id)}`); } catch { /* ignore */ }
+  if (getStoredSession()) {
+    setTab("logtracer");
+    jumpToPendingLogTracerEntry();
+  } else {
+    showLogin("Log in to see this incident in Log Tracer.");
+  }
+}
+
+async function loadNotificationBar() {
+  const entries = await fetchScraperErrors();
+  if (entries.length === 0) {
+    notifBar.hidden = true;
+    return;
+  }
+  // Capped well under the full 30-day errors.json — this is a ticker
+  // glanced at in passing, not a second copy of Log Tracer's own table.
+  const recent = entries.slice(0, 20);
+  const itemHtml = (entry) =>
+    `<a class="notif-bar-item" href="?tab=logtracer&entry=${encodeURIComponent(entry.id)}" data-entry-id="${escapeAttr(entry.id)}">` +
+    `<span class="dot"></span>${escapeHtml(entry.message)}<span class="when">${escapeHtml(formatLogTime(entry.receivedAt))}</span></a>` +
+    `<span class="notif-bar-sep">&bull;</span>`;
+  const itemsHtml = recent.map(itemHtml).join("");
+  // Duplicated once — same seamless-loop technique kennethjensen.me's own
+  // stat ticker uses (assets/base.css there): the track animates exactly
+  // -50%, so the second copy picks up invisibly where the first left off.
+  notifBarTrack.innerHTML = itemsHtml + itemsHtml;
+  notifBarTrack.querySelectorAll(".notif-bar-item").forEach((a) => {
+    a.addEventListener("click", (e) => {
+      e.preventDefault();
+      goToLogTracerEntry(a.dataset.entryId);
+    });
+  });
+  notifBar.hidden = false;
+}
+
+loadNotificationBar();
+
+// A page loaded directly with ?entry=<id> (a notification-bar link opened
+// fresh, e.g. in a new tab) jumps straight there once logged in, same as
+// clicking the item in-page does — read once at load, consumed by
+// tryUnlock()/the silent-session check at the bottom of this file.
+(() => {
+  const entry = new URLSearchParams(location.search).get("entry");
+  if (entry) pendingLogTracerEntry = entry;
+})();
 
 // --- Word cloud ---
 // Hand-rolled spiral layout: place words largest-first, spiraling
@@ -1721,8 +1864,15 @@ async function tryUnlock(password, totpCode) {
     await login(password, totpCode);
     totpInput.value = "";
     showApp();
-    loadFlagged();
-    loaded.review = true;
+    // A notification-bar click before login (goToLogTracerEntry) leaves a
+    // target entry waiting — honour it instead of defaulting to Review, so
+    // logging in from that prompt lands exactly where Kenneth was headed.
+    if (pendingLogTracerEntry) {
+      setTab("logtracer");
+    } else {
+      loadFlagged();
+      loaded.review = true;
+    }
     // Best-effort: if lemming-worker's ADMIN_PASSWORD is the same value,
     // this gets the Log Tracer tab ready with no second prompt. If it
     // fails (different password, or that Worker not yet configured), the
@@ -1746,8 +1896,14 @@ async function tryUnlock(password, totpCode) {
   try {
     await callWorker("/jobs/flagged");
     showApp();
-    loadFlagged();
-    loaded.review = true;
+    // A page loaded with ?entry=<id> already queued this above — jump
+    // straight to Log Tracer instead of the default Review tab.
+    if (pendingLogTracerEntry) {
+      setTab("logtracer");
+    } else {
+      loadFlagged();
+      loaded.review = true;
+    }
   } catch {
     clearStoredSession();
     showLogin();
