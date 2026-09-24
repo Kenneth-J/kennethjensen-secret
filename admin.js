@@ -1386,6 +1386,26 @@ async function fetchScraperErrors() {
   }
 }
 
+// Third source, same no-login static-file convention as the scraper above:
+// a Mac launchd script watches an iCloud Drive folder and converts photos/
+// videos into LinkedIn-ready assets, writing one entry per run (success or
+// failure) straight into this file. Already in final shape, no per-kind
+// verb mapping needed the way the scraper's message does.
+function normalizeLinkedInEntry(entry) {
+  return { id: entry.id, receivedAt: entry.receivedAt, source: "linkedin", message: entry.message };
+}
+
+async function fetchLinkedInEntries() {
+  try {
+    const res = await fetch("/linkedin-log/data.json", { cache: "no-store" });
+    if (!res.ok) return [];
+    const data = await res.json();
+    return (data.entries || []).map(normalizeLinkedInEntry);
+  } catch {
+    return [];
+  }
+}
+
 function renderLogRow(entry) {
   const tr = document.createElement("tr");
   tr.className = "log-row";
@@ -1414,6 +1434,7 @@ async function loadLogTracer() {
   logTracerTbody.innerHTML = "";
 
   const scraperEntries = await fetchScraperErrors();
+  const linkedinEntries = await fetchLinkedInEntries();
 
   // A separate session from the main login gate (see LEMMING_STORAGE_KEY's
   // comment) — tryUnlock() elsewhere tries to establish this automatically
@@ -1441,7 +1462,7 @@ async function loadLogTracer() {
     }
   }
 
-  const entries = [...scraperEntries, ...lemmingEntries].sort(
+  const entries = [...scraperEntries, ...linkedinEntries, ...lemmingEntries].sort(
     (a, b) => new Date(b.receivedAt).getTime() - new Date(a.receivedAt).getTime()
   );
 
@@ -1525,7 +1546,13 @@ function goToLogTracerEntry(id) {
 }
 
 async function loadNotificationBar() {
-  const entries = await fetchScraperErrors();
+  // Only sources that don't need login belong here (same reason Lemming's
+  // own entries are left out) — linkedin-log/data.json is public, same as
+  // errors/data.json.
+  const [scraperEntries, linkedinEntries] = await Promise.all([fetchScraperErrors(), fetchLinkedInEntries()]);
+  const entries = [...scraperEntries, ...linkedinEntries].sort(
+    (a, b) => new Date(b.receivedAt).getTime() - new Date(a.receivedAt).getTime()
+  );
   if (entries.length === 0) {
     notifBar.hidden = true;
     return;
