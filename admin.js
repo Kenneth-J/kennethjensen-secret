@@ -28,6 +28,7 @@ const logoutBtn = document.getElementById("logout-btn");
 const tabBtns = document.querySelectorAll(".tab-btn");
 const panels = {
   review: document.getElementById("review-panel"),
+  recommendations: document.getElementById("recommendations-panel"),
   wordcloud: document.getElementById("wordcloud-panel"),
   searchterms: document.getElementById("searchterms-panel"),
   missing: document.getElementById("missing-panel"),
@@ -40,6 +41,18 @@ const panels = {
 const reviewStatus = document.getElementById("review-status");
 const jobList = document.getElementById("job-list");
 const reviewEmpty = document.getElementById("review-empty");
+
+const recoSearchInput = document.getElementById("reco-search");
+const recoSearchBtn = document.getElementById("reco-search-btn");
+const recoCountryAdd = document.getElementById("reco-country-add");
+const recoTagInAdd = document.getElementById("reco-tagin-add");
+const recoTagExAdd = document.getElementById("reco-tagex-add");
+const recoPills = document.getElementById("reco-pills");
+const recoStatus = document.getElementById("reco-status");
+const recoToast = document.getElementById("reco-toast");
+const recoTableWrap = document.getElementById("reco-table-wrap");
+const recoTbody = document.getElementById("reco-tbody");
+const recoEmpty = document.getElementById("reco-empty");
 
 const cloudStatus = document.getElementById("cloud-status");
 const cloudCard = document.getElementById("cloud-card");
@@ -320,12 +333,13 @@ function showApp() {
   logoutBtn.style.display = "inline-block";
 }
 
-const loaded = { review: false, wordcloud: false, searchterms: false, missing: false, clicks: false, health: false, logtracer: false };
+const loaded = { review: false, recommendations: false, wordcloud: false, searchterms: false, missing: false, clicks: false, health: false, logtracer: false };
 
 function setTab(tab) {
   tabBtns.forEach((btn) => btn.classList.toggle("active", btn.dataset.tab === tab));
   Object.entries(panels).forEach(([name, el]) => el.classList.toggle("active", name === tab));
   if (tab === "review" && !loaded.review) { loaded.review = true; loadFlagged(); }
+  if (tab === "recommendations" && !loaded.recommendations) { loaded.recommendations = true; loadRecommendations(); }
   if (tab === "wordcloud" && !loaded.wordcloud) { loaded.wordcloud = true; loadWordCloud(); }
   if (tab === "searchterms" && !loaded.searchterms) { loaded.searchterms = true; loadSearchTerms(); }
   if (tab === "missing" && !loaded.missing) { loaded.missing = true; loadMissingData(); }
@@ -389,6 +403,236 @@ async function loadFlagged() {
   } catch (err) {
     if (err.unauthorized) { clearStoredSession(); showLogin("Session expired. Enter the password again."); return; }
     reviewStatus.textContent = `Failed to load: ${err.message}`;
+  }
+}
+
+// --- Recommendations ---
+// Kenneth's manual curation queue (added 2026-09-24): star 2-5 noteworthy
+// jobs a cycle with a reason. The biweekly LinkedIn cloud routine already
+// ranks Personally Recommended jobs first when it drafts a post, so this
+// tab is purely the curation UI, it never drafts or posts anything itself.
+let recoCountries = [];
+let recoTagsIn = [];
+let recoTagsEx = [];
+let recoTagVocabulary = [];
+let recoJobs = [];
+
+function fmtRecoDate(iso) {
+  if (!iso) return "";
+  return new Date(iso + "T00:00:00Z").toLocaleDateString("en-GB", { day: "numeric", month: "short", timeZone: "UTC" });
+}
+
+function renderRecoPills() {
+  recoPills.innerHTML = "";
+  const addPillGroup = (values, cssClass, onRemove) => {
+    values.forEach((value) => {
+      const pill = document.createElement("span");
+      pill.className = `reco-pill ${cssClass}`;
+      pill.innerHTML = `${escapeHtml(value)} <button type="button" aria-label="Remove ${escapeAttr(value)} filter">&times;</button>`;
+      pill.querySelector("button").addEventListener("click", () => {
+        onRemove(value);
+        renderRecoPills();
+        loadRecommendations();
+      });
+      recoPills.appendChild(pill);
+    });
+  };
+  addPillGroup(recoCountries, "", (v) => { recoCountries = recoCountries.filter((x) => x !== v); });
+  addPillGroup(recoTagsIn, "", (v) => { recoTagsIn = recoTagsIn.filter((x) => x !== v); });
+  addPillGroup(recoTagsEx, "exclude", (v) => { recoTagsEx = recoTagsEx.filter((x) => x !== v); });
+}
+
+function populateRecoTagSelects() {
+  [recoTagInAdd, recoTagExAdd].forEach((sel) => {
+    const label = sel === recoTagInAdd ? "+ must have tag" : "+ exclude tag";
+    sel.innerHTML = `<option value="">${label}</option>`;
+    recoTagVocabulary.forEach((t) => {
+      const opt = document.createElement("option");
+      opt.value = t;
+      opt.textContent = t;
+      sel.appendChild(opt);
+    });
+  });
+}
+
+if (recoCountryAdd) {
+  WORKING_COUNTRY_OPTIONS.forEach((c) => {
+    const opt = document.createElement("option");
+    opt.value = c;
+    opt.textContent = c;
+    recoCountryAdd.appendChild(opt);
+  });
+  recoCountryAdd.addEventListener("change", () => {
+    if (recoCountryAdd.value && !recoCountries.includes(recoCountryAdd.value)) {
+      recoCountries.push(recoCountryAdd.value);
+      recoCountryAdd.value = "";
+      renderRecoPills();
+      loadRecommendations();
+    }
+  });
+}
+if (recoTagInAdd) {
+  recoTagInAdd.addEventListener("change", () => {
+    if (recoTagInAdd.value && !recoTagsIn.includes(recoTagInAdd.value)) {
+      recoTagsIn.push(recoTagInAdd.value);
+      recoTagInAdd.value = "";
+      renderRecoPills();
+      loadRecommendations();
+    }
+  });
+}
+if (recoTagExAdd) {
+  recoTagExAdd.addEventListener("change", () => {
+    if (recoTagExAdd.value && !recoTagsEx.includes(recoTagExAdd.value)) {
+      recoTagsEx.push(recoTagExAdd.value);
+      recoTagExAdd.value = "";
+      renderRecoPills();
+      loadRecommendations();
+    }
+  });
+}
+if (recoSearchBtn) recoSearchBtn.addEventListener("click", () => loadRecommendations());
+if (recoSearchInput) recoSearchInput.addEventListener("keydown", (e) => { if (e.key === "Enter") loadRecommendations(); });
+
+function renderRecoRow(job) {
+  const tr = document.createElement("tr");
+
+  const starTd = document.createElement("td");
+  const starBtn = document.createElement("button");
+  starBtn.type = "button";
+  starBtn.className = `star-btn${job.recommended ? " on" : ""}`;
+  starBtn.innerHTML = "&#9733;";
+  starBtn.title = job.recommended ? "Un-star" : "Star as noteworthy";
+  starTd.appendChild(starBtn);
+  tr.appendChild(starTd);
+
+  const jobTd = document.createElement("td");
+  jobTd.className = "reco-job-cell";
+  const u = trackedJobUrl(job);
+  const titleHtml = u
+    ? `<a href="${escapeAttr(u)}" target="_blank" rel="noopener">${escapeHtml(job.jobTitle || "(untitled)")}</a>`
+    : escapeHtml(job.jobTitle || "(untitled)");
+  jobTd.innerHTML = `
+    ${titleHtml}
+    ${job.experienceLevel ? `<div class="reco-job-meta">${escapeHtml(job.experienceLevel)}</div>` : ""}
+  `;
+  tr.appendChild(jobTd);
+
+  const companyTd = document.createElement("td");
+  companyTd.innerHTML = `
+    ${escapeHtml(job.company || "")}
+    ${job.contactMatch ? `<div class="reco-badge know" title="${escapeAttr(job.contactMatch.name)}">&#128279; know someone</div>` : ""}
+    ${job.alreadyPosted ? `<div class="reco-badge posted">already posted</div>` : ""}
+  `;
+  tr.appendChild(companyTd);
+
+  const locationTd = document.createElement("td");
+  locationTd.innerHTML = `
+    ${escapeHtml(job.location || "")}
+    ${job.workStyle ? `<div class="reco-job-meta">${escapeHtml(job.workStyle)}</div>` : ""}
+  `;
+  tr.appendChild(locationTd);
+
+  const dateTd = document.createElement("td");
+  dateTd.textContent = fmtRecoDate(job.datePosted);
+  tr.appendChild(dateTd);
+
+  const tagsTd = document.createElement("td");
+  tagsTd.className = "reco-tags";
+  tagsTd.innerHTML = (job.tags || []).map((t) => `<span class="reco-tag">${escapeHtml(t)}</span>`).join("");
+  tr.appendChild(tagsTd);
+
+  function buildReasonRow() {
+    const row = document.createElement("tr");
+    row.className = "reco-reason-row";
+    const td = document.createElement("td");
+    td.colSpan = 6;
+    const textarea = document.createElement("textarea");
+    textarea.placeholder = "Why is this noteworthy?";
+    textarea.value = job.recommendationReason || "";
+    textarea.addEventListener("blur", () => saveRecommendation(job, true, textarea.value, starBtn));
+    td.appendChild(textarea);
+    row.appendChild(td);
+    return row;
+  }
+
+  // Pre-built here (not yet attached) for an already-starred job — the
+  // caller appends it right after `tr`, since `tr` isn't in the DOM yet at
+  // this point and `tr.after()` is a silent no-op on a detached node.
+  let reasonRow = job.recommended ? buildReasonRow() : null;
+
+  // Only used from the star-click handler below, by which point `tr` is
+  // definitely attached (the initial render loop already ran) — `tr.after()`
+  // is safe here in a way it isn't above.
+  function ensureReasonRow() {
+    if (reasonRow) return reasonRow;
+    reasonRow = buildReasonRow();
+    tr.after(reasonRow);
+    return reasonRow;
+  }
+
+  starBtn.addEventListener("click", async () => {
+    const next = !job.recommended;
+    if (next) {
+      ensureReasonRow().querySelector("textarea").focus();
+    } else if (reasonRow) {
+      reasonRow.remove();
+      reasonRow = null;
+    }
+    await saveRecommendation(job, next, job.recommendationReason, starBtn);
+  });
+
+  return { tr, reasonRow };
+}
+
+async function saveRecommendation(job, recommended, reason, starBtn) {
+  const prevRecommended = job.recommended;
+  const prevReason = job.recommendationReason;
+  job.recommended = recommended;
+  job.recommendationReason = reason || "";
+  starBtn.classList.toggle("on", recommended);
+  try {
+    await callWorker(`/jobs/${job.id}/recommend`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ recommended, reason: reason || "" }),
+    });
+  } catch (err) {
+    if (err.unauthorized) { clearStoredSession(); showLogin("Session expired. Enter the password again."); return; }
+    job.recommended = prevRecommended;
+    job.recommendationReason = prevReason;
+    starBtn.classList.toggle("on", prevRecommended);
+    showTagToast(recoToast, `Failed to save "${job.jobTitle || "this job"}": ${err.message}`, "error");
+  }
+}
+
+async function loadRecommendations() {
+  recoStatus.textContent = "Loading…";
+  recoTableWrap.style.display = "none";
+  recoTbody.innerHTML = "";
+  recoEmpty.style.display = "none";
+  try {
+    const params = new URLSearchParams({
+      q: recoSearchInput.value.trim(),
+      countries: recoCountries.join(","),
+      tagsInclude: recoTagsIn.join(","),
+      tagsExclude: recoTagsEx.join(","),
+    });
+    const data = await callWorker(`/jobs/recommendations?${params}`);
+    recoStatus.textContent = "";
+    recoJobs = data.jobs;
+    recoTagVocabulary = data.tagVocabulary || [];
+    populateRecoTagSelects();
+    if (!recoJobs.length) { recoEmpty.style.display = "block"; return; }
+    recoTableWrap.style.display = "block";
+    for (const job of recoJobs) {
+      const { tr, reasonRow } = renderRecoRow(job);
+      recoTbody.appendChild(tr);
+      if (reasonRow) recoTbody.appendChild(reasonRow);
+    }
+  } catch (err) {
+    if (err.unauthorized) { clearStoredSession(); showLogin("Session expired. Enter the password again."); return; }
+    showLoadError(recoStatus, err, () => loadRecommendations());
   }
 }
 
@@ -1286,7 +1530,7 @@ logoutBtn.addEventListener("click", () => {
   clearStoredLemmingSession();
   passwordInput.value = "";
   totpInput.value = "";
-  loaded.review = loaded.wordcloud = loaded.searchterms = loaded.missing = loaded.clicks = loaded.health = loaded.logtracer = false;
+  loaded.review = loaded.recommendations = loaded.wordcloud = loaded.searchterms = loaded.missing = loaded.clicks = loaded.health = loaded.logtracer = false;
   setTab("review");
   showLogin();
 });

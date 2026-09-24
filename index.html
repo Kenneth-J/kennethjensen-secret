@@ -214,6 +214,45 @@
   .logtracer-relogin input{
     flex:1;padding:9px 12px;border:1px solid var(--line);border-radius:8px;font-size:13.5px;
   }
+
+  /* Recommendations */
+  .reco-controls{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:16px;}
+  .reco-controls input[type=text]{
+    flex:1;min-width:200px;padding:9px 12px;border:1px solid var(--line);border-radius:8px;font-size:13.5px;
+  }
+  .reco-controls input[type=text]:focus{outline:2px solid var(--accent);outline-offset:-1px;}
+  .reco-controls select{
+    padding:8px 10px;border:1px solid var(--line);border-radius:8px;font-size:13px;background:#fff;color:var(--ink);
+  }
+  .reco-pills{display:flex;flex-wrap:wrap;gap:6px;}
+  .reco-pill{
+    display:inline-flex;align-items:center;gap:4px;background:var(--accent-soft);color:var(--accent);
+    font-size:12px;font-weight:600;padding:3px 6px 3px 10px;border-radius:999px;
+  }
+  .reco-pill.exclude{background:var(--danger-soft);color:var(--danger);}
+  .reco-pill button{border:none;background:none;cursor:pointer;color:inherit;opacity:.7;font-size:13px;padding:2px;}
+  .reco-pill button:hover{opacity:1;}
+  .reco-table td{vertical-align:top;}
+  .star-btn{
+    border:none;background:none;cursor:pointer;font-size:18px;line-height:1;color:var(--line);padding:2px;
+    transition:color .15s,transform .1s;
+  }
+  .star-btn:hover{transform:scale(1.1);}
+  .star-btn.on{color:#e0a622;}
+  .reco-job-cell a{color:inherit;text-decoration:none;font-weight:600;}
+  .reco-job-cell a:hover{color:var(--accent);}
+  .reco-job-meta{color:var(--ink-soft);font-size:12px;margin-top:2px;}
+  .reco-badge{display:inline-block;font-size:10.5px;font-weight:700;padding:2px 8px;border-radius:999px;margin-top:4px;margin-right:4px;}
+  .reco-badge.know{background:var(--up-soft);color:var(--up);}
+  .reco-badge.posted{background:var(--bg-alt);color:var(--ink-soft);}
+  .reco-tags{margin-top:4px;}
+  .reco-tag{display:inline-block;font-size:10.5px;padding:1px 7px;border-radius:6px;background:var(--bg-alt);color:var(--ink-soft);margin:0 4px 2px 0;}
+  .reco-reason-row td{background:var(--bg-alt);border-bottom:1px solid var(--line);}
+  .reco-reason-row textarea{
+    width:100%;min-height:44px;font:inherit;font-size:13px;padding:8px 10px;border:1px solid var(--line);
+    border-radius:8px;resize:vertical;
+  }
+  .reco-reason-row textarea:focus{outline:2px solid var(--accent);outline-offset:-1px;}
 </style>
 </head>
 <body>
@@ -252,6 +291,7 @@
   <div id="app-view" style="display:none;">
     <div class="tabs">
       <button class="tab-btn active" data-tab="review">Flagged Jobs</button>
+      <button class="tab-btn" data-tab="recommendations">Recommendations</button>
       <button class="tab-btn" data-tab="wordcloud">Word Cloud</button>
       <button class="tab-btn" data-tab="searchterms">Search Terms</button>
       <button class="tab-btn" data-tab="missing">Missing Data</button>
@@ -271,6 +311,42 @@
       <div id="review-empty" class="empty-state" style="display:none;">
         <div class="checkmark">✓</div>
         Nothing to review right now.
+      </div>
+    </div>
+
+    <div id="recommendations-panel" class="tab-panel">
+      <div class="section-head">
+        <h1>Recommendations</h1>
+        <p>Active jobs, ranked jobs where you know someone at the company first, then relevancy to the search box, then newest posting on top. Star 2-5 noteworthy ones a cycle and add a reason, the biweekly LinkedIn post draft picks up starred jobs from here automatically. "Already posted" means it went out on a previous LinkedIn draft.</p>
+      </div>
+      <div class="reco-controls">
+        <input type="text" id="reco-search" placeholder="Search title, company, tags...">
+        <select id="reco-country-add"><option value="">+ country</option></select>
+        <select id="reco-tagin-add"><option value="">+ must have tag</option></select>
+        <select id="reco-tagex-add"><option value="">+ exclude tag</option></select>
+        <button class="btn btn-override" id="reco-search-btn">Search</button>
+      </div>
+      <div class="reco-pills" id="reco-pills" style="margin-bottom:14px;"></div>
+      <div id="reco-status" class="status-line"></div>
+      <div id="reco-toast" class="toast-box"></div>
+      <div class="missing-table-wrap" id="reco-table-wrap" style="display:none;">
+        <table class="missing-table reco-table">
+          <thead>
+            <tr>
+              <th></th>
+              <th>Job</th>
+              <th>Company</th>
+              <th>Location</th>
+              <th>Posted</th>
+              <th>Tags</th>
+            </tr>
+          </thead>
+          <tbody id="reco-tbody"></tbody>
+        </table>
+      </div>
+      <div id="reco-empty" class="empty-state" style="display:none;">
+        <div class="checkmark">✓</div>
+        No active jobs match this filter right now.
       </div>
     </div>
 
