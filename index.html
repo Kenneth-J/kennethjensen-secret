@@ -216,6 +216,22 @@
   }
 
   /* Recommendations */
+  .reco-noteworthy{
+    background:#fff;border:1px solid var(--line);border-radius:var(--radius);margin-bottom:18px;overflow:hidden;
+  }
+  .reco-noteworthy summary{
+    list-style:none;cursor:pointer;padding:12px 16px;font-size:13.5px;font-weight:700;color:var(--ink);
+    display:flex;align-items:center;gap:8px;user-select:none;
+  }
+  .reco-noteworthy summary::-webkit-details-marker{display:none;}
+  .reco-noteworthy summary::before{
+    content:"\25B8";display:inline-block;color:var(--ink-soft);transition:transform .15s;font-size:11px;
+  }
+  .reco-noteworthy[open] summary::before{transform:rotate(90deg);}
+  .reco-noteworthy summary:hover{background:var(--bg-alt);}
+  .reco-noteworthy #reco-noteworthy-count{color:var(--accent);}
+  .reco-noteworthy .missing-table-wrap{border:none;border-radius:0;border-top:1px solid var(--line);}
+  .reco-noteworthy .empty-state{padding:16px;font-size:13px;}
   .reco-controls{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:16px;}
   .reco-controls input[type=text]{
     flex:1;min-width:200px;padding:9px 12px;border:1px solid var(--line);border-radius:8px;font-size:13.5px;
@@ -247,12 +263,8 @@
   .reco-badge.posted{background:var(--bg-alt);color:var(--ink-soft);}
   .reco-tags{margin-top:4px;}
   .reco-tag{display:inline-block;font-size:10.5px;padding:1px 7px;border-radius:6px;background:var(--bg-alt);color:var(--ink-soft);margin:0 4px 2px 0;}
-  .reco-reason-row td{background:var(--bg-alt);border-bottom:1px solid var(--line);}
-  .reco-reason-row textarea{
-    width:100%;min-height:44px;font:inherit;font-size:13px;padding:8px 10px;border:1px solid var(--line);
-    border-radius:8px;resize:vertical;
-  }
-  .reco-reason-row textarea:focus{outline:2px solid var(--accent);outline-offset:-1px;}
+  .reco-noteworthy textarea.cell-input{width:100%;min-height:44px;padding:8px 10px;border-radius:8px;resize:vertical;}
+  .reco-noteworthy textarea.cell-input:focus{outline:2px solid var(--accent);outline-offset:-1px;}
 </style>
 </head>
 <body>
@@ -319,6 +331,24 @@
         <h1>Recommendations</h1>
         <p>Active jobs, ranked jobs where you know someone at the company first, then relevancy to the search box, then newest posting on top. Star 2-5 noteworthy ones a cycle and add a reason, the biweekly LinkedIn post draft picks up starred jobs from here automatically. "Already posted" means it went out on a previous LinkedIn draft.</p>
       </div>
+      <details class="reco-noteworthy" id="reco-noteworthy">
+        <summary>Noteworthy jobs (<span id="reco-noteworthy-count">0</span>)</summary>
+        <div class="missing-table-wrap" id="reco-noteworthy-table-wrap" style="display:none;">
+          <table class="missing-table reco-table">
+            <thead>
+              <tr>
+                <th></th>
+                <th>Job</th>
+                <th>Reason</th>
+              </tr>
+            </thead>
+            <tbody id="reco-noteworthy-tbody"></tbody>
+          </table>
+        </div>
+        <div id="reco-noteworthy-empty" class="empty-state" style="display:none;">
+          Nothing starred yet, jobs you mark noteworthy below show up here.
+        </div>
+      </details>
       <div class="reco-controls">
         <input type="text" id="reco-search" placeholder="Search title, company, tags...">
         <select id="reco-country-add"><option value="">+ country</option></select>

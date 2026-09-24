@@ -53,6 +53,10 @@ const recoToast = document.getElementById("reco-toast");
 const recoTableWrap = document.getElementById("reco-table-wrap");
 const recoTbody = document.getElementById("reco-tbody");
 const recoEmpty = document.getElementById("reco-empty");
+const recoNoteworthyCount = document.getElementById("reco-noteworthy-count");
+const recoNoteworthyTableWrap = document.getElementById("reco-noteworthy-table-wrap");
+const recoNoteworthyTbody = document.getElementById("reco-noteworthy-tbody");
+const recoNoteworthyEmpty = document.getElementById("reco-noteworthy-empty");
 
 const cloudStatus = document.getElementById("cloud-status");
 const cloudCard = document.getElementById("cloud-card");
@@ -508,15 +512,25 @@ if (recoTagExAdd) {
 if (recoSearchBtn) recoSearchBtn.addEventListener("click", () => loadRecommendations());
 if (recoSearchInput) recoSearchInput.addEventListener("keydown", (e) => { if (e.key === "Enter") loadRecommendations(); });
 
+// Main table only ever shows not-yet-starred jobs (see renderRecoSections()
+// below) — starring one here saves it, then re-renders both sections so
+// the row moves down into the Noteworthy section, where its reason
+// textarea lives. No inline reason UI here at all any more.
 function renderRecoRow(job) {
   const tr = document.createElement("tr");
 
   const starTd = document.createElement("td");
   const starBtn = document.createElement("button");
   starBtn.type = "button";
-  starBtn.className = `star-btn${job.recommended ? " on" : ""}`;
+  starBtn.className = "star-btn";
   starBtn.innerHTML = "&#9733;";
-  starBtn.title = job.recommended ? "Un-star" : "Star as noteworthy";
+  starBtn.title = "Star as noteworthy";
+  starBtn.addEventListener("click", async () => {
+    starBtn.disabled = true;
+    const ok = await saveRecommendation(job, true, job.recommendationReason || "", starBtn);
+    if (!ok) starBtn.disabled = false;
+    else renderRecoSections();
+  });
   starTd.appendChild(starBtn);
   tr.appendChild(starTd);
 
@@ -556,67 +570,103 @@ function renderRecoRow(job) {
   tagsTd.innerHTML = (job.tags || []).map((t) => `<span class="reco-tag">${escapeHtml(t)}</span>`).join("");
   tr.appendChild(tagsTd);
 
-  function buildReasonRow() {
-    const row = document.createElement("tr");
-    row.className = "reco-reason-row";
-    const td = document.createElement("td");
-    td.colSpan = 6;
-    const textarea = document.createElement("textarea");
-    textarea.className = "cell-input";
-    textarea.placeholder = "Why is this noteworthy?";
-    textarea.value = job.recommendationReason || "";
+  return tr;
+}
 
-    // Debounced autosave (700ms after the last keystroke, same pattern as
-    // Missing Data's wireCellSave()), plus an immediate save on blur — a
-    // typed reason should never be lost to switching tabs or closing the
-    // page before the debounce fires. Star stays on throughout: the point
-    // of this textarea only existing while `job.recommended` is true.
-    let saveTimer = null;
-    const saveReason = async () => {
-      clearTimeout(saveTimer);
-      const ok = await saveRecommendation(job, true, textarea.value, starBtn);
-      markCellState(textarea, ok ? "saved" : "error");
-      if (ok) setTimeout(() => markCellState(textarea, null), 1500);
-    };
-    textarea.addEventListener("input", () => {
-      markCellState(textarea, "dirty");
-      clearTimeout(saveTimer);
-      saveTimer = setTimeout(saveReason, 700);
-    });
-    textarea.addEventListener("blur", saveReason);
+// The collapsible Noteworthy section — every job here has recommended ===
+// true, so unlike renderRecoRow() the reason textarea is always present,
+// not conditional, and the star button always means "un-star".
+function renderNoteworthyRow(job) {
+  const tr = document.createElement("tr");
 
-    td.appendChild(textarea);
-    row.appendChild(td);
-    return row;
-  }
-
-  // Pre-built here (not yet attached) for an already-starred job — the
-  // caller appends it right after `tr`, since `tr` isn't in the DOM yet at
-  // this point and `tr.after()` is a silent no-op on a detached node.
-  let reasonRow = job.recommended ? buildReasonRow() : null;
-
-  // Only used from the star-click handler below, by which point `tr` is
-  // definitely attached (the initial render loop already ran) — `tr.after()`
-  // is safe here in a way it isn't above.
-  function ensureReasonRow() {
-    if (reasonRow) return reasonRow;
-    reasonRow = buildReasonRow();
-    tr.after(reasonRow);
-    return reasonRow;
-  }
-
+  const starTd = document.createElement("td");
+  const starBtn = document.createElement("button");
+  starBtn.type = "button";
+  starBtn.className = "star-btn on";
+  starBtn.innerHTML = "&#9733;";
+  starBtn.title = "Un-star";
   starBtn.addEventListener("click", async () => {
-    const next = !job.recommended;
-    if (next) {
-      ensureReasonRow().querySelector("textarea").focus();
-    } else if (reasonRow) {
-      reasonRow.remove();
-      reasonRow = null;
-    }
-    await saveRecommendation(job, next, job.recommendationReason, starBtn);
+    starBtn.disabled = true;
+    const ok = await saveRecommendation(job, false, job.recommendationReason || "", starBtn);
+    if (!ok) starBtn.disabled = false;
+    else renderRecoSections();
   });
+  starTd.appendChild(starBtn);
+  tr.appendChild(starTd);
 
-  return { tr, reasonRow };
+  const jobTd = document.createElement("td");
+  jobTd.className = "reco-job-cell";
+  const u = trackedJobUrl(job);
+  const titleHtml = u
+    ? `<a href="${escapeAttr(u)}" target="_blank" rel="noopener">${escapeHtml(job.jobTitle || "(untitled)")}</a>`
+    : escapeHtml(job.jobTitle || "(untitled)");
+  jobTd.innerHTML = `
+    ${titleHtml}
+    <div class="reco-job-meta">${escapeHtml(job.company || "")}</div>
+    ${job.contactMatch ? contactBadgeHtml(job.contactMatch) : ""}
+    ${job.alreadyPosted ? `<div class="reco-badge posted">already posted</div>` : ""}
+  `;
+  tr.appendChild(jobTd);
+
+  const reasonTd = document.createElement("td");
+  const textarea = document.createElement("textarea");
+  textarea.className = "cell-input";
+  textarea.placeholder = "Why is this noteworthy?";
+  textarea.value = job.recommendationReason || "";
+
+  // Debounced autosave (700ms after the last keystroke, same pattern as
+  // Missing Data's wireCellSave()), plus an immediate save on blur — a
+  // typed reason should never be lost to switching tabs or closing the
+  // page before the debounce fires.
+  let saveTimer = null;
+  const saveReason = async () => {
+    clearTimeout(saveTimer);
+    const ok = await saveRecommendation(job, true, textarea.value, starBtn);
+    markCellState(textarea, ok ? "saved" : "error");
+    if (ok) setTimeout(() => markCellState(textarea, null), 1500);
+  };
+  textarea.addEventListener("input", () => {
+    markCellState(textarea, "dirty");
+    clearTimeout(saveTimer);
+    saveTimer = setTimeout(saveReason, 700);
+  });
+  textarea.addEventListener("blur", saveReason);
+  reasonTd.appendChild(textarea);
+  tr.appendChild(reasonTd);
+
+  return tr;
+}
+
+// Single source of truth for both tables: splits the already-fetched
+// recoJobs by `recommended` and re-renders both from scratch. Called after
+// initial load and after every star/un-star save, so a job visibly moves
+// between the two sections instead of the main table ever showing a
+// starred job (per Kenneth's request — Noteworthy is where starred jobs
+// live now, the main table is the "not yet decided" queue).
+function renderRecoSections() {
+  const noteworthy = recoJobs.filter((j) => j.recommended);
+  const others = recoJobs.filter((j) => !j.recommended);
+
+  recoNoteworthyCount.textContent = String(noteworthy.length);
+  recoNoteworthyTbody.innerHTML = "";
+  if (noteworthy.length === 0) {
+    recoNoteworthyTableWrap.style.display = "none";
+    recoNoteworthyEmpty.style.display = "block";
+  } else {
+    recoNoteworthyEmpty.style.display = "none";
+    recoNoteworthyTableWrap.style.display = "block";
+    for (const job of noteworthy) recoNoteworthyTbody.appendChild(renderNoteworthyRow(job));
+  }
+
+  recoTbody.innerHTML = "";
+  if (others.length === 0) {
+    recoTableWrap.style.display = "none";
+    recoEmpty.style.display = "block";
+  } else {
+    recoEmpty.style.display = "none";
+    recoTableWrap.style.display = "block";
+    for (const job of others) recoTbody.appendChild(renderRecoRow(job));
+  }
 }
 
 async function saveRecommendation(job, recommended, reason, starBtn) {
@@ -647,6 +697,9 @@ async function loadRecommendations() {
   recoTableWrap.style.display = "none";
   recoTbody.innerHTML = "";
   recoEmpty.style.display = "none";
+  recoNoteworthyTableWrap.style.display = "none";
+  recoNoteworthyTbody.innerHTML = "";
+  recoNoteworthyEmpty.style.display = "none";
   try {
     const params = new URLSearchParams({
       q: recoSearchInput.value.trim(),
@@ -659,13 +712,7 @@ async function loadRecommendations() {
     recoJobs = data.jobs;
     recoTagVocabulary = data.tagVocabulary || [];
     populateRecoTagSelects();
-    if (!recoJobs.length) { recoEmpty.style.display = "block"; return; }
-    recoTableWrap.style.display = "block";
-    for (const job of recoJobs) {
-      const { tr, reasonRow } = renderRecoRow(job);
-      recoTbody.appendChild(tr);
-      if (reasonRow) recoTbody.appendChild(reasonRow);
-    }
+    renderRecoSections();
   } catch (err) {
     if (err.unauthorized) { clearStoredSession(); showLogin("Session expired. Enter the password again."); return; }
     showLoadError(recoStatus, err, () => loadRecommendations());
