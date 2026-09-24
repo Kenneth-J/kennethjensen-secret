@@ -604,9 +604,18 @@ function renderNoteworthyRow(job) {
     ${titleHtml}
     <div class="reco-job-meta">${escapeHtml(job.company || "")}</div>
     ${job.contactMatch ? contactBadgeHtml(job.contactMatch) : ""}
-    ${job.alreadyPosted ? `<div class="reco-badge posted">already posted</div>` : ""}
   `;
   tr.appendChild(jobTd);
+
+  // Explicit either-way marker (not just a badge that appears only when
+  // true) — Kenneth asked to see whether a starred job already went out on
+  // the biweekly LinkedIn post or not, at a glance, not just infer "no
+  // badge" as "not posted".
+  const postedTd = document.createElement("td");
+  postedTd.innerHTML = job.alreadyPosted
+    ? `<span class="reco-posted-status posted">&#10003; posted</span>`
+    : `<span class="reco-posted-status pending">not yet</span>`;
+  tr.appendChild(postedTd);
 
   const reasonTd = document.createElement("td");
   const textarea = document.createElement("textarea");
