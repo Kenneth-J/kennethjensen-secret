@@ -1,10 +1,10 @@
 {
-  "generatedAt": "2026-10-05T02:23:05.790Z",
+  "generatedAt": "2026-10-06T03:24:59.454Z",
   "sites": [
     {
       "site": "landing.jobs",
       "status": "down",
-      "runsDegraded": 15,
+      "runsDegraded": 16,
       "shouldAlert": false,
       "checks": {
         "reachability": {
@@ -89,7 +89,7 @@
         },
         "freshness": {
           "status": "fail",
-          "daysSinceLastSeen": 31.3,
+          "daysSinceLastSeen": 32.3,
           "lastSeen": "2026-09-03T19:29:11.136Z"
         },
         "saveSuccess": {
@@ -170,7 +170,7 @@
         },
         "matchRate": {
           "status": "ok",
-          "fetched": 300,
+          "fetched": 290,
           "matched": 8,
           "matchPercent": 3
         },
@@ -182,13 +182,13 @@
         },
         "yield": {
           "status": "ok",
-          "fetched": 300,
-          "previousFetched": 321
+          "fetched": 290,
+          "previousFetched": 300
         },
         "freshness": {
           "status": "ok",
           "daysSinceLastSeen": 0,
-          "lastSeen": "2026-10-05T01:42:40.095Z"
+          "lastSeen": "2026-10-06T02:46:50.728Z"
         },
         "saveSuccess": {
           "status": "ok",
@@ -213,64 +213,64 @@
             {
               "field": "Location",
               "emptyCount": 14,
-              "total": 353,
+              "total": 358,
               "emptyPercent": 4
             },
             {
               "field": "Working Country",
               "emptyCount": 14,
-              "total": 353,
+              "total": 358,
               "emptyPercent": 4
             },
             {
               "field": "City",
-              "emptyCount": 137,
-              "total": 353,
+              "emptyCount": 140,
+              "total": 358,
               "emptyPercent": 39
             },
             {
               "field": "Employment Type",
-              "emptyCount": 353,
-              "total": 353,
+              "emptyCount": 358,
+              "total": 358,
               "emptyPercent": 100
             },
             {
               "field": "Salary",
-              "emptyCount": 353,
-              "total": 353,
+              "emptyCount": 358,
+              "total": 358,
               "emptyPercent": 100
             },
             {
               "field": "Date Posted",
               "emptyCount": 0,
-              "total": 353,
+              "total": 358,
               "emptyPercent": 0
             },
             {
               "field": "Experience Level",
-              "emptyCount": 240,
-              "total": 353,
+              "emptyCount": 245,
+              "total": 358,
               "emptyPercent": 68
             },
             {
               "field": "Company Size",
-              "emptyCount": 353,
-              "total": 353,
+              "emptyCount": 358,
+              "total": 358,
               "emptyPercent": 100
             },
             {
               "field": "Raw Description",
-              "emptyCount": 180,
-              "total": 353,
+              "emptyCount": 181,
+              "total": 358,
               "emptyPercent": 51
             }
           ]
         },
         "matchRate": {
           "status": "ok",
-          "fetched": 1207,
-          "matched": 353,
-          "matchPercent": 29
+          "fetched": 1384,
+          "matched": 358,
+          "matchPercent": 26
         },
         "locationDropped": {
           "status": "info",
@@ -280,17 +280,17 @@
         },
         "yield": {
           "status": "ok",
-          "fetched": 1207,
-          "previousFetched": 1393
+          "fetched": 1384,
+          "previousFetched": 1207
         },
         "freshness": {
           "status": "ok",
           "daysSinceLastSeen": 0,
-          "lastSeen": "2026-10-05T01:58:14.221Z"
+          "lastSeen": "2026-10-06T02:57:11.015Z"
         },
         "saveSuccess": {
           "status": "ok",
-          "saved": 353,
+          "saved": 358,
           "saveFailed": 0
         }
       }
@@ -298,7 +298,7 @@
     {
       "site": "deunemployment.com",
       "status": "down",
-      "runsDegraded": 15,
+      "runsDegraded": 16,
       "shouldAlert": false,
       "checks": {
         "reachability": {
@@ -383,7 +383,7 @@
         },
         "freshness": {
           "status": "fail",
-          "daysSinceLastSeen": 24.7,
+          "daysSinceLastSeen": 25.7,
           "lastSeen": "2026-09-10T10:10:52.576Z"
         },
         "saveSuccess": {
@@ -432,9 +432,9 @@
             },
             {
               "field": "Salary",
-              "emptyCount": 2,
+              "emptyCount": 1,
               "total": 2,
-              "emptyPercent": 100
+              "emptyPercent": 50
             },
             {
               "field": "Date Posted",
@@ -482,7 +482,7 @@
         "freshness": {
           "status": "ok",
           "daysSinceLastSeen": 0,
-          "lastSeen": "2026-10-05T01:58:17.510Z"
+          "lastSeen": "2026-10-06T02:57:16.129Z"
         },
         "saveSuccess": {
           "status": "ok",
@@ -580,7 +580,7 @@
         "freshness": {
           "status": "ok",
           "daysSinceLastSeen": 0,
-          "lastSeen": "2026-10-05T01:58:26.302Z"
+          "lastSeen": "2026-10-06T02:57:23.668Z"
         },
         "saveSuccess": {
           "status": "ok",
@@ -591,8 +591,8 @@
     },
     {
       "site": "thehub.io",
-      "status": "healthy",
-      "runsDegraded": 0,
+      "status": "degraded",
+      "runsDegraded": 1,
       "shouldAlert": false,
       "checks": {
         "reachability": {
@@ -605,93 +605,84 @@
             {
               "field": "Location",
               "emptyCount": 0,
-              "total": 1,
-              "emptyPercent": 0
+              "total": 0,
+              "emptyPercent": null
             },
             {
               "field": "Working Country",
               "emptyCount": 0,
-              "total": 1,
-              "emptyPercent": 0
+              "total": 0,
+              "emptyPercent": null
             },
             {
               "field": "City",
               "emptyCount": 0,
-              "total": 1,
-              "emptyPercent": 0
+              "total": 0,
+              "emptyPercent": null
             },
             {
               "field": "Employment Type",
               "emptyCount": 0,
-              "total": 1,
-              "emptyPercent": 0
+              "total": 0,
+              "emptyPercent": null
             },
             {
               "field": "Salary",
-              "emptyCount": 1,
-              "total": 1,
-              "emptyPercent": 100
+              "emptyCount": 0,
+              "total": 0,
+              "emptyPercent": null
             },
             {
               "field": "Date Posted",
-              "emptyCount": 1,
-              "total": 1,
-              "emptyPercent": 100
+              "emptyCount": 0,
+              "total": 0,
+              "emptyPercent": null
             },
             {
               "field": "Experience Level",
               "emptyCount": 0,
-              "total": 1,
-              "emptyPercent": 0
+              "total": 0,
+              "emptyPercent": null
             },
             {
               "field": "Company Size",
-              "emptyCount": 1,
-              "total": 1,
-              "emptyPercent": 100
+              "emptyCount": 0,
+              "total": 0,
+              "emptyPercent": null
             },
             {
               "field": "Raw Description",
-              "emptyCount": 1,
-              "total": 1,
-              "emptyPercent": 100
+              "emptyCount": 0,
+              "total": 0,
+              "emptyPercent": null
             }
           ]
         },
         "matchRate": {
           "status": "ok",
-          "fetched": 203,
-          "matched": 1,
-          "matchPercent": 0
+          "fetched": 0,
+          "matched": 0,
+          "matchPercent": null
         },
         "locationDropped": {
           "status": "info",
-          "dropped": 27,
-          "droppedPercent": 96,
-          "sampleLocations": [
-            "Madrid, Spain",
-            "Hamburg, Germany",
-            "Berlin, Germany",
-            "London, United Kingdom",
-            "Amsterdam, Netherlands",
-            "Munich, Germany",
-            "Milan, Italy",
-            "Paris, France"
-          ]
+          "dropped": 0,
+          "droppedPercent": null,
+          "sampleLocations": []
         },
         "yield": {
-          "status": "ok",
-          "fetched": 203,
-          "previousFetched": 202
+          "status": "fail",
+          "fetched": 0,
+          "previousFetched": 203
         },
         "freshness": {
           "status": "ok",
-          "daysSinceLastSeen": 0,
+          "daysSinceLastSeen": 1,
           "lastSeen": "2026-10-05T01:59:09.504Z"
         },
         "saveSuccess": {
           "status": "ok",
-          "saved": 1,
+          "saved": 0,
           "saveFailed": 0
         }
       }
@@ -883,7 +874,7 @@
         "freshness": {
           "status": "ok",
           "daysSinceLastSeen": 0,
-          "lastSeen": "2026-10-05T01:59:10.364Z"
+          "lastSeen": "2026-10-06T02:57:40.006Z"
         },
         "saveSuccess": {
           "status": "ok",
@@ -943,9 +934,9 @@
             },
             {
               "field": "Experience Level",
-              "emptyCount": 37,
+              "emptyCount": 40,
               "total": 75,
-              "emptyPercent": 49
+              "emptyPercent": 53
             },
             {
               "field": "Company Size",
@@ -963,9 +954,9 @@
         },
         "matchRate": {
           "status": "ok",
-          "fetched": 95,
+          "fetched": 96,
           "matched": 75,
-          "matchPercent": 79
+          "matchPercent": 78
         },
         "locationDropped": {
           "status": "info",
@@ -977,13 +968,13 @@
         },
         "yield": {
           "status": "ok",
-          "fetched": 95,
-          "previousFetched": 90
+          "fetched": 96,
+          "previousFetched": 95
         },
         "freshness": {
           "status": "ok",
           "daysSinceLastSeen": 0,
-          "lastSeen": "2026-10-05T02:06:34.268Z"
+          "lastSeen": "2026-10-06T03:05:19.086Z"
         },
         "saveSuccess": {
           "status": "ok",
@@ -1008,63 +999,63 @@
             {
               "field": "Location",
               "emptyCount": 0,
-              "total": 454,
+              "total": 459,
               "emptyPercent": 0
             },
             {
               "field": "Working Country",
               "emptyCount": 0,
-              "total": 454,
+              "total": 459,
               "emptyPercent": 0
             },
             {
               "field": "City",
-              "emptyCount": 204,
-              "total": 454,
-              "emptyPercent": 45
+              "emptyCount": 209,
+              "total": 459,
+              "emptyPercent": 46
             },
             {
               "field": "Employment Type",
               "emptyCount": 19,
-              "total": 454,
+              "total": 459,
               "emptyPercent": 4
             },
             {
               "field": "Salary",
-              "emptyCount": 454,
-              "total": 454,
+              "emptyCount": 459,
+              "total": 459,
               "emptyPercent": 100
             },
             {
               "field": "Date Posted",
               "emptyCount": 0,
-              "total": 454,
+              "total": 459,
               "emptyPercent": 0
             },
             {
               "field": "Experience Level",
-              "emptyCount": 218,
-              "total": 454,
-              "emptyPercent": 48
+              "emptyCount": 232,
+              "total": 459,
+              "emptyPercent": 51
             },
             {
               "field": "Company Size",
-              "emptyCount": 454,
-              "total": 454,
+              "emptyCount": 459,
+              "total": 459,
               "emptyPercent": 100
             },
             {
               "field": "Raw Description",
               "emptyCount": 0,
-              "total": 454,
+              "total": 459,
               "emptyPercent": 0
             }
           ]
         },
         "matchRate": {
           "status": "ok",
-          "fetched": 3452,
-          "matched": 454,
+          "fetched": 3516,
+          "matched": 459,
           "matchPercent": 13
         },
         "locationDropped": {
@@ -1078,17 +1069,17 @@
         },
         "yield": {
           "status": "ok",
-          "fetched": 3452,
-          "previousFetched": 3610
+          "fetched": 3516,
+          "previousFetched": 3452
         },
         "freshness": {
           "status": "ok",
           "daysSinceLastSeen": 0,
-          "lastSeen": "2026-10-05T02:14:22.139Z"
+          "lastSeen": "2026-10-06T03:14:57.791Z"
         },
         "saveSuccess": {
           "status": "ok",
-          "saved": 454,
+          "saved": 459,
           "saveFailed": 0
         }
       }
@@ -1109,63 +1100,63 @@
             {
               "field": "Location",
               "emptyCount": 0,
-              "total": 160,
+              "total": 157,
               "emptyPercent": 0
             },
             {
               "field": "Working Country",
               "emptyCount": 0,
-              "total": 160,
+              "total": 157,
               "emptyPercent": 0
             },
             {
               "field": "City",
-              "emptyCount": 103,
-              "total": 160,
-              "emptyPercent": 64
+              "emptyCount": 106,
+              "total": 157,
+              "emptyPercent": 68
             },
             {
               "field": "Employment Type",
-              "emptyCount": 160,
-              "total": 160,
+              "emptyCount": 157,
+              "total": 157,
               "emptyPercent": 100
             },
             {
               "field": "Salary",
-              "emptyCount": 160,
-              "total": 160,
+              "emptyCount": 157,
+              "total": 157,
               "emptyPercent": 100
             },
             {
               "field": "Date Posted",
               "emptyCount": 0,
-              "total": 160,
+              "total": 157,
               "emptyPercent": 0
             },
             {
               "field": "Experience Level",
-              "emptyCount": 135,
-              "total": 160,
-              "emptyPercent": 84
+              "emptyCount": 134,
+              "total": 157,
+              "emptyPercent": 85
             },
             {
               "field": "Company Size",
-              "emptyCount": 160,
-              "total": 160,
+              "emptyCount": 157,
+              "total": 157,
               "emptyPercent": 100
             },
             {
               "field": "Raw Description",
               "emptyCount": 0,
-              "total": 160,
+              "total": 157,
               "emptyPercent": 0
             }
           ]
         },
         "matchRate": {
           "status": "ok",
-          "fetched": 982,
-          "matched": 160,
+          "fetched": 984,
+          "matched": 157,
           "matchPercent": 16
         },
         "locationDropped": {
@@ -1176,17 +1167,17 @@
         },
         "yield": {
           "status": "ok",
-          "fetched": 982,
-          "previousFetched": 1057
+          "fetched": 984,
+          "previousFetched": 982
         },
         "freshness": {
           "status": "ok",
           "daysSinceLastSeen": 0,
-          "lastSeen": "2026-10-05T02:17:43.697Z"
+          "lastSeen": "2026-10-06T03:18:46.357Z"
         },
         "saveSuccess": {
           "status": "ok",
-          "saved": 160,
+          "saved": 157,
           "saveFailed": 0
         }
       }
@@ -1194,7 +1185,7 @@
     {
       "site": "duunitori.fi",
       "status": "down",
-      "runsDegraded": 15,
+      "runsDegraded": 16,
       "shouldAlert": false,
       "checks": {
         "reachability": {
@@ -1340,9 +1331,9 @@
             },
             {
               "field": "Experience Level",
-              "emptyCount": 23,
+              "emptyCount": 22,
               "total": 24,
-              "emptyPercent": 96
+              "emptyPercent": 92
             },
             {
               "field": "Company Size",
@@ -1360,14 +1351,14 @@
         },
         "matchRate": {
           "status": "ok",
-          "fetched": 197,
+          "fetched": 204,
           "matched": 24,
           "matchPercent": 12
         },
         "locationDropped": {
           "status": "info",
-          "dropped": 8,
-          "droppedPercent": 25,
+          "dropped": 7,
+          "droppedPercent": 23,
           "sampleLocations": [
             "Varkaus",
             "Kerava",
@@ -1380,13 +1371,13 @@
         },
         "yield": {
           "status": "ok",
-          "fetched": 197,
+          "fetched": 204,
           "previousFetched": 197
         },
         "freshness": {
           "status": "ok",
           "daysSinceLastSeen": 0,
-          "lastSeen": "2026-10-05T02:18:23.034Z"
+          "lastSeen": "2026-10-06T03:19:27.543Z"
         },
         "saveSuccess": {
           "status": "ok",
@@ -1411,64 +1402,64 @@
             {
               "field": "Location",
               "emptyCount": 0,
-              "total": 2,
+              "total": 3,
               "emptyPercent": 0
             },
             {
               "field": "Working Country",
               "emptyCount": 0,
-              "total": 2,
+              "total": 3,
               "emptyPercent": 0
             },
             {
               "field": "City",
-              "emptyCount": 0,
-              "total": 2,
-              "emptyPercent": 0
+              "emptyCount": 1,
+              "total": 3,
+              "emptyPercent": 33
             },
             {
               "field": "Employment Type",
               "emptyCount": 0,
-              "total": 2,
+              "total": 3,
               "emptyPercent": 0
             },
             {
               "field": "Salary",
-              "emptyCount": 2,
-              "total": 2,
+              "emptyCount": 3,
+              "total": 3,
               "emptyPercent": 100
             },
             {
               "field": "Date Posted",
               "emptyCount": 0,
-              "total": 2,
+              "total": 3,
               "emptyPercent": 0
             },
             {
               "field": "Experience Level",
-              "emptyCount": 1,
-              "total": 2,
-              "emptyPercent": 50
+              "emptyCount": 2,
+              "total": 3,
+              "emptyPercent": 67
             },
             {
               "field": "Company Size",
-              "emptyCount": 2,
-              "total": 2,
+              "emptyCount": 3,
+              "total": 3,
               "emptyPercent": 100
             },
             {
               "field": "Raw Description",
               "emptyCount": 0,
-              "total": 2,
+              "total": 3,
               "emptyPercent": 0
             }
           ]
         },
         "matchRate": {
           "status": "ok",
-          "fetched": 67,
-          "matched": 2,
-          "matchPercent": 3
+          "fetched": 77,
+          "matched": 3,
+          "matchPercent": 4
         },
         "locationDropped": {
           "status": "info",
@@ -1478,17 +1469,17 @@
         },
         "yield": {
           "status": "ok",
-          "fetched": 67,
-          "previousFetched": 70
+          "fetched": 77,
+          "previousFetched": 67
         },
         "freshness": {
           "status": "ok",
           "daysSinceLastSeen": 0,
-          "lastSeen": "2026-10-05T02:18:31.699Z"
+          "lastSeen": "2026-10-06T03:19:37.809Z"
         },
         "saveSuccess": {
           "status": "ok",
-          "saved": 2,
+          "saved": 3,
           "saveFailed": 0
         }
       }
@@ -1509,64 +1500,64 @@
             {
               "field": "Location",
               "emptyCount": 0,
-              "total": 10,
+              "total": 9,
               "emptyPercent": 0
             },
             {
               "field": "Working Country",
               "emptyCount": 0,
-              "total": 10,
+              "total": 9,
               "emptyPercent": 0
             },
             {
               "field": "City",
-              "emptyCount": 10,
-              "total": 10,
+              "emptyCount": 9,
+              "total": 9,
               "emptyPercent": 100
             },
             {
               "field": "Employment Type",
-              "emptyCount": 10,
-              "total": 10,
+              "emptyCount": 9,
+              "total": 9,
               "emptyPercent": 100
             },
             {
               "field": "Salary",
-              "emptyCount": 10,
-              "total": 10,
+              "emptyCount": 9,
+              "total": 9,
               "emptyPercent": 100
             },
             {
               "field": "Date Posted",
               "emptyCount": 0,
-              "total": 10,
+              "total": 9,
               "emptyPercent": 0
             },
             {
               "field": "Experience Level",
-              "emptyCount": 10,
-              "total": 10,
+              "emptyCount": 9,
+              "total": 9,
               "emptyPercent": 100
             },
             {
               "field": "Company Size",
-              "emptyCount": 10,
-              "total": 10,
+              "emptyCount": 9,
+              "total": 9,
               "emptyPercent": 100
             },
             {
               "field": "Raw Description",
-              "emptyCount": 10,
-              "total": 10,
+              "emptyCount": 9,
+              "total": 9,
               "emptyPercent": 100
             }
           ]
         },
         "matchRate": {
           "status": "ok",
-          "fetched": 76,
-          "matched": 10,
-          "matchPercent": 13
+          "fetched": 78,
+          "matched": 9,
+          "matchPercent": 12
         },
         "locationDropped": {
           "status": "info",
@@ -1576,17 +1567,17 @@
         },
         "yield": {
           "status": "ok",
-          "fetched": 76,
-          "previousFetched": 79
+          "fetched": 78,
+          "previousFetched": 76
         },
         "freshness": {
           "status": "ok",
           "daysSinceLastSeen": 0,
-          "lastSeen": "2026-10-05T02:19:26.945Z"
+          "lastSeen": "2026-10-06T03:20:31.667Z"
         },
         "saveSuccess": {
           "status": "ok",
-          "saved": 10,
+          "saved": 9,
           "saveFailed": 0
         }
       }
@@ -1680,7 +1671,7 @@
         "freshness": {
           "status": "ok",
           "daysSinceLastSeen": 0,
-          "lastSeen": "2026-10-05T02:20:02.915Z"
+          "lastSeen": "2026-10-06T03:21:06.592Z"
         },
         "saveSuccess": {
           "status": "ok",
@@ -1705,64 +1696,64 @@
             {
               "field": "Location",
               "emptyCount": 0,
-              "total": 22,
+              "total": 17,
               "emptyPercent": 0
             },
             {
               "field": "Working Country",
               "emptyCount": 0,
-              "total": 22,
+              "total": 17,
               "emptyPercent": 0
             },
             {
               "field": "City",
-              "emptyCount": 12,
-              "total": 22,
-              "emptyPercent": 55
+              "emptyCount": 9,
+              "total": 17,
+              "emptyPercent": 53
             },
             {
               "field": "Employment Type",
               "emptyCount": 0,
-              "total": 22,
+              "total": 17,
               "emptyPercent": 0
             },
             {
               "field": "Salary",
-              "emptyCount": 11,
-              "total": 22,
-              "emptyPercent": 50
+              "emptyCount": 8,
+              "total": 17,
+              "emptyPercent": 47
             },
             {
               "field": "Date Posted",
               "emptyCount": 0,
-              "total": 22,
+              "total": 17,
               "emptyPercent": 0
             },
             {
               "field": "Experience Level",
-              "emptyCount": 16,
-              "total": 22,
-              "emptyPercent": 73
+              "emptyCount": 11,
+              "total": 17,
+              "emptyPercent": 65
             },
             {
               "field": "Company Size",
-              "emptyCount": 22,
-              "total": 22,
+              "emptyCount": 17,
+              "total": 17,
               "emptyPercent": 100
             },
             {
               "field": "Raw Description",
               "emptyCount": 0,
-              "total": 22,
+              "total": 17,
               "emptyPercent": 0
             }
           ]
         },
         "matchRate": {
           "status": "ok",
-          "fetched": 150,
-          "matched": 22,
-          "matchPercent": 15
+          "fetched": 146,
+          "matched": 17,
+          "matchPercent": 12
         },
         "locationDropped": {
           "status": "info",
@@ -1772,17 +1763,17 @@
         },
         "yield": {
           "status": "ok",
-          "fetched": 150,
-          "previousFetched": 153
+          "fetched": 146,
+          "previousFetched": 150
         },
         "freshness": {
           "status": "ok",
           "daysSinceLastSeen": 0,
-          "lastSeen": "2026-10-05T02:20:37.687Z"
+          "lastSeen": "2026-10-06T03:21:38.205Z"
         },
         "saveSuccess": {
           "status": "ok",
-          "saved": 22,
+          "saved": 17,
           "saveFailed": 0
         }
       }
@@ -1803,63 +1794,63 @@
             {
               "field": "Location",
               "emptyCount": 0,
-              "total": 49,
+              "total": 51,
               "emptyPercent": 0
             },
             {
               "field": "Working Country",
               "emptyCount": 0,
-              "total": 49,
+              "total": 51,
               "emptyPercent": 0
             },
             {
               "field": "City",
-              "emptyCount": 49,
-              "total": 49,
+              "emptyCount": 51,
+              "total": 51,
               "emptyPercent": 100
             },
             {
               "field": "Employment Type",
-              "emptyCount": 49,
-              "total": 49,
+              "emptyCount": 51,
+              "total": 51,
               "emptyPercent": 100
             },
             {
               "field": "Salary",
               "emptyCount": 0,
-              "total": 49,
+              "total": 51,
               "emptyPercent": 0
             },
             {
               "field": "Date Posted",
               "emptyCount": 0,
-              "total": 49,
+              "total": 51,
               "emptyPercent": 0
             },
             {
               "field": "Experience Level",
-              "emptyCount": 19,
-              "total": 49,
+              "emptyCount": 20,
+              "total": 51,
               "emptyPercent": 39
             },
             {
               "field": "Company Size",
-              "emptyCount": 49,
-              "total": 49,
+              "emptyCount": 51,
+              "total": 51,
               "emptyPercent": 100
             },
             {
               "field": "Raw Description",
-              "emptyCount": 17,
-              "total": 49,
-              "emptyPercent": 35
+              "emptyCount": 19,
+              "total": 51,
+              "emptyPercent": 37
             }
           ]
         },
         "matchRate": {
           "status": "ok",
-          "fetched": 2067,
-          "matched": 49,
+          "fetched": 2168,
+          "matched": 51,
           "matchPercent": 2
         },
         "locationDropped": {
@@ -1870,17 +1861,17 @@
         },
         "yield": {
           "status": "ok",
-          "fetched": 2067,
-          "previousFetched": 2147
+          "fetched": 2168,
+          "previousFetched": 2067
         },
         "freshness": {
           "status": "ok",
           "daysSinceLastSeen": 0,
-          "lastSeen": "2026-10-05T02:21:09.721Z"
+          "lastSeen": "2026-10-06T03:22:16.722Z"
         },
         "saveSuccess": {
           "status": "ok",
-          "saved": 49,
+          "saved": 51,
           "saveFailed": 0
         }
       }
@@ -1936,9 +1927,9 @@
             },
             {
               "field": "Experience Level",
-              "emptyCount": 6,
+              "emptyCount": 7,
               "total": 7,
-              "emptyPercent": 86
+              "emptyPercent": 100
             },
             {
               "field": "Company Size",
@@ -1956,7 +1947,7 @@
         },
         "matchRate": {
           "status": "ok",
-          "fetched": 115,
+          "fetched": 117,
           "matched": 7,
           "matchPercent": 6
         },
@@ -1968,13 +1959,13 @@
         },
         "yield": {
           "status": "ok",
-          "fetched": 115,
-          "previousFetched": 116
+          "fetched": 117,
+          "previousFetched": 115
         },
         "freshness": {
           "status": "ok",
           "daysSinceLastSeen": 0,
-          "lastSeen": "2026-10-05T02:21:29.169Z"
+          "lastSeen": "2026-10-06T03:22:38.595Z"
         },
         "saveSuccess": {
           "status": "ok",
@@ -1999,64 +1990,64 @@
             {
               "field": "Location",
               "emptyCount": 0,
-              "total": 13,
+              "total": 19,
               "emptyPercent": 0
             },
             {
               "field": "Working Country",
               "emptyCount": 0,
-              "total": 13,
+              "total": 19,
               "emptyPercent": 0
             },
             {
               "field": "City",
-              "emptyCount": 3,
-              "total": 13,
-              "emptyPercent": 23
+              "emptyCount": 5,
+              "total": 19,
+              "emptyPercent": 26
             },
             {
               "field": "Employment Type",
               "emptyCount": 0,
-              "total": 13,
+              "total": 19,
               "emptyPercent": 0
             },
             {
               "field": "Salary",
               "emptyCount": 1,
-              "total": 13,
-              "emptyPercent": 8
+              "total": 19,
+              "emptyPercent": 5
             },
             {
               "field": "Date Posted",
               "emptyCount": 0,
-              "total": 13,
+              "total": 19,
               "emptyPercent": 0
             },
             {
               "field": "Experience Level",
-              "emptyCount": 11,
-              "total": 13,
-              "emptyPercent": 85
+              "emptyCount": 16,
+              "total": 19,
+              "emptyPercent": 84
             },
             {
               "field": "Company Size",
-              "emptyCount": 13,
-              "total": 13,
+              "emptyCount": 19,
+              "total": 19,
               "emptyPercent": 100
             },
             {
               "field": "Raw Description",
               "emptyCount": 0,
-              "total": 13,
+              "total": 19,
               "emptyPercent": 0
             }
           ]
         },
         "matchRate": {
           "status": "ok",
-          "fetched": 162,
-          "matched": 13,
-          "matchPercent": 8
+          "fetched": 166,
+          "matched": 19,
+          "matchPercent": 11
         },
         "locationDropped": {
           "status": "info",
@@ -2066,17 +2057,17 @@
         },
         "yield": {
           "status": "ok",
-          "fetched": 162,
-          "previousFetched": 165
+          "fetched": 166,
+          "previousFetched": 162
         },
         "freshness": {
           "status": "ok",
           "daysSinceLastSeen": 0,
-          "lastSeen": "2026-10-05T02:21:56.721Z"
+          "lastSeen": "2026-10-06T03:23:25.877Z"
         },
         "saveSuccess": {
           "status": "ok",
-          "saved": 13,
+          "saved": 19,
           "saveFailed": 0
         }
       }
@@ -2097,63 +2088,63 @@
             {
               "field": "Location",
               "emptyCount": 0,
-              "total": 89,
+              "total": 93,
               "emptyPercent": 0
             },
             {
               "field": "Working Country",
               "emptyCount": 0,
-              "total": 89,
+              "total": 93,
               "emptyPercent": 0
             },
             {
               "field": "City",
-              "emptyCount": 12,
-              "total": 89,
-              "emptyPercent": 13
+              "emptyCount": 14,
+              "total": 93,
+              "emptyPercent": 15
             },
             {
               "field": "Employment Type",
-              "emptyCount": 89,
-              "total": 89,
+              "emptyCount": 93,
+              "total": 93,
               "emptyPercent": 100
             },
             {
               "field": "Salary",
               "emptyCount": 4,
-              "total": 89,
+              "total": 93,
               "emptyPercent": 4
             },
             {
               "field": "Date Posted",
               "emptyCount": 14,
-              "total": 89,
-              "emptyPercent": 16
+              "total": 93,
+              "emptyPercent": 15
             },
             {
               "field": "Experience Level",
-              "emptyCount": 70,
-              "total": 89,
-              "emptyPercent": 79
+              "emptyCount": 73,
+              "total": 93,
+              "emptyPercent": 78
             },
             {
               "field": "Company Size",
-              "emptyCount": 89,
-              "total": 89,
+              "emptyCount": 93,
+              "total": 93,
               "emptyPercent": 100
             },
             {
               "field": "Raw Description",
-              "emptyCount": 89,
-              "total": 89,
+              "emptyCount": 93,
+              "total": 93,
               "emptyPercent": 100
             }
           ]
         },
         "matchRate": {
           "status": "ok",
-          "fetched": 1275,
-          "matched": 89,
+          "fetched": 1323,
+          "matched": 93,
           "matchPercent": 7
         },
         "locationDropped": {
@@ -2164,17 +2155,17 @@
         },
         "yield": {
           "status": "ok",
-          "fetched": 1275,
-          "previousFetched": 1320
+          "fetched": 1323,
+          "previousFetched": 1275
         },
         "freshness": {
           "status": "ok",
           "daysSinceLastSeen": 0,
-          "lastSeen": "2026-10-05T02:23:05.419Z"
+          "lastSeen": "2026-10-06T03:24:58.791Z"
         },
         "saveSuccess": {
           "status": "ok",
-          "saved": 89,
+          "saved": 93,
           "saveFailed": 0
         }
       }
