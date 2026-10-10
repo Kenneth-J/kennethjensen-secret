@@ -1,3 +1,22 @@
+/* Self-hosted (2026-10-10, replacing this page's own Google Fonts CDN
+   link) — same two files as kennethjensen-secret/design-system.css one
+   level up, see that file's own comment for why; referenced here via
+   ../fonts/ since this page lives in its own iospage/ subdirectory. */
+@font-face{
+  font-family:'Inter';
+  font-style:normal;
+  font-weight:400 800;
+  font-display:swap;
+  src:url('../fonts/Inter.woff2') format('woff2');
+}
+@font-face{
+  font-family:'Space Grotesk';
+  font-style:normal;
+  font-weight:600 700;
+  font-display:swap;
+  src:url('../fonts/SpaceGrotesk.woff2') format('woff2');
+}
+
 :root{
   --bg:#0f1a1d;
   --bg-alt:#16262b;

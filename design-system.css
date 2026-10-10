@@ -7,6 +7,27 @@
    admin-specific UI (login gate, job cards, tables, word cloud, health,
    docs, log tracer) stays inline in index.html. */
 
+/* Self-hosted (2026-10-10, replacing the Google Fonts CDN link index.html
+   used to carry) — same two variable-font WOFF2 files as
+   kennethjensen-me/assets/base.css (see that file's own comment on why
+   self-hosting and why these are the only files needed); JetBrains Mono
+   isn't included here since this admin panel never uses it. Kept in sync
+   with that file. */
+@font-face{
+  font-family:'Inter';
+  font-style:normal;
+  font-weight:400 800;
+  font-display:swap;
+  src:url('fonts/Inter.woff2') format('woff2');
+}
+@font-face{
+  font-family:'Space Grotesk';
+  font-style:normal;
+  font-weight:600 700;
+  font-display:swap;
+  src:url('fonts/SpaceGrotesk.woff2') format('woff2');
+}
+
 :root{
   --ink:#132a33;
   --ink-soft:#5c7680;
