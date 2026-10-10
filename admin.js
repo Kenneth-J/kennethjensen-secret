@@ -1524,7 +1524,16 @@ function latestBaserowError(scraperEntries) {
 // worker/src/index.ts's recordFailedAuth()/handleLastFailedLogin()) —
 // authenticated, unlike every other source above, so it can only ever be
 // fetched once Kenneth is already logged in himself. Country only, no IP
-// or credential guess — see the Worker's own comment on why.
+// or credential guess — see the Worker's own comment on why. `reason`
+// (added 2026-10-10 alongside the Denmark-only login block) distinguishes
+// a geo-blocked attempt, worth calling out on its own, from an ordinary
+// wrong password/code.
+function failedLoginMessage(lastFailure) {
+  return lastFailure.reason === "blocked_country"
+    ? `Blocked login attempt from ${lastFailure.country} (outside Denmark)`
+    : `Failed login attempt from ${lastFailure.country}`;
+}
+
 async function fetchLatestFailedLogin() {
   try {
     const data = await callWorker("/auth/last-failure");
@@ -1534,7 +1543,30 @@ async function fetchLatestFailedLogin() {
         id: "latest-failed-login",
         receivedAt: data.lastFailure.at,
         source: "auth",
-        message: `Failed login attempt from ${data.lastFailure.country}`,
+        message: failedLoginMessage(data.lastFailure),
+      },
+    ];
+  } catch {
+    return []; // unauthorized/transient — Log Tracer's other sources still render
+  }
+}
+
+// Seventh source: lemming-worker's own failed-login tracking, same shape
+// as jobmatch-worker's above (see that repo's lib/adminSession.ts header
+// comment on why this is reimplemented per-Worker rather than shared).
+// Uses callLemmingWorker, so — like the /logs entries below — it only
+// ever returns anything once Kenneth has a Lemming session of his own;
+// loadLogTracer() already handles that being absent.
+async function fetchLatestLemmingFailedLogin() {
+  try {
+    const data = await callLemmingWorker("/auth/last-failure");
+    if (!data.lastFailure) return [];
+    return [
+      {
+        id: "latest-lemming-failed-login",
+        receivedAt: data.lastFailure.at,
+        source: "auth",
+        message: failedLoginMessage(data.lastFailure),
       },
     ];
   } catch {
@@ -1583,6 +1615,7 @@ async function loadLogTracer() {
   // scraper entries above render regardless, only Lemming's own are
   // missing until logged in.
   let lemmingEntries = [];
+  let lemmingFailedLoginEntries = [];
   let lemmingNeedsLogin = !getStoredLemmingSession();
   if (!lemmingNeedsLogin) {
     try {
@@ -1594,6 +1627,7 @@ async function loadLogTracer() {
         message: entry.message,
         context: entry.context,
       }));
+      lemmingFailedLoginEntries = await fetchLatestLemmingFailedLogin();
     } catch (err) {
       if (err.unauthorized) lemmingNeedsLogin = true;
       // else: a transient Lemming fetch failure shouldn't hide scraper
@@ -1608,6 +1642,7 @@ async function loadLogTracer() {
     ...baserowEntries,
     ...failedLoginEntries,
     ...lemmingEntries,
+    ...lemmingFailedLoginEntries,
   ].sort(
     (a, b) => new Date(b.receivedAt).getTime() - new Date(a.receivedAt).getTime()
   );
