@@ -369,6 +369,7 @@
       <button class="tab-btn" data-tab="searchterms">Search Terms</button>
       <button class="tab-btn" data-tab="missing">Missing Data</button>
       <button class="tab-btn" data-tab="clicks">Top Clicked</button>
+      <button class="tab-btn" data-tab="visitors">Visitors</button>
       <button class="tab-btn" data-tab="health">Site Health</button>
       <button class="tab-btn" data-tab="logtracer">Log Tracer</button>
       <button class="tab-btn" data-tab="docs">How We Classify</button>
@@ -544,6 +545,39 @@
       <div id="clicks-empty" class="empty-state" style="display:none;">
         <div class="checkmark">✓</div>
         No click-throughs yet.
+      </div>
+    </div>
+
+    <div id="visitors-panel" class="tab-panel">
+      <div class="section-head">
+        <h1>Visitors by country</h1>
+        <p>Where visitors to kennethjensen.me and the Job Analytics stats page are coming from, straight off Cloudflare's own edge geolocation &mdash; no cookies, no IP addresses stored, just a country tally.</p>
+      </div>
+      <div id="visitors-status" class="status-line"></div>
+      <div id="visitors-content" style="display:none;">
+        <div class="section-head"><h1>kennethjensen.me</h1></div>
+        <div class="missing-table-wrap" id="visitors-home-table-wrap" style="display:none;">
+          <table class="missing-table">
+            <thead><tr><th>Country</th><th>Visits</th></tr></thead>
+            <tbody id="visitors-home-tbody"></tbody>
+          </table>
+        </div>
+        <div id="visitors-home-empty" class="empty-state" style="display:none;">
+          <div class="checkmark">✓</div>
+          No visits logged yet.
+        </div>
+
+        <div class="section-head"><h1>Job Analytics (/jobmatch/stats)</h1></div>
+        <div class="missing-table-wrap" id="visitors-jobmatch-stats-table-wrap" style="display:none;">
+          <table class="missing-table">
+            <thead><tr><th>Country</th><th>Visits</th></tr></thead>
+            <tbody id="visitors-jobmatch-stats-tbody"></tbody>
+          </table>
+        </div>
+        <div id="visitors-jobmatch-stats-empty" class="empty-state" style="display:none;">
+          <div class="checkmark">✓</div>
+          No visits logged yet.
+        </div>
       </div>
     </div>
 

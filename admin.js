@@ -33,6 +33,7 @@ const panels = {
   searchterms: document.getElementById("searchterms-panel"),
   missing: document.getElementById("missing-panel"),
   clicks: document.getElementById("clicks-panel"),
+  visitors: document.getElementById("visitors-panel"),
   health: document.getElementById("health-panel"),
   logtracer: document.getElementById("logtracer-panel"),
   docs: document.getElementById("docs-panel"),
@@ -86,6 +87,25 @@ const clicksStatus = document.getElementById("clicks-status");
 const clicksTableWrap = document.getElementById("clicks-table-wrap");
 const clicksTbody = document.getElementById("clicks-tbody");
 const clicksEmpty = document.getElementById("clicks-empty");
+
+const visitorsStatus = document.getElementById("visitors-status");
+const visitorsContent = document.getElementById("visitors-content");
+// One {tableWrap, tbody, empty} trio per page jobmatch-worker's /visit/log
+// accepts (see VISIT_LOG_PAGES in that repo's src/index.ts) — adding a
+// third page later means adding both a panel in index.html and an entry
+// here, nothing else in this tab's rendering logic changes.
+const VISITORS_PAGES = {
+  home: {
+    tableWrap: document.getElementById("visitors-home-table-wrap"),
+    tbody: document.getElementById("visitors-home-tbody"),
+    empty: document.getElementById("visitors-home-empty"),
+  },
+  "jobmatch-stats": {
+    tableWrap: document.getElementById("visitors-jobmatch-stats-table-wrap"),
+    tbody: document.getElementById("visitors-jobmatch-stats-tbody"),
+    empty: document.getElementById("visitors-jobmatch-stats-empty"),
+  },
+};
 
 const healthStatus = document.getElementById("health-status");
 const healthContent = document.getElementById("health-content");
@@ -342,7 +362,7 @@ function showApp() {
   loadNotificationBar();
 }
 
-const loaded = { review: false, recommendations: false, wordcloud: false, searchterms: false, missing: false, clicks: false, health: false, logtracer: false };
+const loaded = { review: false, recommendations: false, wordcloud: false, searchterms: false, missing: false, clicks: false, visitors: false, health: false, logtracer: false };
 
 function setTab(tab) {
   tabBtns.forEach((btn) => btn.classList.toggle("active", btn.dataset.tab === tab));
@@ -353,6 +373,7 @@ function setTab(tab) {
   if (tab === "searchterms" && !loaded.searchterms) { loaded.searchterms = true; loadSearchTerms(); }
   if (tab === "missing" && !loaded.missing) { loaded.missing = true; loadMissingData(); }
   if (tab === "clicks" && !loaded.clicks) { loaded.clicks = true; loadTopClicked(); }
+  if (tab === "visitors" && !loaded.visitors) { loaded.visitors = true; loadVisitors(); }
   if (tab === "health" && !loaded.health) { loaded.health = true; loadHealth(); }
   if (tab === "logtracer" && !loaded.logtracer) { loaded.logtracer = true; loadLogTracer(); }
 }
@@ -1160,6 +1181,58 @@ async function loadTopClicked() {
   }
 }
 
+// --- Visitors ---
+// Country code -> readable name via the browser's own Intl.DisplayNames
+// (widely supported, no country-name table to maintain here). Falls back
+// to the raw code for "unknown" (no cf.country on the request) or any
+// code Intl doesn't recognise.
+const countryDisplayNames = typeof Intl !== "undefined" && Intl.DisplayNames
+  ? new Intl.DisplayNames(["en"], { type: "region" })
+  : null;
+
+function countryLabel(code) {
+  if (!countryDisplayNames || code === "unknown") return code;
+  try {
+    return countryDisplayNames.of(code);
+  } catch {
+    return code;
+  }
+}
+
+function renderVisitorRow(code, count) {
+  const tr = document.createElement("tr");
+  const countryCell = document.createElement("td");
+  countryCell.textContent = countryLabel(code);
+  tr.appendChild(countryCell);
+  const countCell = document.createElement("td");
+  countCell.textContent = count;
+  tr.appendChild(countCell);
+  return tr;
+}
+
+function renderVisitorPage(pageId, countries) {
+  const { tableWrap, tbody, empty } = VISITORS_PAGES[pageId];
+  const entries = Object.entries(countries || {}).sort((a, b) => b[1] - a[1]);
+  if (!entries.length) { empty.style.display = "block"; tableWrap.style.display = "none"; return; }
+  tableWrap.style.display = "block";
+  empty.style.display = "none";
+  for (const [code, count] of entries) tbody.appendChild(renderVisitorRow(code, count));
+}
+
+async function loadVisitors() {
+  visitorsStatus.textContent = "Loading…";
+  visitorsContent.style.display = "none";
+  try {
+    const data = await callWorker("/visit/stats");
+    visitorsStatus.textContent = "";
+    visitorsContent.style.display = "block";
+    for (const pageId of Object.keys(VISITORS_PAGES)) renderVisitorPage(pageId, data.pages[pageId]);
+  } catch (err) {
+    if (err.unauthorized) { clearStoredSession(); showLogin("Session expired. Enter the password again."); return; }
+    visitorsStatus.textContent = `Failed to load: ${err.message}`;
+  }
+}
+
 // --- Site health ---
 // Fetched as a plain same-origin static file, not through callWorker() —
 // health/data.json is written by the scraper's own src/index.js and
@@ -1962,7 +2035,7 @@ logoutBtn.addEventListener("click", () => {
   clearStoredLemmingSession();
   passwordInput.value = "";
   totpInput.value = "";
-  loaded.review = loaded.recommendations = loaded.wordcloud = loaded.searchterms = loaded.missing = loaded.clicks = loaded.health = loaded.logtracer = false;
+  loaded.review = loaded.recommendations = loaded.wordcloud = loaded.searchterms = loaded.missing = loaded.clicks = loaded.visitors = loaded.health = loaded.logtracer = false;
   setTab("review");
   showLogin();
 });
