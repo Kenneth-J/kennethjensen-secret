@@ -1,6 +1,1702 @@
 {
-  "generatedAt": "2026-10-14T04:08:38.315Z",
+  "generatedAt": "2026-10-16T03:09:40.327Z",
   "entries": [
+    {
+      "id": "2026-10-16T03:09:23.869Z-212",
+      "at": "2026-10-16T03:09:23.869Z",
+      "kind": "save",
+      "site": "cvbankas.lt",
+      "jobTitle": "AUKŠTUMINIO KRAUTUVO VAIRUOTOJAS (-A) LOGISTIKOS SANDĖLYJE",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T03:09:22.096Z-211",
+      "at": "2026-10-16T03:09:22.096Z",
+      "kind": "save",
+      "site": "cvbankas.lt",
+      "jobTitle": "\"L&#039;Occitane\" logistikos asistentė (-as), Kaunas (Terminuota darbo sutartis)",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T03:09:20.498Z-210",
+      "at": "2026-10-16T03:09:20.498Z",
+      "kind": "save",
+      "site": "cvbankas.lt",
+      "jobTitle": "LOGISTIKOS VADOVO ASISTENTĖ (-AS)",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T03:09:18.898Z-209",
+      "at": "2026-10-16T03:09:18.898Z",
+      "kind": "save",
+      "site": "cvbankas.lt",
+      "jobTitle": "TRANSPORTO LOGISTIKOS VADYBININKAS (-Ė) UK RINKAI Darbui Mažeikiuose",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T03:09:17.066Z-208",
+      "at": "2026-10-16T03:09:17.066Z",
+      "kind": "save",
+      "site": "cvbankas.lt",
+      "jobTitle": "VYRESNYSIS LOGISTIKOS IR TRANSPORTO VADYBININKAS (-Ė)",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T03:09:15.208Z-207",
+      "at": "2026-10-16T03:09:15.208Z",
+      "kind": "save",
+      "site": "cvbankas.lt",
+      "jobTitle": "Logistikos vadybininkas (-ė)",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T03:09:13.429Z-206",
+      "at": "2026-10-16T03:09:13.429Z",
+      "kind": "save",
+      "site": "cvbankas.lt",
+      "jobTitle": "Logistikos specialistas (-ė)",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T03:09:11.976Z-205",
+      "at": "2026-10-16T03:09:11.976Z",
+      "kind": "save",
+      "site": "cvbankas.lt",
+      "jobTitle": "Kviečiame į komandą prisijungti Logistikos specialistą (-ę)",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T03:09:10.517Z-204",
+      "at": "2026-10-16T03:09:10.517Z",
+      "kind": "save",
+      "site": "cvbankas.lt",
+      "jobTitle": "LOGISTIKOS SKYRIAUS VADOVAS (-Ė)",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T03:09:08.304Z-203",
+      "at": "2026-10-16T03:09:08.304Z",
+      "kind": "save",
+      "site": "cvbankas.lt",
+      "jobTitle": "Logistikos vadybininkas – automobilių importas",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T03:09:06.609Z-202",
+      "at": "2026-10-16T03:09:06.609Z",
+      "kind": "save",
+      "site": "cvbankas.lt",
+      "jobTitle": "ADMINISTRATORIUS (-Ė) LOGISTIKOS CENTRE VILNIUJE",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T03:09:04.983Z-201",
+      "at": "2026-10-16T03:09:04.983Z",
+      "kind": "save",
+      "site": "cvbankas.lt",
+      "jobTitle": "Logistikos skyriaus vadovas (-ė)",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T03:09:03.483Z-200",
+      "at": "2026-10-16T03:09:03.483Z",
+      "kind": "save",
+      "site": "cvbankas.lt",
+      "jobTitle": "Prekių priėmėjas (-a) logistikos centre",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T03:09:01.787Z-199",
+      "at": "2026-10-16T03:09:01.787Z",
+      "kind": "save",
+      "site": "cvbankas.lt",
+      "jobTitle": "Prekių atrinkėjas (-a) logistikos centre",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T03:09:00.139Z-198",
+      "at": "2026-10-16T03:09:00.139Z",
+      "kind": "save",
+      "site": "cvbankas.lt",
+      "jobTitle": "LOGISTIKOS APSKAITININKĖ (-AS)",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T03:08:58.569Z-197",
+      "at": "2026-10-16T03:08:58.569Z",
+      "kind": "save",
+      "site": "cvbankas.lt",
+      "jobTitle": "Logistikos / tiekimo specialistas",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T03:08:57.091Z-196",
+      "at": "2026-10-16T03:08:57.091Z",
+      "kind": "save",
+      "site": "cvbankas.lt",
+      "jobTitle": "PRAKTIKA LOGISTIKOS SRITYJE SU ĮDARBINIMO GALIMYBE 🫵",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T03:08:55.450Z-195",
+      "at": "2026-10-16T03:08:55.450Z",
+      "kind": "save",
+      "site": "cvbankas.lt",
+      "jobTitle": "Logistikos vadovas (-ė)",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T03:08:46.164Z-194",
+      "at": "2026-10-16T03:08:46.164Z",
+      "kind": "save",
+      "site": "cvbankas.lt",
+      "jobTitle": "PRAKTIKA LOGISTIKOS SRITYJE SU ĮDARBINIMO GALIMYBE 📢",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T03:08:43.998Z-193",
+      "at": "2026-10-16T03:08:43.998Z",
+      "kind": "save",
+      "site": "cvbankas.lt",
+      "jobTitle": "Logistikos vadybininkas (-ė) | Kaunas",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T03:08:42.215Z-192",
+      "at": "2026-10-16T03:08:42.215Z",
+      "kind": "save",
+      "site": "cvbankas.lt",
+      "jobTitle": "Transporto vadybininkas (-ė) / planuotojas (autovežių logistika)",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T03:08:39.821Z-191",
+      "at": "2026-10-16T03:08:39.821Z",
+      "kind": "save",
+      "site": "cvbankas.lt",
+      "jobTitle": "Logistikos asistentas (-ė) pilnu etatu Vilniuje",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T03:08:37.233Z-190",
+      "at": "2026-10-16T03:08:37.233Z",
+      "kind": "save",
+      "site": "cvbankas.lt",
+      "jobTitle": "Logistikos skambučių centro operatorė (-as)",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T03:08:33.644Z-189",
+      "at": "2026-10-16T03:08:33.644Z",
+      "kind": "save",
+      "site": "cvbankas.lt",
+      "jobTitle": "Senior Sales Manager | cargoGO Logistics",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T03:08:31.974Z-188",
+      "at": "2026-10-16T03:08:31.974Z",
+      "kind": "save",
+      "site": "cvbankas.lt",
+      "jobTitle": "Transport & Logistics Practice Leader",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T03:08:11.517Z-187",
+      "at": "2026-10-16T03:08:11.517Z",
+      "kind": "save",
+      "site": "cvmarket.lt",
+      "jobTitle": "ADMINISTRATORIUS (-Ė) LOGISTIKOS CENTRE",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T03:08:00.697Z-186",
+      "at": "2026-10-16T03:08:00.697Z",
+      "kind": "save",
+      "site": "cvmarket.lv",
+      "jobTitle": "Iepirkumu un loģistikas projektu vadītājs/-a",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T03:07:48.436Z-185",
+      "at": "2026-10-16T03:07:48.436Z",
+      "kind": "save",
+      "site": "cv.lv",
+      "jobTitle": "Iepirkumu un loģistikas projektu vadītājs/-a",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T03:07:41.255Z-184",
+      "at": "2026-10-16T03:07:41.255Z",
+      "kind": "save",
+      "site": "cv.lv",
+      "jobTitle": "Krāvējs noliktavā Rumbulas loģistikas centrā (Latgales ielā 493, Rīgā).",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T03:07:39.314Z-183",
+      "at": "2026-10-16T03:07:39.314Z",
+      "kind": "save",
+      "site": "cv.lv",
+      "jobTitle": "Vecākais loģistikas speciālists",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T03:07:37.697Z-182",
+      "at": "2026-10-16T03:07:37.697Z",
+      "kind": "save",
+      "site": "cv.lv",
+      "jobTitle": "Loģistikas speciālists/-e",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T03:07:35.647Z-181",
+      "at": "2026-10-16T03:07:35.647Z",
+      "kind": "save",
+      "site": "cv.lv",
+      "jobTitle": "Logistics Specialist – Swedish Speaking",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T03:07:32.222Z-180",
+      "at": "2026-10-16T03:07:32.222Z",
+      "kind": "save",
+      "site": "cv.lv",
+      "jobTitle": "Loģistikas nodaļā klientu menedžeris/-e- plānotājs/-a Skandināvijas virzienā",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T03:07:29.753Z-179",
+      "at": "2026-10-16T03:07:29.753Z",
+      "kind": "save",
+      "site": "cv.lv",
+      "jobTitle": "Klientu apkalpošanas un loģistikas asistents/-e",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T03:07:27.620Z-178",
+      "at": "2026-10-16T03:07:27.620Z",
+      "kind": "save",
+      "site": "cv.lv",
+      "jobTitle": "Loģistikas uzskaites darbinieks",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T03:07:25.550Z-177",
+      "at": "2026-10-16T03:07:25.550Z",
+      "kind": "save",
+      "site": "cv.lv",
+      "jobTitle": "Loģistikas menedžera palīgs/-dze",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T03:07:24.001Z-176",
+      "at": "2026-10-16T03:07:24.001Z",
+      "kind": "save",
+      "site": "cv.lv",
+      "jobTitle": "Loģistikas menedžeris/-e /Transporta koordinators/-e",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T03:07:21.529Z-175",
+      "at": "2026-10-16T03:07:21.529Z",
+      "kind": "save",
+      "site": "cv.lv",
+      "jobTitle": "Loģistikas speciālists/-e",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T03:07:17.747Z-174",
+      "at": "2026-10-16T03:07:17.747Z",
+      "kind": "save",
+      "site": "cvkeskus.ee",
+      "jobTitle": "Sõiduautode logistika koordinaator",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T03:07:15.641Z-173",
+      "at": "2026-10-16T03:07:15.641Z",
+      "kind": "save",
+      "site": "cvkeskus.ee",
+      "jobTitle": "Logistika koordinaator",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T03:07:13.002Z-172",
+      "at": "2026-10-16T03:07:13.002Z",
+      "kind": "save",
+      "site": "cvkeskus.ee",
+      "jobTitle": "Transpordijuht Maxima logistikakeskuses",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T03:07:10.290Z-171",
+      "at": "2026-10-16T03:07:10.290Z",
+      "kind": "save",
+      "site": "cvkeskus.ee",
+      "jobTitle": "FP&A Business Partner, Micromobility",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T01:22:12.061Z-170",
+      "at": "2026-10-16T01:22:12.061Z",
+      "kind": "save",
+      "site": "tyomarkkinatori.fi",
+      "jobTitle": "Logistiikkatyöntekijä , DHL Supply Chain Oy",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T01:22:08.922Z-169",
+      "at": "2026-10-16T01:22:08.922Z",
+      "kind": "save",
+      "site": "tyomarkkinatori.fi",
+      "jobTitle": "Logistiikkanokka, rakennustyömaa (Lappeenranta)",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T01:22:06.437Z-168",
+      "at": "2026-10-16T01:22:06.437Z",
+      "kind": "save",
+      "site": "tyomarkkinatori.fi",
+      "jobTitle": "Varastotyöntekijöitä logistiikka- ja kokoonpanotehtäviin Hyvinkäälle",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T01:22:04.311Z-167",
+      "at": "2026-10-16T01:22:04.311Z",
+      "kind": "save",
+      "site": "tyomarkkinatori.fi",
+      "jobTitle": "Järjestelijä telakalle (Logistiikka)",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T01:22:02.326Z-166",
+      "at": "2026-10-16T01:22:02.326Z",
+      "kind": "save",
+      "site": "tyomarkkinatori.fi",
+      "jobTitle": "Tiiminvetäjä (logistiikka)",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T01:21:58.997Z-165",
+      "at": "2026-10-16T01:21:58.997Z",
+      "kind": "save",
+      "site": "tyomarkkinatori.fi",
+      "jobTitle": "Logistiikkaoperaattori lähtevään logistiikkaan Vaisalalle",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T01:21:55.001Z-164",
+      "at": "2026-10-16T01:21:55.001Z",
+      "kind": "save",
+      "site": "tyomarkkinatori.fi",
+      "jobTitle": "Logistiikkatyöntekijä",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T01:21:53.089Z-163",
+      "at": "2026-10-16T01:21:53.089Z",
+      "kind": "save",
+      "site": "tyomarkkinatori.fi",
+      "jobTitle": "Sisälogistiikkapäällikkö",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T01:21:41.646Z-162",
+      "at": "2026-10-16T01:21:41.646Z",
+      "kind": "fetch",
+      "site": "duunitori.fi",
+      "jobTitle": null,
+      "message": "duunitori.fi: all 19 keyword searches failed (last: duunitori.fi: fetch failed with status 403 (haku=mobilitāte, sivu=1))"
+    },
+    {
+      "id": "2026-10-16T01:21:40.571Z-161",
+      "at": "2026-10-16T01:21:40.571Z",
+      "kind": "save",
+      "site": "arbeidsplassen.nav.no",
+      "jobTitle": "Teleskoptruckfører innen byggeplass logistikk",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T01:21:37.892Z-160",
+      "at": "2026-10-16T01:21:37.892Z",
+      "kind": "save",
+      "site": "arbeidsplassen.nav.no",
+      "jobTitle": "Pakke- og logistikkmedarbeider",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T01:21:35.498Z-159",
+      "at": "2026-10-16T01:21:35.498Z",
+      "kind": "save",
+      "site": "arbeidsplassen.nav.no",
+      "jobTitle": "Logistikkplanlegger",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T01:21:33.450Z-158",
+      "at": "2026-10-16T01:21:33.450Z",
+      "kind": "save",
+      "site": "arbeidsplassen.nav.no",
+      "jobTitle": "Leder innkjøp- og sirkulærlogistikk",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T01:21:27.906Z-157",
+      "at": "2026-10-16T01:21:27.906Z",
+      "kind": "save",
+      "site": "arbeidsplassen.nav.no",
+      "jobTitle": "Driftsleder innen transport og logistikk",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T01:21:24.543Z-156",
+      "at": "2026-10-16T01:21:24.543Z",
+      "kind": "save",
+      "site": "arbeidsplassen.nav.no",
+      "jobTitle": "Postdoktor med fokus på storskala infrastruktur for CO2-logistikk",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T01:21:20.422Z-155",
+      "at": "2026-10-16T01:21:20.422Z",
+      "kind": "save",
+      "site": "arbeidsplassen.nav.no",
+      "jobTitle": "Faglærer i logistikk",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T01:21:17.919Z-154",
+      "at": "2026-10-16T01:21:17.919Z",
+      "kind": "save",
+      "site": "arbeidsplassen.nav.no",
+      "jobTitle": "Lager- og logistikkoperatør",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T01:21:14.408Z-153",
+      "at": "2026-10-16T01:21:14.408Z",
+      "kind": "save",
+      "site": "arbeidsplassen.nav.no",
+      "jobTitle": "Logistikkoperatør prosjekt",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T01:21:11.555Z-152",
+      "at": "2026-10-16T01:21:11.555Z",
+      "kind": "save",
+      "site": "arbeidsplassen.nav.no",
+      "jobTitle": "Logistikk Operatør",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T01:21:09.473Z-151",
+      "at": "2026-10-16T01:21:09.473Z",
+      "kind": "save",
+      "site": "arbeidsplassen.nav.no",
+      "jobTitle": "Logistikkmedarbeider",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T01:21:06.850Z-150",
+      "at": "2026-10-16T01:21:06.850Z",
+      "kind": "save",
+      "site": "arbeidsplassen.nav.no",
+      "jobTitle": "Vikar logistikk",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T01:21:03.398Z-149",
+      "at": "2026-10-16T01:21:03.398Z",
+      "kind": "save",
+      "site": "arbeidsplassen.nav.no",
+      "jobTitle": "Logistikkmedarbeider",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T01:21:01.203Z-148",
+      "at": "2026-10-16T01:21:01.203Z",
+      "kind": "save",
+      "site": "arbeidsplassen.nav.no",
+      "jobTitle": "Logistikkmedarbeider",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T01:20:58.887Z-147",
+      "at": "2026-10-16T01:20:58.887Z",
+      "kind": "save",
+      "site": "arbeidsplassen.nav.no",
+      "jobTitle": "Logistikkmedarbeider ",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T01:20:56.556Z-146",
+      "at": "2026-10-16T01:20:56.556Z",
+      "kind": "save",
+      "site": "arbeidsplassen.nav.no",
+      "jobTitle": "Erfaren rådgiver mobilitet og transportanalyse",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T01:20:54.522Z-145",
+      "at": "2026-10-16T01:20:54.522Z",
+      "kind": "save",
+      "site": "arbeidsplassen.nav.no",
+      "jobTitle": "Forretningsutvikler for mobilitetstilbydere",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T01:20:51.828Z-144",
+      "at": "2026-10-16T01:20:51.828Z",
+      "kind": "save",
+      "site": "arbeidsplassen.nav.no",
+      "jobTitle": "Order & Logistics Coordinator",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T01:20:49.635Z-143",
+      "at": "2026-10-16T01:20:49.635Z",
+      "kind": "save",
+      "site": "arbeidsplassen.nav.no",
+      "jobTitle": "Logistics & Project Coordinator",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T01:20:46.620Z-142",
+      "at": "2026-10-16T01:20:46.620Z",
+      "kind": "save",
+      "site": "arbeidsplassen.nav.no",
+      "jobTitle": "Logistic & Lean Manager",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T01:20:44.034Z-141",
+      "at": "2026-10-16T01:20:44.034Z",
+      "kind": "save",
+      "site": "arbeidsplassen.nav.no",
+      "jobTitle": "Procurement and Logistics Specialist",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T01:20:05.363Z-140",
+      "at": "2026-10-16T01:20:05.363Z",
+      "kind": "save",
+      "site": "arbetsformedlingen.se",
+      "jobTitle": "Säljare till Sälj & logistik 8h/v, IKEA Kalmar",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T01:20:01.234Z-139",
+      "at": "2026-10-16T01:20:01.234Z",
+      "kind": "save",
+      "site": "arbetsformedlingen.se",
+      "jobTitle": "Extrajobb inom lager och logistik - studenter",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T01:19:27.086Z-138",
+      "at": "2026-10-16T01:19:27.086Z",
+      "kind": "save",
+      "site": "arbetsformedlingen.se",
+      "jobTitle": "Logistiksassistent",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T01:19:24.905Z-137",
+      "at": "2026-10-16T01:19:24.905Z",
+      "kind": "save",
+      "site": "arbetsformedlingen.se",
+      "jobTitle": "Förrådsman på Logistikkompaniet till F 16",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T01:19:22.913Z-136",
+      "at": "2026-10-16T01:19:22.913Z",
+      "kind": "save",
+      "site": "arbetsformedlingen.se",
+      "jobTitle": "Inköps- och logistikassistent",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T01:19:20.978Z-135",
+      "at": "2026-10-16T01:19:20.978Z",
+      "kind": "save",
+      "site": "arbetsformedlingen.se",
+      "jobTitle": "Logistikchef till ShoreLink i Piteå",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T01:19:18.823Z-134",
+      "at": "2026-10-16T01:19:18.823Z",
+      "kind": "save",
+      "site": "arbetsformedlingen.se",
+      "jobTitle": "Logistikchef",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T01:19:16.626Z-133",
+      "at": "2026-10-16T01:19:16.626Z",
+      "kind": "save",
+      "site": "arbetsformedlingen.se",
+      "jobTitle": "Logistiker till Beyond Gravity",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T01:19:14.640Z-132",
+      "at": "2026-10-16T01:19:14.640Z",
+      "kind": "save",
+      "site": "arbetsformedlingen.se",
+      "jobTitle": "Logistiker Saab Barracuda, Gamleby",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T01:19:12.556Z-131",
+      "at": "2026-10-16T01:19:12.556Z",
+      "kind": "save",
+      "site": "arbetsformedlingen.se",
+      "jobTitle": "Logistikkoordinator",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T01:19:10.473Z-130",
+      "at": "2026-10-16T01:19:10.473Z",
+      "kind": "save",
+      "site": "arbetsformedlingen.se",
+      "jobTitle": "Logistikingenjör inom internlogistik och produktion",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T01:19:08.132Z-129",
+      "at": "2026-10-16T01:19:08.132Z",
+      "kind": "save",
+      "site": "arbetsformedlingen.se",
+      "jobTitle": "Produktionslogistiker - Norra Stockholm!",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T01:19:05.905Z-128",
+      "at": "2026-10-16T01:19:05.905Z",
+      "kind": "save",
+      "site": "arbetsformedlingen.se",
+      "jobTitle": "Truckförare till logistikverksamhet!",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T01:19:03.962Z-127",
+      "at": "2026-10-16T01:19:03.962Z",
+      "kind": "save",
+      "site": "arbetsformedlingen.se",
+      "jobTitle": "Resande Platschef till ledande aktör inom logistik- och industribygg",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T01:19:01.903Z-126",
+      "at": "2026-10-16T01:19:01.903Z",
+      "kind": "save",
+      "site": "arbetsformedlingen.se",
+      "jobTitle": "Logistikansvarig  Möbelmästarna Härjedalen",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T01:18:59.795Z-125",
+      "at": "2026-10-16T01:18:59.795Z",
+      "kind": "save",
+      "site": "arbetsformedlingen.se",
+      "jobTitle": "Logistikansvarig till RZ INM",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T01:18:57.198Z-124",
+      "at": "2026-10-16T01:18:57.198Z",
+      "kind": "save",
+      "site": "arbetsformedlingen.se",
+      "jobTitle": "Lagermedarbetare inom 3PL & Kampanjlogistik till Företag i Falun.",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T01:18:55.086Z-123",
+      "at": "2026-10-16T01:18:55.086Z",
+      "kind": "save",
+      "site": "arbetsformedlingen.se",
+      "jobTitle": "Logistikkoordinator",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T01:18:53.065Z-122",
+      "at": "2026-10-16T01:18:53.065Z",
+      "kind": "save",
+      "site": "arbetsformedlingen.se",
+      "jobTitle": "Chaufför till Unilabs nya logistikenhet i Jönköping",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T01:18:50.797Z-121",
+      "at": "2026-10-16T01:18:50.797Z",
+      "kind": "save",
+      "site": "arbetsformedlingen.se",
+      "jobTitle": "Chaufför till Unilabs nya logistikenhet i Skövde",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T01:18:48.577Z-120",
+      "at": "2026-10-16T01:18:48.577Z",
+      "kind": "save",
+      "site": "arbetsformedlingen.se",
+      "jobTitle": "Chaufför till Unilabs nya logistikenhet i Karlstad",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T01:18:46.572Z-119",
+      "at": "2026-10-16T01:18:46.572Z",
+      "kind": "save",
+      "site": "arbetsformedlingen.se",
+      "jobTitle": "Chaufför till Unilabs nya logistikenhet i Örebro",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T01:18:44.356Z-118",
+      "at": "2026-10-16T01:18:44.356Z",
+      "kind": "save",
+      "site": "arbetsformedlingen.se",
+      "jobTitle": "Extrajobb på Apoteas nya logistikcenter i Varberg!",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T01:18:42.297Z-117",
+      "at": "2026-10-16T01:18:42.297Z",
+      "kind": "save",
+      "site": "arbetsformedlingen.se",
+      "jobTitle": "Logistiktekniker inom produktionsteknik till Oskarshamn",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T01:18:40.140Z-116",
+      "at": "2026-10-16T01:18:40.140Z",
+      "kind": "save",
+      "site": "arbetsformedlingen.se",
+      "jobTitle": "Lagerarbetande logistikadministratör",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T01:18:38.024Z-115",
+      "at": "2026-10-16T01:18:38.024Z",
+      "kind": "save",
+      "site": "arbetsformedlingen.se",
+      "jobTitle": "Vi söker Logistikchef till Beconfident®  i Båstad",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T01:18:35.874Z-114",
+      "at": "2026-10-16T01:18:35.874Z",
+      "kind": "save",
+      "site": "arbetsformedlingen.se",
+      "jobTitle": "Logistikofficer till Försvarsmedicincentrum",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T01:18:33.725Z-113",
+      "at": "2026-10-16T01:18:33.725Z",
+      "kind": "save",
+      "site": "arbetsformedlingen.se",
+      "jobTitle": "Logistik- & orderspecialist till Carbomax",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T01:18:31.590Z-112",
+      "at": "2026-10-16T01:18:31.590Z",
+      "kind": "save",
+      "site": "arbetsformedlingen.se",
+      "jobTitle": "Logistiktekniker till tillverkningsindustrin – Oskarshamn",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T01:18:29.503Z-111",
+      "at": "2026-10-16T01:18:29.503Z",
+      "kind": "save",
+      "site": "arbetsformedlingen.se",
+      "jobTitle": "Logistikkoordinator till Trollhättan",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T01:18:27.080Z-110",
+      "at": "2026-10-16T01:18:27.080Z",
+      "kind": "save",
+      "site": "arbetsformedlingen.se",
+      "jobTitle": "SUPPLY CHAIN ORDER COORDINATOR, order & logistik i tillverkande industri - ",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T01:18:24.867Z-109",
+      "at": "2026-10-16T01:18:24.867Z",
+      "kind": "save",
+      "site": "arbetsformedlingen.se",
+      "jobTitle": "Central roll inom LAGER / LOGISTIK - Nordic Wire Tray AB",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T01:18:21.941Z-108",
+      "at": "2026-10-16T01:18:21.941Z",
+      "kind": "save",
+      "site": "arbetsformedlingen.se",
+      "jobTitle": "Delivery Coordinator  få framtidens logistik att fungera varje dag",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T01:18:19.309Z-107",
+      "at": "2026-10-16T01:18:19.309Z",
+      "kind": "save",
+      "site": "arbetsformedlingen.se",
+      "jobTitle": "Produktionsledare kväll till Martin & Servera Logistik i Enköping",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T01:18:17.112Z-106",
+      "at": "2026-10-16T01:18:17.112Z",
+      "kind": "save",
+      "site": "arbetsformedlingen.se",
+      "jobTitle": "Extrajobb som administratör inom logistik & kundservice – Norrköping",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T01:18:14.268Z-105",
+      "at": "2026-10-16T01:18:14.268Z",
+      "kind": "save",
+      "site": "arbetsformedlingen.se",
+      "jobTitle": "Studenter sökes för arbete inom lager och logistik!",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T01:18:12.059Z-104",
+      "at": "2026-10-16T01:18:12.059Z",
+      "kind": "save",
+      "site": "arbetsformedlingen.se",
+      "jobTitle": "Studenter sökes för extrajobb inom logistik och kvalitetskontroll",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T01:18:07.545Z-103",
+      "at": "2026-10-16T01:18:07.545Z",
+      "kind": "save",
+      "site": "arbetsformedlingen.se",
+      "jobTitle": "Konsultchef - inom lager och logistik",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T01:18:05.459Z-102",
+      "at": "2026-10-16T01:18:05.459Z",
+      "kind": "save",
+      "site": "arbetsformedlingen.se",
+      "jobTitle": "Project Manager - Elgiganten Logistik AB",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T01:18:03.051Z-101",
+      "at": "2026-10-16T01:18:03.051Z",
+      "kind": "save",
+      "site": "arbetsformedlingen.se",
+      "jobTitle": "Flexibelt deltidsjobb inom terminal och logistik",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T01:18:00.801Z-100",
+      "at": "2026-10-16T01:18:00.801Z",
+      "kind": "save",
+      "site": "arbetsformedlingen.se",
+      "jobTitle": "Flexibelt deltidsjobb inom terminal och logistik",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T01:17:58.732Z-99",
+      "at": "2026-10-16T01:17:58.732Z",
+      "kind": "save",
+      "site": "arbetsformedlingen.se",
+      "jobTitle": "Flexibelt deltidsjobb inom terminal och logistik",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T01:17:55.005Z-98",
+      "at": "2026-10-16T01:17:55.005Z",
+      "kind": "save",
+      "site": "arbetsformedlingen.se",
+      "jobTitle": "Koordinator inom planering och logistik",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T01:17:51.978Z-97",
+      "at": "2026-10-16T01:17:51.978Z",
+      "kind": "save",
+      "site": "arbetsformedlingen.se",
+      "jobTitle": "Produktionsledare Logistik och Kund",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T01:17:49.741Z-96",
+      "at": "2026-10-16T01:17:49.741Z",
+      "kind": "save",
+      "site": "arbetsformedlingen.se",
+      "jobTitle": "Kvalificerad Kundtjänstmedarbetare inom Logistik",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T01:17:47.628Z-95",
+      "at": "2026-10-16T01:17:47.628Z",
+      "kind": "save",
+      "site": "arbetsformedlingen.se",
+      "jobTitle": "Arbetsledare Krossning, Uppfordring, Logistik",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T01:17:45.362Z-94",
+      "at": "2026-10-16T01:17:45.362Z",
+      "kind": "save",
+      "site": "arbetsformedlingen.se",
+      "jobTitle": "Operatör till logistik: Chafförsmottagning",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T01:17:38.015Z-93",
+      "at": "2026-10-16T01:17:38.015Z",
+      "kind": "save",
+      "site": "arbetsformedlingen.se",
+      "jobTitle": "Logistikchef till framgångsrikt modebolag",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T01:17:35.673Z-92",
+      "at": "2026-10-16T01:17:35.673Z",
+      "kind": "save",
+      "site": "arbetsformedlingen.se",
+      "jobTitle": "Logistiktekniker inom Produktionsteknik",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T01:17:33.492Z-91",
+      "at": "2026-10-16T01:17:33.492Z",
+      "kind": "save",
+      "site": "arbetsformedlingen.se",
+      "jobTitle": "Logistikkoordinator till NewColds nya lager i Flen",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T01:17:29.611Z-90",
+      "at": "2026-10-16T01:17:29.611Z",
+      "kind": "save",
+      "site": "arbetsformedlingen.se",
+      "jobTitle": "Bilrangerare sökes till fordonslogistik",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T01:17:27.038Z-89",
+      "at": "2026-10-16T01:17:27.038Z",
+      "kind": "save",
+      "site": "arbetsformedlingen.se",
+      "jobTitle": "Director of Logistics and Warehouse operations till Swedish Lorry Parts",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T01:17:23.487Z-88",
+      "at": "2026-10-16T01:17:23.487Z",
+      "kind": "save",
+      "site": "arbetsformedlingen.se",
+      "jobTitle": "DSV Lead Logistics Söker en Manager till Göteborg!",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T01:17:16.981Z-87",
+      "at": "2026-10-16T01:17:16.981Z",
+      "kind": "save",
+      "site": "arbetsformedlingen.se",
+      "jobTitle": "Arbetsledare till Bonver Logistics i Rosersberg",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T01:17:13.318Z-86",
+      "at": "2026-10-16T01:17:13.318Z",
+      "kind": "save",
+      "site": "arbetsformedlingen.se",
+      "jobTitle": "Operations Manager - Transport and Logistics",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T01:17:10.955Z-85",
+      "at": "2026-10-16T01:17:10.955Z",
+      "kind": "save",
+      "site": "arbetsformedlingen.se",
+      "jobTitle": "Logistics Manager till framgångsrikt modebolag",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T01:17:06.495Z-84",
+      "at": "2026-10-16T01:17:06.495Z",
+      "kind": "save",
+      "site": "arbetsformedlingen.se",
+      "jobTitle": "Avdelningschef till POWER Logistics",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T01:17:03.253Z-83",
+      "at": "2026-10-16T01:17:03.253Z",
+      "kind": "save",
+      "site": "arbetsformedlingen.se",
+      "jobTitle": "Senior Logistics Engineer",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T01:17:01.201Z-82",
+      "at": "2026-10-16T01:17:01.201Z",
+      "kind": "save",
+      "site": "arbetsformedlingen.se",
+      "jobTitle": "Logistics Developer",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T01:16:58.814Z-81",
+      "at": "2026-10-16T01:16:58.814Z",
+      "kind": "save",
+      "site": "arbetsformedlingen.se",
+      "jobTitle": "Logistics Technician",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T01:16:54.995Z-80",
+      "at": "2026-10-16T01:16:54.995Z",
+      "kind": "save",
+      "site": "arbetsformedlingen.se",
+      "jobTitle": "Automotive Software Engineer - AUTOSAR BSW",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T01:16:52.224Z-79",
+      "at": "2026-10-16T01:16:52.224Z",
+      "kind": "save",
+      "site": "arbetsformedlingen.se",
+      "jobTitle": "Consultant manager till Adecco Automotive!",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T01:16:49.902Z-78",
+      "at": "2026-10-16T01:16:49.902Z",
+      "kind": "save",
+      "site": "arbetsformedlingen.se",
+      "jobTitle": "Account Manager - Automotive",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T01:16:41.163Z-77",
+      "at": "2026-10-16T01:16:41.163Z",
+      "kind": "save",
+      "site": "arbetsformedlingen.se",
+      "jobTitle": "IT Business and System Analyst to automotive company!",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T01:16:35.429Z-76",
+      "at": "2026-10-16T01:16:35.429Z",
+      "kind": "save",
+      "site": "arbetsformedlingen.se",
+      "jobTitle": "Embedded Software Engineer  Automotive - 20057",
+      "message": "fetch failed"
+    },
+    {
+      "id": "2026-10-16T01:16:32.782Z-75",
+      "at": "2026-10-16T01:16:32.782Z",
+      "kind": "save",
+      "site": "arbetsformedlingen.se",
+      "jobTitle": "Automotive Software Engineer - ASW (Göteborg)",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T01:16:29.201Z-74",
+      "at": "2026-10-16T01:16:29.201Z",
+      "kind": "save",
+      "site": "arbetsformedlingen.se",
+      "jobTitle": "Industrial Engineer to automotive company!",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T01:16:21.866Z-73",
+      "at": "2026-10-16T01:16:21.866Z",
+      "kind": "save",
+      "site": "arbetsformedlingen.se",
+      "jobTitle": "System Designer Automotive",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T01:16:18.084Z-72",
+      "at": "2026-10-16T01:16:18.084Z",
+      "kind": "save",
+      "site": "arbetsformedlingen.se",
+      "jobTitle": "Teamledare Lager & Logistik E-handel, Tingsryd",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T01:16:13.089Z-71",
+      "at": "2026-10-16T01:16:13.089Z",
+      "kind": "save",
+      "site": "arbetsformedlingen.se",
+      "jobTitle": "Automotive Diagnostics Specialist",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T01:16:08.132Z-70",
+      "at": "2026-10-16T01:16:08.132Z",
+      "kind": "save",
+      "site": "arbetsformedlingen.se",
+      "jobTitle": "Mobility & Reward Manager",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T01:14:51.371Z-69",
+      "at": "2026-10-16T01:14:51.371Z",
+      "kind": "save",
+      "site": "jobnet.dk",
+      "jobTitle": "Logistikmedarbejder med erfaring inden for logistik, forsyning eller butiksdrift søges til HE Midt Indkøb og Logistik, Servicecentret, Regionshospital Viborg til 16 måneders vikariat",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T01:14:45.171Z-68",
+      "at": "2026-10-16T01:14:45.171Z",
+      "kind": "save",
+      "site": "jobnet.dk",
+      "jobTitle": "Barselsvikar til Trafiksikkerhed og Mobilitet",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T01:14:43.098Z-67",
+      "at": "2026-10-16T01:14:43.098Z",
+      "kind": "save",
+      "site": "jobnet.dk",
+      "jobTitle": "Elev til Lager & Logistik",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T01:14:40.959Z-66",
+      "at": "2026-10-16T01:14:40.959Z",
+      "kind": "save",
+      "site": "jobnet.dk",
+      "jobTitle": "Logistik, kundeservice og administration",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T01:14:34.005Z-65",
+      "at": "2026-10-16T01:14:34.005Z",
+      "kind": "save",
+      "site": "jobnet.dk",
+      "jobTitle": "Driver & Logistic",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T01:14:32.060Z-64",
+      "at": "2026-10-16T01:14:32.060Z",
+      "kind": "save",
+      "site": "jobnet.dk",
+      "jobTitle": "VIE – Logistics Methods Engineer (M/F) – Denmark",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T01:14:29.587Z-63",
+      "at": "2026-10-16T01:14:29.587Z",
+      "kind": "save",
+      "site": "jobnet.dk",
+      "jobTitle": "Data Migration Consultant to Scan Global Logistics",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T01:14:27.598Z-62",
+      "at": "2026-10-16T01:14:27.598Z",
+      "kind": "save",
+      "site": "jobnet.dk",
+      "jobTitle": "Administrative, Logistics & Project Support Expert",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T01:14:25.272Z-61",
+      "at": "2026-10-16T01:14:25.272Z",
+      "kind": "save",
+      "site": "jobnet.dk",
+      "jobTitle": "Nordic Logistics ApS – Moving Employee - Flyttemedarbejder søges",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T01:14:23.220Z-60",
+      "at": "2026-10-16T01:14:23.220Z",
+      "kind": "save",
+      "site": "jobnet.dk",
+      "jobTitle": "Tekniker til teknisk klargøring - Semler Fleet Logistics",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T01:14:19.768Z-59",
+      "at": "2026-10-16T01:14:19.768Z",
+      "kind": "save",
+      "site": "jobnet.dk",
+      "jobTitle": "Internship in Planning & Logistics",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T01:14:17.701Z-58",
+      "at": "2026-10-16T01:14:17.701Z",
+      "kind": "save",
+      "site": "jobnet.dk",
+      "jobTitle": "Vognopbygger / Montør til Semler Fleet Logistics",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T01:14:15.317Z-57",
+      "at": "2026-10-16T01:14:15.317Z",
+      "kind": "save",
+      "site": "jobnet.dk",
+      "jobTitle": "Logistics Specialist",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T01:14:12.571Z-56",
+      "at": "2026-10-16T01:14:12.571Z",
+      "kind": "save",
+      "site": "jobnet.dk",
+      "jobTitle": "Mekanikere søges til spændende automotive virksomhed i Dragør",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T01:14:09.568Z-55",
+      "at": "2026-10-16T01:14:09.568Z",
+      "kind": "save",
+      "site": "jobnet.dk",
+      "jobTitle": "HyperCar tekniker til ZENVO Automotive i Præstø - Skab det ekstraordinære",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T01:14:05.080Z-54",
+      "at": "2026-10-16T01:14:05.080Z",
+      "kind": "save",
+      "site": "jobnet.dk",
+      "jobTitle": "Senior Finance Business Partner with focus on Mobility",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T01:14:02.612Z-53",
+      "at": "2026-10-16T01:14:02.612Z",
+      "kind": "save",
+      "site": "jobnet.dk",
+      "jobTitle": "Senior Finance Business Partner with focus on Mobility",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T01:13:53.931Z-52",
+      "at": "2026-10-16T01:13:53.931Z",
+      "kind": "save",
+      "site": "jobnet.dk",
+      "jobTitle": "Automontør Next Mobility Aabenraa",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T01:13:51.941Z-51",
+      "at": "2026-10-16T01:13:51.941Z",
+      "kind": "save",
+      "site": "jobnet.dk",
+      "jobTitle": "E-mobility-koordinator",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T01:13:49.817Z-50",
+      "at": "2026-10-16T01:13:49.817Z",
+      "kind": "save",
+      "site": "jobnet.dk",
+      "jobTitle": "Global Mobility",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T01:13:47.397Z-49",
+      "at": "2026-10-16T01:13:47.397Z",
+      "kind": "save",
+      "site": "jobnet.dk",
+      "jobTitle": "Commercial Director, eMobility (eMSP)",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T01:08:58.170Z-48",
+      "at": "2026-10-16T01:08:58.170Z",
+      "kind": "save",
+      "site": "euremotejobs.com",
+      "jobTitle": "Account Manager – Logistics Operations",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T01:08:55.448Z-47",
+      "at": "2026-10-16T01:08:55.448Z",
+      "kind": "fetch",
+      "site": "deunemployment.com",
+      "jobTitle": null,
+      "message": "deunemployment.com: all 19 keyword searches failed (last: deunemployment.com: search failed with status 403 (q=mobilitāte))"
+    },
+    {
+      "id": "2026-10-16T01:08:52.811Z-46",
+      "at": "2026-10-16T01:08:52.811Z",
+      "kind": "save",
+      "site": "jobindex.dk",
+      "jobTitle": "Ordrer- og logistikassistent",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T01:08:51.006Z-45",
+      "at": "2026-10-16T01:08:51.006Z",
+      "kind": "save",
+      "site": "jobindex.dk",
+      "jobTitle": "Sekretariatsleder til Teknik og Logistik, Aalborg Universitetshospital",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T01:08:48.937Z-44",
+      "at": "2026-10-16T01:08:48.937Z",
+      "kind": "save",
+      "site": "jobindex.dk",
+      "jobTitle": "Lager- og logistikmedarbejder til varemodtagelse i Aars",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T01:08:46.969Z-43",
+      "at": "2026-10-16T01:08:46.969Z",
+      "kind": "save",
+      "site": "jobindex.dk",
+      "jobTitle": "Lager- og logistikmedarbejder til specialgods i Greve",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T01:08:45.222Z-42",
+      "at": "2026-10-16T01:08:45.222Z",
+      "kind": "save",
+      "site": "jobindex.dk",
+      "jobTitle": "Lager- og logistikmedarbejder til medicinske produkter i Glostrup",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T01:08:42.644Z-41",
+      "at": "2026-10-16T01:08:42.644Z",
+      "kind": "save",
+      "site": "jobindex.dk",
+      "jobTitle": "Lager- og logistikmedarbejder til pluk, pak og intern transport i Fredericia",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T01:08:38.212Z-40",
+      "at": "2026-10-16T01:08:38.212Z",
+      "kind": "save",
+      "site": "jobindex.dk",
+      "jobTitle": "Bliv vores nye logistikleder i BAUHAUS Tilst",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T01:08:36.143Z-39",
+      "at": "2026-10-16T01:08:36.143Z",
+      "kind": "save",
+      "site": "jobindex.dk",
+      "jobTitle": "Industrioperatør / Specialarbejder til logistikafdelingen hos Aalborg Portland A/S",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T01:08:33.187Z-38",
+      "at": "2026-10-16T01:08:33.187Z",
+      "kind": "save",
+      "site": "jobindex.dk",
+      "jobTitle": "Lager- og logistikmedarbejder til intern transport i Odense SØ",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T01:08:31.390Z-37",
+      "at": "2026-10-16T01:08:31.390Z",
+      "kind": "save",
+      "site": "jobindex.dk",
+      "jobTitle": "Funktionsleder til Logistikservice på OUH Svendborg og Nyborg Sygehus – portørfunktionen",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T01:08:29.522Z-36",
+      "at": "2026-10-16T01:08:29.522Z",
+      "kind": "save",
+      "site": "jobindex.dk",
+      "jobTitle": "Logistikassistent søges til alsidigt vikariat i Brøndby",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T01:08:24.323Z-35",
+      "at": "2026-10-16T01:08:24.323Z",
+      "kind": "save",
+      "site": "jobindex.dk",
+      "jobTitle": "Logistikassistent med fokus på myndighedsbeholdninger og beredskab",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T01:08:20.960Z-34",
+      "at": "2026-10-16T01:08:20.960Z",
+      "kind": "save",
+      "site": "jobindex.dk",
+      "jobTitle": "Salgs- og logistikkoordinator",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T01:08:18.881Z-33",
+      "at": "2026-10-16T01:08:18.881Z",
+      "kind": "save",
+      "site": "jobindex.dk",
+      "jobTitle": "Lager- og Logistikansvarlig",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T01:08:14.892Z-32",
+      "at": "2026-10-16T01:08:14.892Z",
+      "kind": "save",
+      "site": "jobindex.dk",
+      "jobTitle": "Lager- og logistikmedarbejder med flair for montage i Aalborg",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T01:08:12.543Z-31",
+      "at": "2026-10-16T01:08:12.543Z",
+      "kind": "save",
+      "site": "jobindex.dk",
+      "jobTitle": "Distriktschef Salg – B2B Salg af Intralogistikløsninger",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T01:08:10.453Z-30",
+      "at": "2026-10-16T01:08:10.453Z",
+      "kind": "save",
+      "site": "jobindex.dk",
+      "jobTitle": "Stålhaven i Løgstør søger en pakke-, logistik- og lagermedarbejder",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T01:08:08.693Z-29",
+      "at": "2026-10-16T01:08:08.693Z",
+      "kind": "save",
+      "site": "jobindex.dk",
+      "jobTitle": "Logistikmedarbejder med erfaring inden for logistik, forsyning eller butiksdrift søges til HE Midt Indkøb og Logistik, Servic...",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T01:08:04.176Z-28",
+      "at": "2026-10-16T01:08:04.176Z",
+      "kind": "save",
+      "site": "jobindex.dk",
+      "jobTitle": "Logistik og salgssupport – Central rolle med mange tværorganisatoriske opgaver",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T01:08:02.287Z-27",
+      "at": "2026-10-16T01:08:02.287Z",
+      "kind": "save",
+      "site": "jobindex.dk",
+      "jobTitle": "Supervisor til Logistik & Kundeservice i Vejle",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T01:07:57.955Z-26",
+      "at": "2026-10-16T01:07:57.955Z",
+      "kind": "save",
+      "site": "jobindex.dk",
+      "jobTitle": "Medarbejder til Lager & Logistik",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T01:07:55.995Z-25",
+      "at": "2026-10-16T01:07:55.995Z",
+      "kind": "save",
+      "site": "jobindex.dk",
+      "jobTitle": "Studentermedhjælper til logistik og eksportdokumentation",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T01:07:53.207Z-24",
+      "at": "2026-10-16T01:07:53.207Z",
+      "kind": "save",
+      "site": "jobindex.dk",
+      "jobTitle": "Trafik- og mobilitetsplanlægger til udviklingen af fremtidens Tønder Kommune – genopslag",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T01:07:51.465Z-23",
+      "at": "2026-10-16T01:07:51.465Z",
+      "kind": "save",
+      "site": "jobindex.dk",
+      "jobTitle": "Barselsvikar til Trafiksikkerhed og Mobilitet",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T01:07:49.340Z-22",
+      "at": "2026-10-16T01:07:49.340Z",
+      "kind": "save",
+      "site": "jobindex.dk",
+      "jobTitle": "Logistik- og Administrationskoordinator med flair for IT",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T01:07:46.840Z-21",
+      "at": "2026-10-16T01:07:46.840Z",
+      "kind": "save",
+      "site": "jobindex.dk",
+      "jobTitle": "Forsyningsassistent til Base Warehouse i Supply Chain Management, Logistic Support Squadron ved Fighter Wing Skrydstrup",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T01:07:42.441Z-20",
+      "at": "2026-10-16T01:07:42.441Z",
+      "kind": "save",
+      "site": "jobindex.dk",
+      "jobTitle": "Logistikmedarbejder til Picking, 32 timer pr. uge, Gentofte",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T01:07:39.476Z-19",
+      "at": "2026-10-16T01:07:39.476Z",
+      "kind": "save",
+      "site": "jobindex.dk",
+      "jobTitle": "Logistics Co-worker for Picking Online Orders, 37 hours per week, IKEA Odense",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T01:07:37.364Z-18",
+      "at": "2026-10-16T01:07:37.364Z",
+      "kind": "save",
+      "site": "jobindex.dk",
+      "jobTitle": "Logistics Coordinator til HARDI INTERNATIONAL A/S",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T01:07:35.735Z-17",
+      "at": "2026-10-16T01:07:35.735Z",
+      "kind": "save",
+      "site": "jobindex.dk",
+      "jobTitle": "Supply Chain and Logistic Assistant (Internal Recruitment Strictly)",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T01:07:33.781Z-16",
+      "at": "2026-10-16T01:07:33.781Z",
+      "kind": "save",
+      "site": "jobindex.dk",
+      "jobTitle": "Logistics Process Engineer (24-Month Contract)",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T01:07:32.029Z-15",
+      "at": "2026-10-16T01:07:32.029Z",
+      "kind": "save",
+      "site": "jobindex.dk",
+      "jobTitle": "Nordic Logistics ApS – Moving Employee - Flyttemedarbejder søges",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T01:07:30.342Z-14",
+      "at": "2026-10-16T01:07:30.342Z",
+      "kind": "save",
+      "site": "jobindex.dk",
+      "jobTitle": "Kaptajn til Fighter Wing, Logistics Operations Center",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T01:07:28.650Z-13",
+      "at": "2026-10-16T01:07:28.650Z",
+      "kind": "save",
+      "site": "jobindex.dk",
+      "jobTitle": "Logistics Coordinator",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T01:07:25.626Z-12",
+      "at": "2026-10-16T01:07:25.626Z",
+      "kind": "save",
+      "site": "jobindex.dk",
+      "jobTitle": "Tekniker til teknisk klargøring - Semler Fleet Logistics",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T01:07:23.325Z-11",
+      "at": "2026-10-16T01:07:23.325Z",
+      "kind": "save",
+      "site": "jobindex.dk",
+      "jobTitle": "Vognopbygger / Montør til Semler Fleet Logistics",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T01:07:21.044Z-10",
+      "at": "2026-10-16T01:07:21.044Z",
+      "kind": "save",
+      "site": "jobindex.dk",
+      "jobTitle": "Logistics Specialist",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T01:07:18.635Z-9",
+      "at": "2026-10-16T01:07:18.635Z",
+      "kind": "save",
+      "site": "jobindex.dk",
+      "jobTitle": "Mekanikere søges til spændende automotive virksomhed i Dragør",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T01:07:09.099Z-8",
+      "at": "2026-10-16T01:07:09.099Z",
+      "kind": "save",
+      "site": "jobindex.dk",
+      "jobTitle": "Flexleasing-rådgiver til Audi Gladsaxe – en del af Semler Mobility",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T01:07:06.521Z-7",
+      "at": "2026-10-16T01:07:06.521Z",
+      "kind": "save",
+      "site": "jobindex.dk",
+      "jobTitle": "Salgsrådgiver til Skoda Køge - en del af Semler Mobility",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T01:07:04.632Z-6",
+      "at": "2026-10-16T01:07:04.632Z",
+      "kind": "save",
+      "site": "jobindex.dk",
+      "jobTitle": "Kundemodtager til Audi Fredericia - en del af Semler Mobility",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T01:07:02.516Z-5",
+      "at": "2026-10-16T01:07:02.516Z",
+      "kind": "save",
+      "site": "jobindex.dk",
+      "jobTitle": "Audi Ekspert til Audi Gladsaxe - en del af Semler Mobility",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T01:07:00.571Z-4",
+      "at": "2026-10-16T01:07:00.571Z",
+      "kind": "save",
+      "site": "jobindex.dk",
+      "jobTitle": "Tekniker til Semler Mobility i Risskov",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T01:06:58.261Z-3",
+      "at": "2026-10-16T01:06:58.261Z",
+      "kind": "save",
+      "site": "jobindex.dk",
+      "jobTitle": "Booker til Semler Mobility Højbjerg",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T01:06:56.250Z-2",
+      "at": "2026-10-16T01:06:56.250Z",
+      "kind": "save",
+      "site": "jobindex.dk",
+      "jobTitle": "Kundemodtager til Semler Mobility Højbjerg",
+      "message": "Baserow create failed: 403 {\"error\":\"ERROR_ROW_USAGE_LIMIT_EXCEEDED\",\"detail\":\"The row usage limit has been exceeded for more than 168 hours. Therefore, it's not possible to create new rows. Please reduce the number of rows, or upgrade your plan.\"}"
+    },
+    {
+      "id": "2026-10-16T01:04:25.505Z-1",
+      "at": "2026-10-16T01:04:25.505Z",
+      "kind": "fetch",
+      "site": "landing.jobs",
+      "jobTitle": null,
+      "message": "landing.jobs: fetch failed with status 403"
+    },
     {
       "id": "2026-10-14T04:08:21.587Z-367",
       "at": "2026-10-14T04:08:21.587Z",
